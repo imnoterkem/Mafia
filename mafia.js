@@ -1,25 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Your web app's Firebase configuration
 var firebaseConfig = {
     apiKey: "AIzaSyAMppKcZo4sa9GjtknjiRyCVt2_yNexh9M",
     authDomain: "team-up-aff0e.firebaseapp.com",
@@ -30,6 +8,28 @@ var firebaseConfig = {
     appId: "1:874195963351:web:d3a1d27d2f4225dff54f92",
     measurementId: "G-WRG3X3HCKY"
 };
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+
+const db=firebase.database();
+function Join(){
+    db.ref("Room").push({
+    })
+}
+function Host(){
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

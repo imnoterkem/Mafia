@@ -10,13 +10,25 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-const db=firebase.database();
-function Join(){
+const db = firebase.database();
+function Join() {
     db.ref("Room").push({
+        users: 1
     })
 }
-function Host(){
 
+
+function Host() {
+    db.ref('Number').once('value').then(snap=>{
+
+        db.ref("Room").push({
+            room: snap.val()
+            
+        })
+        window.location.href=`mafia2.html?room=${snap.val()}`
+        console.log(parseInt(snap.val())+1);
+        db.ref().update({Number: parseInt(snap.val())+1})
+    })
 }
 
 

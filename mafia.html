@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mafia</title>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-database.js"></script>
-<link rel="stylesheet" href="mafia.css">
+    <script src="mafia.js"></script>
+    <link rel="stylesheet" href="mafia.css">
 </head>
+
 <body>
     <div class="container">
-        <div class="nevtreh">
-            <input id="name" type="text " placeholder="User Name" />
-        </div>
-        <div class="edku">
-            <button>login</button>
-            <button>join host</button>
+        <div id="cont2">
+            <div id="top">
+                <input type="text" placeholder="Nickname">
+            </div>
+            <div id="bottom">
+                <button id="host">Host a game</button>
+                <button id="join">Join a game</button>
+            </div>
         </div>
     </div>
 </body>
+
 </html>

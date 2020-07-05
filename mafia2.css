@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    height: 100vh;
+    padding: 0;
+    background: #222025;
+    display: flex;
+}
+
+ .container {
+    display: flex;
+   
+    justify-content: center;
+} 
+.members {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.top {    
+    margin: 0;
+    position: absolute;
+    width: 100vw;
+    height: 150px;
+    left: 13px;
+    top: 0px;
+    background: #2B292E;
+}
+
+.teamUP {
+    position: absolute;
+    width: 425px;
+    height: 70px;
+    left: 222px;
+    top: 173px;
+    color: #62B8E8;
+    background: #322F37;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px;
+} 
+
+#zambuulin {
+    position: absolute;
+    width: 425px;
+    height: 70px;
+    left: 223px;
+    top: 249px;
+    background: #39373C;
+    border: 3px solid #3AC448;
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.chatbox {
+    position: absolute;
+    width: 485px;
+    height: 559px;
+    left: 733px;
+    top: 173px;
+    background: #39373C;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px 10px 0px 0px
+}
+#flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

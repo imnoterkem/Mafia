@@ -5,18 +5,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: coral;
+    background-color: #222025;
+
   }
   .container {
     display: flex;
-    width: 30vw;
-    height: 75vh;
+    width:25%;
+    height: 40%;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     border: 5px solid white;
     background-color: white;
     border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
   }
   
   .nevtreh {
@@ -47,4 +51,52 @@ body {
     width: 8vw;
     background-color: coral;
     border-radius: 3px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   }
+
+#name{
+  background-color: whitesmoke;
+  color: coral;
+}
+.text{
+  color: black;
+  margin-top: 5px;
+  font-size: 12px;
+  font-family: sans-serif;
+  display: flex;
+  height: 35px;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.edku{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.font{
+  margin-top: 5px;
+  font-size: 12px;
+  font-family: sans-serif;
+}
+.play{
+  display: flex;
+  justify-content: center;
+}
+
+
+
+
+
+
+/* 
+#top{
+  margin: 0;
+  height: 30%;
+  background-color: #39373C;
+  width: 100%;
+}
+#bottom{
+  margin: 0;
+  background-color: #332f37;
+  height: 70%;
+} */

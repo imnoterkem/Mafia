@@ -1,0 +1,16 @@
+body{
+    margin: 0px;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    justify-content: space-evenly;
+}
+#players{
+    height: 80%;
+    width: 40%;
+}
+#chat{
+    height: 80%;
+    width: 40%;
+}

@@ -1,46 +1,43 @@
-var firebaseConfig = {
-    apiKey: "AIzaSyAMppKcZo4sa9GjtknjiRyCVt2_yNexh9M",
-    authDomain: "team-up-aff0e.firebaseapp.com",
-    databaseURL: "https://team-up-aff0e.firebaseio.com",
-    projectId: "team-up-aff0e",
-    storageBucket: "team-up-aff0e.appspot.com",
-    messagingSenderId: "874195963351",
-    appId: "1:874195963351:web:d3a1d27d2f4225dff54f92",
-    measurementId: "G-WRG3X3HCKY"
-};
-firebase.initializeApp(firebaseConfig);
 
-const db = firebase.database();
+  var firebaseConfig = {
+    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+    authDomain: "team-up-73173.firebaseapp.com",
+    databaseURL: "https://team-up-73173.firebaseio.com",
+    projectId: "team-up-73173",
+    storageBucket: "team-up-73173.appspot.com",
+    messagingSenderId: "1030300585767",
+    appId: "1:1030300585767:web:6577af963515d152b32302"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
 function Join() {
     let s = document.getElementById("name").value
     if (s !== '') {
-        db.ref(`Room/${s}/players`).once("value").then(snap => {
-
-            db.ref(`Room/${s}`).update({ players: parseInt(snap.val())+1})
-            window.location.href = `mafia2.html?/${s}`
-            
-
+        db.doc(`Room/${s}`).get().then(function(doc) {
+            if (doc.exists) {
+                let number=parseInt(doc.data().players)+1;
+                db.doc(`Room/${s}`).update({
+                    players: number
+                })
+                window.location.href = `mafia2.html?r=${s}`
+            } else {
+                console.log("No such document!");
+            }
         })
     }
 }
 
+
 function Host() {
-    db.ref('Number').once('value').then(snap => {
         let s = document.getElementById("name").value;
-        // for(let i=0; i<Object.values(db.ref("Room")).length; i++){
-
-        // }
-        // Object.values(db.ref("Room")).length;
         if (s !== '') {
-            db.ref(`Room/${s}`).set({
+            db.collection('Room').doc(s).set({
                 players: 1
-
             })
-            window.location.href = `mafia2.html?/${s}`
-            console.log(parseInt(snap.val()) + 1);
-            db.ref().update({ Number: parseInt(snap.val()) + 1 })
+            window.location.href = `mafia2.html?r=${s}`
         }
-    })
 }
 
 

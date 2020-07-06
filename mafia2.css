@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 body {
     margin: 0;
     height: 100vh;
@@ -6,83 +5,128 @@ body {
     background: #222025;
     display: flex;
 }
-
- .container {
+.container{
     display: flex;
-   
-    justify-content: center;
-} 
-.members {
-    display: flex;
-    flex-direction: column;
-    color: white;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    height: 100%;
+    width: 100%;
+    
 }
 
 .top {    
-    margin: 0;
-    position: absolute;
-    width: 100vw;
-    height: 150px;
-    left: 13px;
-    top: 0px;
+    width: 100%;
+    height: 15%;
     background: #2B292E;
+    text-align: center;
+    font-size: larger;
+}
+
+.flex {
+    width: 100%;
+    height: 70%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.members {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .teamUP {
-    position: absolute;
-    width: 425px;
-    height: 70px;
-    left: 222px;
-    top: 173px;
-    color: #62B8E8;
     background: #322F37;
     border: 0.7px solid #000000;
     box-sizing: border-box;
     border-radius: 10px;
-} 
+    width: 35vw;
+    height: 7vh;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 35px;
+    color: #62B8E8;
+    text-align: center;
+}
 
 #zambuulin {
-    position: absolute;
-    width: 425px;
-    height: 70px;
-    left: 223px;
-    top: 249px;
     background: #39373C;
-    border: 3px solid #3AC448;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px;
+    width: 35vw;
+    height: 7vh;
+    text-align: center;
+}
+
+.chat {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatbox {
+    width: 40vw;
+    height: 70vh;
+    background: #39373C;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.inpUT {
+    width: 40vw;
+    height: 7vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    background: #322F37;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    align-items: center;
+}
+
+input {
+    width: 30vw;
+    height: 4vh;
+    background: #858585;
+    border: none;
+}
+
+#seND {
+    width: 7vw;
+    height: 4vh;
+    background: #62B8E8;
+    border: 1px solid #C8C8C8;
+    box-sizing: border-box;
+}
+
+.readyOrNot {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+#REady {
+    margin-top: 3%;
+    width: 35vw;
+    height: 5vh;
+    background: #A6A6A6;
+    border: 0.7px solid #B3B3B3;
     box-sizing: border-box;
     border-radius: 10px;
 }
 
-.chatbox {
-    position: absolute;
-    width: 485px;
-    height: 559px;
-    left: 733px;
-    top: 173px;
-    background: #39373C;
-    border: 0.7px solid #000000;
+#L {
+    width: 3vw;
+    margin-top: 3%;
+    background: #E88262;
+    border: 1px solid #C8C8C8;
     box-sizing: border-box;
-    border-radius: 10px 10px 0px 0px
+    border-radius: 5px;
 }
-#flex{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-=======
-body{
-    margin: 0px;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    justify-content: space-evenly;
-}
-#players{
-    height: 80%;
-    width: 40%;
-}
-#chat{
-    height: 80%;
-    width: 40%;
->>>>>>> 9fe7f7da17c43ac547146f1b0de0025d23111c11
-}
+  
+  ::placeholder {
+    color: #BBBBBB;
+  }

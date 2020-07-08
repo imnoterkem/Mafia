@@ -40,7 +40,7 @@ body {
     border: 0.7px solid #000000;
     box-sizing: border-box;
     border-radius: 10px;
-    width: 35vw;
+    width: 30vw;
     height: 7vh;
     font-family: Roboto;
     font-style: normal;
@@ -56,9 +56,10 @@ body {
     border: 0.7px solid #000000;
     box-sizing: border-box;
     border-radius: 10px;
-    width: 35vw;
+    width: 30vw;
     height: 7vh;
     text-align: center;
+    color: white;
 }
 
 .chat {
@@ -75,7 +76,7 @@ body {
     border-radius: 10px 10px 0px 0px;
 }
 
-.inpUT {
+.input {
     width: 40vw;
     height: 7vh;
     display: flex;
@@ -94,7 +95,7 @@ input {
     border: none;
 }
 
-#seND {
+#send {
     width: 7vw;
     height: 4vh;
     background: #62B8E8;
@@ -108,7 +109,7 @@ input {
     flex-direction: row;
 }
 
-#REady {
+#ready {
     margin-top: 3%;
     width: 35vw;
     height: 5vh;
@@ -116,6 +117,11 @@ input {
     border: 0.7px solid #B3B3B3;
     box-sizing: border-box;
     border-radius: 10px;
+    color: #E5E5E5;
+}
+
+.green {
+    background: #3AC348 !important;
 }
 
 #L {
@@ -129,4 +135,7 @@ input {
   
   ::placeholder {
     color: #BBBBBB;
+  }
+  button {
+      outline: none;
   }

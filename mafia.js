@@ -1,3 +1,4 @@
+
 var firebaseConfig = {
     apiKey: "AIzaSyAMppKcZo4sa9GjtknjiRyCVt2_yNexh9M",
     authDomain: "team-up-aff0e.firebaseapp.com",
@@ -7,52 +8,41 @@ var firebaseConfig = {
     messagingSenderId: "874195963351",
     appId: "1:874195963351:web:d3a1d27d2f4225dff54f92",
     measurementId: "G-WRG3X3HCKY"
-};
-firebase.initializeApp(firebaseConfig);
+}; firebase.initializeApp(firebaseConfig);
 
-const db = firebase.database();
-function Join() {
-    let s = document.getElementById("name").value
-    if (s !== '') {
-        db.ref(`Room/${s}/players`).once("value").then(snap => {
+const fs = firebase.firestore();
 
-            db.ref(`Room/${s}`).update({ players: parseInt(snap.val())+1})
-            window.location.href = `mafia2.html?/${s}`
-            
+const show = () => {
+    document.getElementById('button2').style.display = "flex";
+    document.getElementById('button').style.display = "none";
+}
 
-        })
+document.getElementById('cancel').onclick = () => {
+    document.getElementById('button2').style.display = "none";
+    document.getElementById('button').style.display = "flex";
+}
+
+document.getElementById('create2').onclick = () => {
+    if (document.getElementById("name").value != "" && (document.getElementById("privateroom").checked == true || document.getElementById('publicroom').checked == true)) {
+        let roomname = document.getElementById("name").value;
+        if (document.getElementById('publicroom').checked == true) {
+            fs.doc(`rooms/${roomname}`).set({
+                status: 'public'    
+            })
+        }
+        else{
+            fs.doc(`rooms/${roomname}`).set({
+                status: 'private'
+            })
+        }
     }
 }
-
-function Host() {
-    db.ref('Number').once('value').then(snap => {
-        let s = document.getElementById("name").value;
-        // for(let i=0; i<Object.values(db.ref("Room")).length; i++){
-
-        // }
-        // Object.values(db.ref("Room")).length;
-        if (s !== '') {
-            db.ref(`Room/${s}`).set({
-                players: 1
-
-            })
-            window.location.href = `mafia2.html?/${s}`
-            console.log(parseInt(snap.val()) + 1);
-            db.ref().update({ Number: parseInt(snap.val()) + 1 })
-        }
+window.onload = ()=>{
+    console.log("load");
+    fs.collection(`rooms`).onSnapshot(function(querySnapshot) {
+        console.log('1')
     })
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

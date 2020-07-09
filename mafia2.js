@@ -1,5 +1,5 @@
 
-  var firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyAMppKcZo4sa9GjtknjiRyCVt2_yNexh9M",
     authDomain: "team-up-aff0e.firebaseapp.com",
     databaseURL: "https://team-up-aff0e.firebaseio.com",
@@ -15,5 +15,8 @@ const ready = () => {
   document.getElementById("ready").classList.toggle('green');
 }
 
-
-
+const Send = () => {
+  const Input = document.getElementById('Input');
+  const inputValue = document.getElementById("Input").nodeValue;
+    
+}

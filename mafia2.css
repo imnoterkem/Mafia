@@ -68,6 +68,8 @@ body {
 }
 
 .chatbox {
+    color: white;
+    padding: 3%;
     width: 40vw;
     height: 70vh;
     background: #39373C;

@@ -1,13 +1,11 @@
-
 var firebaseConfig = {
-    apiKey: "AIzaSyAMppKcZo4sa9GjtknjiRyCVt2_yNexh9M",
-    authDomain: "team-up-aff0e.firebaseapp.com",
-    databaseURL: "https://team-up-aff0e.firebaseio.com",
-    projectId: "team-up-aff0e",
-    storageBucket: "team-up-aff0e.appspot.com",
-    messagingSenderId: "874195963351",
-    appId: "1:874195963351:web:d3a1d27d2f4225dff54f92",
-    measurementId: "G-WRG3X3HCKY"
+    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+    authDomain: "team-up-73173.firebaseapp.com",
+    databaseURL: "https://team-up-73173.firebaseio.com",
+    projectId: "team-up-73173",
+    storageBucket: "team-up-73173.appspot.com",
+    messagingSenderId: "1030300585767",
+    appId: "1:1030300585767:web:6577af963515d152b32302"
 }; firebase.initializeApp(firebaseConfig);
 
 const fs = firebase.firestore();
@@ -22,7 +20,8 @@ document.getElementById('cancel').onclick = () => {
     document.getElementById('button').style.display = "flex";
 }
 
-j = 0;
+let j = 0;
+let o = 0;
 document.getElementById('create2').onclick = () => {
     if (document.getElementById("name").value != "" && (document.getElementById("privateroom").checked == true || document.getElementById('publicroom').checked == true)) {
 
@@ -43,7 +42,6 @@ document.getElementById('create2').onclick = () => {
         room.appendChild(roomstatus);
 
         roomtop.innerHTML = document.getElementById('name').value;
-        roombottom.innerText = "1/7"
         // roomstatus.innerHTML =
 
         // <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -52,42 +50,64 @@ document.getElementById('create2').onclick = () => {
 
         roomside.style.height = "100%";
         roomside.style.width = "80%";
-        document.getElementById('JINHENEROOMS').appendChild(room);
+        document.getElementById('ROOMS').appendChild(room);
 
         for (let i = 0; i < 7; i++) {
             circle = document.createElement('div');
             circle.setAttribute('class', 'circle');
             document.getElementsByClassName('roombottom')[j].appendChild(circle);
+            console.log("wtp")
         }
-        document.getElementsByClassName('circle')[6].style.background="#3AC348"; 
+        document.getElementsByClassName('circle')[o].style.background = "#3AC348";
+        // roombottom.innerText = "1/7"
 
         let roomname = document.getElementById("name").value;
-        if (document.getElementById('publicroom').checked == true) {
-            document.getElementById('roomstatus').innerText = "Public";
-            fs.doc(`rooms/${roomname}`).set({
-                status: 'public'
-            })
-        }
-        else {
-            fs.doc(`rooms/${roomname}`).set({
-                status: 'private'
-            })
-        }
+        // if (document.getElementById('publicroom').checked == true) {
+        //     document.getElementById('roomstatus').innerText = "Public";
+        //     fs.doc(`rooms/${roomname}`).set({
+        //         status: 'public'
+        //     })
+        // }
+        // else {
+        //     fs.doc(`rooms/${roomname}`).set({
+        //         status: 'private'
+        //     })
+        // }
         document.getElementById("privateroom").checked = false;
         document.getElementById('publicroom').checked = false;
         document.getElementById('name').value = "";
         document.getElementById('button2').style.display = "none";
         document.getElementById('button').style.display = "flex";
         j++;
+        o = o + 7;
     }
 }
 
-// window.onload = ()=>{
-//     console.log("load");
-//     fs.collection(`rooms`).onSnapshot(function(querySnapshot) {
-//         console.log('1')
-//     })
-//}
+const search = () => {
+    document.getElementById('button').style.width = "80%";
+    document.getElementById('create').style.display = "none";
+    document.getElementById('searchinput').style.display = "flex";
+}
+
+// const hidesearchinput = () => {
+//     document.getElementById('searchinput').style.display="none";
+//     document.getElementById('create').style.display="flex";
+// }
+
+window.onload = () => {
+    var docRef = fs.collection("rooms").doc("SF");
+
+    docRef.get().then(function (doc) {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch(function (error) {
+        console.log("Error getting document:", error);
+    });
+}
 
 
 

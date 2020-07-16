@@ -69,7 +69,6 @@ body {
 }
 
 #create {
-  outline: none;
   width: 35px;
   height: 35px;
   border-radius: 0.5em;
@@ -192,7 +191,7 @@ body {
 
 /*2nd*/
 
-#room{
+#room {
   margin-top: 5%;
   background: #39373C;
   border: 0.7px solid #000000;
@@ -207,16 +206,14 @@ body {
   margin-right: auto;
 }
 
-.roombottom{
+.roombottom {
   height: 70%;
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
   align-items: center;
   color: white;
 }
 
-#roomtop{
+#roomtop {
   height: 30%;
   border-bottom: 1px solid black;
   color: white;
@@ -224,23 +221,42 @@ body {
   padding-left: 8%;
 }
 
-#roomstatus{
+#roomstatus {
   width: 20%;
   border-left: 1px solid black;
 }
 
-#JINHENEROOMS{
+#ROOMS {
   height: 70%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-color: #332f37;
 }
 
-.circle{
+.circle {
   border-radius: 2em;
   background-color: #616161;
   height: 35px;
   width: 35px;
   margin-right: 2%;
 }
-::-webkit-scrollbar{
+
+/* ::-webkit-scrollbar {
   background-color: #332f37;
+} */
+
+#searchinput {
+  width: 85%;
+  height: 50%;
+  background: #222025;
+  border: 0.7px solid #000000;
+  box-sizing: border-box;
+  border-radius: 50px;
+  color: white;
+}
+
+button{
+  outline: none;
+}
+input{
+  outline: none;
 }

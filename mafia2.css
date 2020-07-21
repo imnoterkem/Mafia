@@ -35,7 +35,7 @@ body {
     justify-content: flex-start;
 }
 
-.teamUP {
+.roomName {
     background: #322F37;
     border: 0.7px solid #000000;
     box-sizing: border-box;
@@ -71,11 +71,10 @@ body {
     color: white;
     padding: 3%;
     width: 40vw;
-    height: 70vh;
+    height: 65vh;
     background: #39373C;
     border: 0.7px solid #000000;
     box-sizing: border-box;
-    border-radius: 10px 10px 0px 0px;
     overflow: auto;
 }
 
@@ -104,8 +103,8 @@ input {
     background: #62B8E8;
     border: 1px solid #C8C8C8;
     box-sizing: border-box;
+    color: white;
 }
-
 .readyOrNot {
     display: flex;
     justify-content: space-between;
@@ -146,3 +145,18 @@ input {
       height: 5%;
       width: 100%;
   }
+
+  #welcome {
+      display: flex;
+    background: #39373C;
+    border: 0.7px solid #000000;
+    box-sizing: border-box;
+    border-radius: 10px 10px 0px 0px;
+    width:40vw;
+    height: 6vh;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: #B0C73E;
+  }    
+  

@@ -1,114 +1,182 @@
 var firebaseConfig = {
-    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
-    authDomain: "team-up-73173.firebaseapp.com",
-    databaseURL: "https://team-up-73173.firebaseio.com",
-    projectId: "team-up-73173",
-    storageBucket: "team-up-73173.appspot.com",
-    messagingSenderId: "1030300585767",
-    appId: "1:1030300585767:web:6577af963515d152b32302"
-}; firebase.initializeApp(firebaseConfig);
+  apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+  authDomain: "team-up-73173.firebaseapp.com",
+  databaseURL: "https://team-up-73173.firebaseio.com",
+  projectId: "team-up-73173",
+  storageBucket: "team-up-73173.appspot.com",
+  messagingSenderId: "1030300585767",
+  appId: "1:1030300585767:web:6577af963515d152b32302",
+};
+const app = firebase.initializeApp(firebaseConfig);
 
-const fs = firebase.firestore();
+const db = firebase.firestore(app);
+
+var docRef = db.collection("rooms");
+// get data
+docRef
+  .orderBy("createdAt")
+  .get()
+  .then(function (querySnapshot) {
+    clearRenderedRooms();
+    querySnapshot.forEach(function (doc) {
+      renderRoom(doc.name, doc.status, doc.currentPlayer);
+    });
+  })
+  .catch(function (error) {
+    console.log("Error getting documents: ", error);
+  });
+// listen data
+docRef.onSnapshot(function (querySnapshot) {
+  clearRenderedRooms();
+  let rooms = [];
+  querySnapshot.forEach(function (doc) {
+    // console.log(doc.id, " => ", doc.data());
+    rooms.push(doc.data());
+  });
+  rooms
+    .sort((a, b) => a.createdAt - b.createdAt)
+    .forEach((e) => {
+      renderRoom(e.name, e.status, e.currentPlayer);
+    });
+});
+
+// reset ROOMS
+const clearRenderedRooms = () => {
+  const myNode = document.getElementById("ROOMS");
+  while (myNode.firstChild) {
+    myNode.removeChild(myNode.lastChild);
+  }
+};
 
 const show = () => {
-    document.getElementById('button2').style.display = "flex";
-    document.getElementById('button').style.display = "none";
-}
+  document.getElementById("button2").style.display = "flex";
+  document.getElementById("button").style.display = "none";
+  document.getElementById("rooms").style.overflow = "hidden";
+};
 
-document.getElementById('cancel').onclick = () => {
-    document.getElementById('button2').style.display = "none";
-    document.getElementById('button').style.display = "flex";
-}
+document.getElementById("cancel").onclick = () => {
+  document.getElementById("button2").style.display = "none";
+  document.getElementById("button").style.display = "flex";
+  document.getElementById("ROOMS").style.overflowY = "scroll";
+};
 
-let j = 0;
-let o = 0;
-document.getElementById('create2').onclick = () => {
-    if (document.getElementById("name").value != "" && (document.getElementById("privateroom").checked == true || document.getElementById('publicroom').checked == true)) {
-
-        let room = document.createElement('div');
-        let roomtop = document.createElement('div');
-        let roombottom = document.createElement('div');
-        let roomside = document.createElement('div');
-        let roomstatus = document.createElement('div');
-
-        room.setAttribute("id", "room");
-        roomtop.setAttribute('id', "roomtop");
-        roombottom.setAttribute('class', 'roombottom');
-        roomstatus.setAttribute('id', 'roomstatus');
-
-        roomside.appendChild(roomtop);
-        roomside.appendChild(roombottom);
-        room.appendChild(roomside);
-        room.appendChild(roomstatus);
-
-        roomtop.innerHTML = document.getElementById('name').value;
-        // roomstatus.innerHTML =
-
-        // <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-        //     <path fill-rule="evenodd" clip-rule="evenodd" d="M5.33348 10.6667C5.33348 4.77564 10.1091 1.2316e-05 16.0001 1.2316e-05C21.8912 1.2316e-05 26.6668 4.77564 26.6668 10.6667V12.8H5.33348V10.6667ZM9.06695 10.6666C9.06695 6.83744 12.1711 3.73328 16.0003 3.73328C19.8295 3.73328 22.9336 6.83744 22.9336 10.6666V12.8H9.06695V10.6666ZM8 15.4668C3.58172 15.4668 0 19.0485 0 23.4667V29.3334C0 33.7517 3.58172 37.3334 8 37.3334H24C28.4183 37.3334 32 33.7517 32 29.3334V23.4668C32 19.0485 28.4183 15.4668 24 15.4668H8Z" fill="#616161" />
-        // </svg>
-
-        roomside.style.height = "100%";
-        roomside.style.width = "80%";
-        document.getElementById('ROOMS').appendChild(room);
-
-        for (let i = 0; i < 7; i++) {
-            circle = document.createElement('div');
-            circle.setAttribute('class', 'circle');
-            document.getElementsByClassName('roombottom')[j].appendChild(circle);
-            console.log("wtp")
-        }
-        document.getElementsByClassName('circle')[o].style.background = "#3AC348";
-        // roombottom.innerText = "1/7"
-
-        let roomname = document.getElementById("name").value;
-        // if (document.getElementById('publicroom').checked == true) {
-        //     document.getElementById('roomstatus').innerText = "Public";
-        //     fs.doc(`rooms/${roomname}`).set({
-        //         status: 'public'
-        //     })
-        // }
-        // else {
-        //     fs.doc(`rooms/${roomname}`).set({
-        //         status: 'private'
-        //     })
-        // }
-        document.getElementById("privateroom").checked = false;
-        document.getElementById('publicroom').checked = false;
-        document.getElementById('name').value = "";
-        document.getElementById('button2').style.display = "none";
-        document.getElementById('button').style.display = "flex";
-        j++;
-        o = o + 7;
+// create room
+document.getElementById("create2").onclick = () => {
+  if (
+    document.getElementById("name").value != "" &&
+    (document.getElementById("privateroom").checked == true ||
+      document.getElementById("publicroom").checked == true)
+  ) {
+    let roomname = document.getElementById("name").value;
+    if (document.getElementById("publicroom").checked == true) {
+      db.doc(`rooms/${roomname}`).set({
+        status: "Public",
+        name: roomname,
+        createdAt: Date.now(),
+        limit: 7,
+        currentPlayer: 1,
+      });
+    } else {
+      db.doc(`rooms/${roomname}`).set({
+        status: "Private",
+        name: roomname,
+        createdAt: Date.now(),
+        limit: 7,
+        currentPlayer: 1,
+      });
     }
-}
+    document.getElementById("privateroom").checked = false;
+    document.getElementById("publicroom").checked = false;
+    document.getElementById("name").value = "";
+    document.getElementById("button2").style.display = "none";
+    document.getElementById("button").style.display = "flex";
+  }
+};
+// render rooms
+const renderRoom = (name, status, currentPlayer) => {
+  let room = document.createElement("div");
+  let roomtop = document.createElement("div");
+  let roombottom = document.createElement("div");
+  let roomside = document.createElement("div");
+  let image = document.createElement("img");
+  image.src = "icons/privateroom.png";
+  image.style.width = "24px";
+  image.style.height = "24px";
+  room.setAttribute("class", "room");
+  roomtop.setAttribute("class", "roomtop");
+  roombottom.setAttribute("class", "roombottom");
+
+  roomside.appendChild(roomtop);
+  roomside.appendChild(roombottom);
+  room.appendChild(roomside);
+
+  roomtop.innerHTML = name;
+  roombottom.innerHTML = `${currentPlayer}/7`;
+
+  if (status == "Private") {
+    let roomstatus = document.createElement("div");
+    let roomstatustext = document.createElement("div");
+    roomstatus.setAttribute("class", "roomstatus");
+    room.appendChild(roomstatus);
+    roomstatus.appendChild(roomstatustext);
+    roomstatus.appendChild(image);
+    roomstatustext.innerText = status;
+    roomside.style.width = "80%";
+  } else {
+    roomside.style.width = "80%";
+    let z = document.createElement("div");
+    z.style.width = "20%";
+    room.append(z);
+    roomtop.style.width = "117%";
+  }
+  document.getElementById("ROOMS").appendChild(room);
+
+  let con = document.createElement("div");
+
+  con.setAttribute("class", "con");
+  for (let i = 0; i < 7; i++) {
+    circle = document.createElement("div");
+
+    if (i < currentPlayer) {
+      circle.style.background = "#3AC348";
+    }
+    circle.setAttribute("class", "circle");
+    con.appendChild(circle);
+    roombottom.appendChild(con);
+  }
+
+  if (currentPlayer < 7) {
+    room.onclick = () => {
+      console.log("1111");
+      room.style.height = 80 + "%";
+      let askcontainer = document.createElement("div");
+      let askname = document.createElement("input");
+      let askpassword = document.createElement("input");
+      let ask = document.createElement("div");
+      let bolih = document.createElement("button");
+      let oroh = document.createElement("button");
+      let confirm = document.createElement("div");
+
+      ask.appendChild(askname, askpassword);
+      confirm.appendChild(bolih, oroh);
+      askcontainer.appendChild(ask, confirm);
+      roombottom.appendChild(askcontainer);
+    };
+  } else {
+    room.onclick = () => {
+      // room.style.border = "1px solid red";
+      // room.style.border = "0.7px solid #000000";
+    };
+  }
+};
 
 const search = () => {
-    document.getElementById('button').style.width = "80%";
-    document.getElementById('create').style.display = "none";
-    document.getElementById('searchinput').style.display = "flex";
-}
+  document.getElementById("button").style.width = "80%";
+  document.getElementById("create").style.display = "none";
+  document.getElementById("searchinput").style.display = "flex";
+};
 
-// const hidesearchinput = () => {
-//     document.getElementById('searchinput').style.display="none";
-//     document.getElementById('create').style.display="flex";
-// }
-
-window.onload = () => {
-    var docRef = fs.collection("rooms").doc("SF");
-
-    docRef.get().then(function (doc) {
-        if (doc.exists) {
-            console.log("Document data:", doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-            console.log("No such document!");
-        }
-    }).catch(function (error) {
-        console.log("Error getting document:", error);
-    });
-}
-
-
-
-
+const hidesearchinput = () => {
+  document.getElementById("searchinput").style.display = "none";
+  document.getElementById("create").style.display = "flex";
+};

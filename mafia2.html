@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="mafia2.css">
-     
-<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
-<script src="mafia2.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+    <script src="mafia2.js"></script>
 </head>
+
 <body>
     <div class="container">
-        
+
         <div class="top">
             <h1 style="color:white">MAFIA</h1>
         </div>
-        
+
         <div class="flex">
-            
+
             <div class="members">
                 <div class="teamUP">TEAM UP</div>
                 <div id="zambuulin">zambuulin</div>
             </div>
-            
+
             <div class="chat">
                 <div class="chatbox"></div>
                 <div class="input">
-                    <input type="text" placeholder="     | Send a message">
+                    <input id="Input" type="text" placeholder="     | Send a message">
                     <button id="send" onclick="Send()">send</button>
                 </div>
                 <div class="readyOrNot">
@@ -37,9 +39,9 @@
             </div>
 
         </div>
-             
+
     </div>
-    
+
 </body>
 
 </html>

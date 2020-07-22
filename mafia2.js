@@ -1,4 +1,5 @@
-  // Your web app's Firebase configuration
+
+ // Your web app's Firebase configuration
   var firebaseConfig = {
       apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
       authDomain: "team-up-73173.firebaseapp.com",

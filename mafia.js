@@ -1,11 +1,11 @@
 var firebaseConfig = {
-  apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
-  authDomain: "team-up-73173.firebaseapp.com",
-  databaseURL: "https://team-up-73173.firebaseio.com",
-  projectId: "team-up-73173",
-  storageBucket: "team-up-73173.appspot.com",
-  messagingSenderId: "1030300585767",
-  appId: "1:1030300585767:web:6577af963515d152b32302",
+    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+    authDomain: "team-up-73173.firebaseapp.com",
+    databaseURL: "https://team-up-73173.firebaseio.com",
+    projectId: "team-up-73173",
+    storageBucket: "team-up-73173.appspot.com",
+    messagingSenderId: "1030300585767",
+    appId: "1:1030300585767:web:6577af963515d152b32302",
 };
 const app = firebase.initializeApp(firebaseConfig);
 
@@ -14,83 +14,83 @@ const db = firebase.firestore(app);
 var docRef = db.collection("rooms");
 // get data
 docRef
-  .orderBy("createdAt")
-  .get()
-  .then(function (querySnapshot) {
-    clearRenderedRooms();
-    querySnapshot.forEach(function (doc) {
-      renderRoom(doc.name, doc.status, doc.currentPlayer);
+    .orderBy("createdAt")
+    .get()
+    .then(function(querySnapshot) {
+        clearRenderedRooms();
+        querySnapshot.forEach(function(doc) {
+            renderRoom(doc.name, doc.status, doc.currentPlayer);
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
     });
-  })
-  .catch(function (error) {
-    console.log("Error getting documents: ", error);
-  });
 // listen data
-docRef.onSnapshot(function (querySnapshot) {
-  clearRenderedRooms();
-  let rooms = [];
-  querySnapshot.forEach(function (doc) {
-    // console.log(doc.id, " => ", doc.data());
-    rooms.push(doc.data());
-  });
-  rooms
-    .sort((a, b) => a.createdAt - b.createdAt)
-    .forEach((e) => {
-      renderRoom(e.name, e.status, e.currentPlayer);
+docRef.onSnapshot(function(querySnapshot) {
+    clearRenderedRooms();
+    let rooms = [];
+    querySnapshot.forEach(function(doc) {
+        // console.log(doc.id, " => ", doc.data());
+        rooms.push(doc.data());
     });
+    rooms
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .forEach((e) => {
+            renderRoom(e.name, e.status, e.currentPlayer);
+        });
 });
 
 // reset ROOMS
 const clearRenderedRooms = () => {
-  const myNode = document.getElementById("ROOMS");
-  while (myNode.firstChild) {
-    myNode.removeChild(myNode.lastChild);
-  }
+    const myNode = document.getElementById("ROOMS");
+    while (myNode.firstChild) {
+        myNode.removeChild(myNode.lastChild);
+    }
 };
 
 const show = () => {
-  document.getElementById("button2").style.display = "flex";
-  document.getElementById("button").style.display = "none";
-  document.getElementById("rooms").style.overflow = "hidden";
+    document.getElementById("button2").style.display = "flex";
+    document.getElementById("button").style.display = "none";
+    document.getElementById("rooms").style.overflow = "hidden";
 };
 
 document.getElementById("cancel").onclick = () => {
-  document.getElementById("button2").style.display = "none";
-  document.getElementById("button").style.display = "flex";
-  document.getElementById("ROOMS").style.overflowY = "scroll";
+    document.getElementById("button2").style.display = "none";
+    document.getElementById("button").style.display = "flex";
+    document.getElementById("ROOMS").style.overflowY = "scroll";
 };
 
 // create room
 document.getElementById("create2").onclick = () => {
-  if (
-    document.getElementById("name").value != "" &&
-    (document.getElementById("privateroom").checked == true ||
-      document.getElementById("publicroom").checked == true)
-  ) {
-    let roomname = document.getElementById("name").value;
-    if (document.getElementById("publicroom").checked == true) {
-      db.doc(`rooms/${roomname}`).set({
-        status: "Public",
-        name: roomname,
-        createdAt: Date.now(),
-        limit: 7,
-        currentPlayer: 1,
-      });
-    } else {
-      db.doc(`rooms/${roomname}`).set({
-        status: "Private",
-        name: roomname,
-        createdAt: Date.now(),
-        limit: 7,
-        currentPlayer: 1,
-      });
+    if (
+        document.getElementById("name").value != "" &&
+        (document.getElementById("privateroom").checked == true ||
+            document.getElementById("publicroom").checked == true)
+    ) {
+        let roomname = document.getElementById("name").value;
+        if (document.getElementById("publicroom").checked == true) {
+            db.doc(`rooms/${roomname}`).set({
+                status: "Public",
+                name: roomname,
+                createdAt: Date.now(),
+                limit: 7,
+                currentPlayer: 1,
+            });
+        } else {
+            db.doc(`rooms/${roomname}`).set({
+                status: "Private",
+                name: roomname,
+                createdAt: Date.now(),
+                limit: 7,
+                currentPlayer: 1,
+            });
+        }
+        document.getElementById("privateroom").checked = false;
+        document.getElementById("publicroom").checked = false;
+        document.getElementById("name").value = "";
+        document.getElementById("button2").style.display = "none";
+        document.getElementById("button").style.display = "flex";
     }
-    document.getElementById("privateroom").checked = false;
-    document.getElementById("publicroom").checked = false;
-    document.getElementById("name").value = "";
-    document.getElementById("button2").style.display = "none";
-    document.getElementById("button").style.display = "flex";
-  }
 };
 // render rooms
 const renderRoom = (name, status, currentPlayer) => {
@@ -240,12 +240,39 @@ const renderRoom = (name, status, currentPlayer) => {
 };
 
 const search = () => {
-  document.getElementById("button").style.width = "80%";
-  document.getElementById("create").style.display = "none";
-  document.getElementById("searchinput").style.display = "flex";
+    document.getElementById("button").style.width = "80%";
+    document.getElementById("create").style.display = "none";
+    document.getElementById("searchinput").style.display = "flex";
 };
 
 const hidesearchinput = () => {
-  document.getElementById("searchinput").style.display = "none";
-  document.getElementById("create").style.display = "flex";
+    document.getElementById("searchinput").style.display = "none";
+    document.getElementById("create").style.display = "flex";
 };
+
+
+
+
+
+
+
+
+firebase.auth().signInAnonymously().catch(function(error) {
+
+    var errorCode = error.code;
+    var errorMessage = error.message;
+});
+
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        console.log(uid);
+        // window.location.href = 'mafia2.html';
+    } else {
+
+    }
+
+});

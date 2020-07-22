@@ -148,3 +148,7 @@ Input {
     border: 1px solid #C8C8C8;
     box-sizing: border-box;
 }
+
+#line1 {
+    border: solid 10px zrgba(255, 255, 255, 0.4);;
+}

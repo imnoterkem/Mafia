@@ -16,21 +16,31 @@
   }
   let roomname = new URL(window.location.href).searchParams.get("r");
   const Send = () => {
-      const Input = document.getElementById('Input');
-      // const inputValue = document.getElementById("Input").value;
-      // const t = document.createTextNode(inputValue);
+    const Input = document.getElementById('Input');
+    if (Input.value === '' ){
+      return;
+    }
+    let s=0;
+    while(Input.value[s]===" "){
+      s++;
+    }
+    Input.value=Input.value.slice(s, Input.value.length)
+    if (Input.value === '' ){
+      return;
+    }
       const d = document.createElement('div');
-      d.innerHTML = Input.value
+      d.innerHTML = Input.value.trim();
       d.classList.add('msgs')
       document.getElementsByClassName('chatbox')[0].appendChild(d);
-
+      
       db.collection(`rooms/${roomname}/Chat`).add({
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           text: Input.value
       })
-      document.getElementById('Input').value = " ";
+      document.getElementById('Input').value = "";
       document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
   }
+
   console.log(roomname)
 
   db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt')

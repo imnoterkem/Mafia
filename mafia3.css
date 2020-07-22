@@ -72,17 +72,20 @@ body {
 }
 
 .ready {
+    display: flex;
     text-align: center;
     justify-content: center;
     align-items: center;
     color: white;
-    font-size: 24px;
-    display: flex;
-    align-self: flex-end;
-    background-color: #3AC348;
-    height: 9%;
+    background: linear-gradient(89.58deg, #3AC448 6.52%, #6BFF7A 13.31%, #3AC448 21.49%);
+    height: 7%;
     width: 95%;
     border-radius: 10px;
+    margin-top: 5%;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .input {
@@ -110,6 +113,11 @@ input {
     background: #858585;
     outline: none;
     border: none;
+    color: #c4c4c4;
+}
+
+::placeholder {
+    color: #c4c4c4;
 }
 
 .button {

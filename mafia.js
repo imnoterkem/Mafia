@@ -201,7 +201,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         var isAnonymous = user.isAnonymous;
         var uid = user.uid;
         console.log(uid);
-        // window.location.href = 'mafia2.html';
+        // window.location.href = 'mafia2.html';   
     } else {
 
     }

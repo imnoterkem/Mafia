@@ -16,9 +16,9 @@
           // User is signed in.
           var isAnonymous = user.isAnonymous;
           useruid = user.uid;
-          db.doc(`users/${useruid}`).set({
-              name: "tester1"
-          })
+          //   db.doc(`users/${useruid}`).set({
+          //       name: "tester1"
+          //   })
           console.log(useruid);
       } else {
           // User is signed out.

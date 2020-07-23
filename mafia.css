@@ -161,6 +161,12 @@ body {
   justify-content: space-between;
 }
 
+#passwordcont{
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
 #cancel {
   width: 40%;
   color: white;

@@ -241,10 +241,14 @@ const renderRoom = (name, status, currentPlayer) => {
                         var isAnonymous = user.isAnonymous;
                         var uid = user.uid;
                         console.log(uid);
-                        window.location.href = `mafia2.html?r=${name}`;
-                        db.doc(`users/${uid}`).set({
+                        console.log(askname.value)
+                        console.log(name)
+                        console.log("error")
+                        db.collection(`rooms/${name}/users`).doc(`${uid}`).set({
                             name: `${askname.value}`
                         });
+                        console.log(name)
+                        window.location.href = `mafia2.html?r=${name}`;
                     } else {
                         console.log('gg1');
                     }

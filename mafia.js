@@ -95,29 +95,34 @@ document.getElementById("create2").onclick = () => {
 // render rooms
 const renderRoom = (name, status, currentPlayer) => {
     let room = document.createElement("div");
+    let roominfo = document.createElement("div");
     let roomtop = document.createElement("div");
     let roombottom = document.createElement("div");
     let roomside = document.createElement("div");
     let image = document.createElement("img");
+    let d = document.createElement("div");
     image.src = "icons/privateroom.png";
     image.style.width = "24px";
     image.style.height = "24px";
     room.setAttribute("class", "room");
     roomtop.setAttribute("class", "roomtop");
     roombottom.setAttribute("class", "roombottom");
+    roominfo.setAttribute("class", "roominfo");
+    d.setAttribute("class", "d");
 
     roomside.appendChild(roomtop);
     roomside.appendChild(roombottom);
-    room.appendChild(roomside);
+    roominfo.appendChild(roomside);
+    room.appendChild(roominfo);
 
     roomtop.innerHTML = name;
-    roombottom.innerHTML = `${currentPlayer}/7`;
+    d.innerHTML = `${currentPlayer}/7`;
 
     if (status == "Private") {
         let roomstatus = document.createElement("div");
         let roomstatustext = document.createElement("div");
         roomstatus.setAttribute("class", "roomstatus");
-        room.appendChild(roomstatus);
+        roominfo.appendChild(roomstatus);
         roomstatus.appendChild(roomstatustext);
         roomstatus.appendChild(image);
         roomstatustext.innerText = status;
@@ -142,25 +147,109 @@ const renderRoom = (name, status, currentPlayer) => {
         }
         circle.setAttribute("class", "circle");
         con.appendChild(circle);
-        roombottom.appendChild(con);
+        d.appendChild(con);
     }
+    roombottom.appendChild(d);
 
     if (currentPlayer < 7) {
-        room.onclick = () => {
+        roominfo.onclick = () => {
+            let t = room.querySelectorAll("#form");
+            if (t.length > 0) return;
             console.log("1111");
-            room.style.height = 80 + "%";
+            room.style.height = "auto";
+            let contForForm = document.createElement("div");
             let askcontainer = document.createElement("div");
             let askname = document.createElement("input");
-            let askpassword = document.createElement("input");
             let ask = document.createElement("div");
             let bolih = document.createElement("button");
             let oroh = document.createElement("button");
             let confirm = document.createElement("div");
+            let asknamecon = document.createElement("div");
 
-            ask.appendChild(askname, askpassword);
-            confirm.appendChild(bolih, oroh);
-            askcontainer.appendChild(ask, confirm);
-            roombottom.appendChild(askcontainer);
+            ask.setAttribute("class", "askcont");
+            askname.setAttribute("class", "ask");
+            askcontainer.setAttribute("class", "askoption");
+            asknamecon.setAttribute("class", "ask-con");
+            confirm.setAttribute("class", "confirm");
+            contForForm.setAttribute("id", "form");
+
+            asknamecon.innerText = "Your name";
+            bolih.innerText = "Cancel";
+            oroh.innerText = "Join";
+
+            bolih.setAttribute("class", "bolih");
+            oroh.setAttribute("class", "oroh");
+
+            if (status == "Private") {
+                let roomstatus = document.createElement("div");
+                // let roomstatustext = document.createElement("div");
+                // roomstatus.setAttribute("class", "roomstatus");
+                // room.appendChild(roomstatus);
+                // roomstatus.appendChild(roomstatustext);
+                // roomstatus.appendChild(image);
+                // roomstatustext.innerText = status;
+                roomstatus.style.height = "20%";
+                let askpassword = document.createElement("input"); //
+                let askpasscon = document.createElement("div"); //
+                askpassword.setAttribute("class", "ask"); //
+                askpasscon.setAttribute("class", "ask-con"); //
+                askpasscon.innerText = "Password"; //
+                askpasscon.appendChild(askpassword); //
+                askcontainer.appendChild(askpasscon); //
+            }
+
+            confirm.appendChild(bolih);
+            confirm.appendChild(oroh);
+            asknamecon.appendChild(askname);
+            askcontainer.appendChild(asknamecon);
+            askcontainer.appendChild(confirm);
+            contForForm.appendChild(askcontainer);
+            contForForm.style.marginRight = "20%";
+            room.appendChild(contForForm);
+            bolih.onclick = () => {
+                contForForm.parentNode.removeChild(contForForm);
+            };
+            // if (askname.value != "") {
+            //   oroh.onclick = () => {
+            //     docRef.get().then(function () {
+            //       let x = currentPlayer + 1;
+            //       db.collection("rooms").doc(name).update({
+            //         currentPlayer: x,
+            //       });
+            //     });
+            //     window.location.href = `mafia2.html?name=${name}`;
+            //   };
+            // }
+
+            oroh.onclick = () => {
+                docRef.get().then(function() {
+                    let x = currentPlayer + 1;
+                    db.collection("rooms").doc(name).update({
+                        currentPlayer: x,
+                    });
+                });
+                firebase
+                    .auth()
+                    .signInAnonymously()
+                    .catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                    });
+
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user && askname.value !== '') {
+                        var isAnonymous = user.isAnonymous;
+                        var uid = user.uid;
+                        console.log(uid);
+                        window.location.href = `mafia2.html?r=${name}`;
+                        db.doc(`users/${uid}`).set({
+                            name: `${askname.value}`
+                        });
+                    } else {
+                        console.log('gg1');
+                    }
+                });
+            };
         };
     } else {
         room.onclick = () => {
@@ -180,30 +269,3 @@ const hidesearchinput = () => {
     document.getElementById("searchinput").style.display = "none";
     document.getElementById("create").style.display = "flex";
 };
-
-
-
-
-
-
-
-
-firebase.auth().signInAnonymously().catch(function(error) {
-
-    var errorCode = error.code;
-    var errorMessage = error.message;
-});
-
-
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        console.log(uid);
-        // window.location.href = 'mafia2.html';   
-    } else {
-
-    }
-
-});

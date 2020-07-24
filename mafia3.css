@@ -47,6 +47,7 @@ body {
     width: 60%;
     background: rgba(255, 255, 255, 0.23);
     align-items: center;
+    position: relative;
 }
 
 .board {
@@ -89,6 +90,7 @@ body {
     height: 25%;
     width: 100%;
     background-color: #C5874E;
+
 }
 
 .ready {
@@ -152,10 +154,20 @@ Input {
 
 #line1 {
     position: absolute;
-    width: 50%;
+    width: 49%;
     border: 2px solid #C4C4C4;
     background-color: #C4C4C4;
     transform: rotate(8deg);
     left: 50%;
     top: 2.8%;
+}
+
+#line2 {
+    position: absolute;
+    width: 49%;
+    border: 2px solid #C4C4C4;
+    background-color: #C4C4C4;
+    transform: rotate(-8deg);
+    right: 50%;
+    top: 2.8%; 
 }

@@ -50,6 +50,7 @@ body {
 }
 
 .board {
+    position: relative;
     width: 45%;
     height: 90%;
     display: flex;
@@ -141,7 +142,7 @@ Input {
 
 #send {
     width: 20%;
-    height: 50%;
+    height: 60%;
     border: none;
     outline: none;
     background: #AFAFAF;
@@ -150,6 +151,11 @@ Input {
 }
 
 #line1 {
-    width: 70%;
-    border: 3px solid #C4C4C4;
+    position: absolute;
+    width: 50%;
+    border: 2px solid #C4C4C4;
+    background-color: #C4C4C4;
+    transform: rotate(8deg);
+    left: 50%;
+    top: 2.8%;
 }

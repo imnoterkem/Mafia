@@ -226,22 +226,19 @@ const renderRoom = (name, status, currentPlayer) => {
                         var errorMessage = error.message;
                         console.log(errorCode, " ", errorMessage);
                     });
-
-                firebase.auth().onAuthStateChanged(function (user) {
-                    if (user && askname.value !== "") {
-                        let uid = user.uid;
-                        db.doc(`users/${uid}`).set({
-                            name: `${askname.value}`,
-                        });
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user && askname.value !== '') {
+                        var uid = user.uid;
                         if (!joinClicked) {
                             joinClicked = true;
                             joinRoom(name, uid);
                         }
-
-                        window.location.href = `mafia2.html?r=${name}`;
-                    } else {
-                        console.log("gg1");
-                    }
+                        db.collection(`rooms/${name}/users`).doc(`${uid}`).set({
+                            name: `${askname.value}`
+                        }).then(function() {
+                            window.location.href = `mafia2.html?r=${name}`;
+                        })
+                    } 
                 });
             };
         };

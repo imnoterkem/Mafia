@@ -39,17 +39,14 @@
           let sendername = doc.data().name;
           console.log(Input.value)
           db.collection(`rooms/${roomname}/Chat`).add({
-
               createdAt: firebase.firestore.FieldValue.serverTimestamp(),
               text: Input.value,
               sender: sendername
+          }).then(function() {
+              Input.value = "";
+              document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
           })
       })
-      if (Input.value === '') {
-          return;
-      }
-      document.getElementById('Input').value = "";
-      document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
   }
 
   console.log(roomname)
@@ -59,7 +56,6 @@
           document.getElementsByClassName('chatbox')[0].innerHTML = ''
           querySnapshot.forEach(function(doc) {
               const t = document.createElement("div")
-              console.log(doc.data().text)
               t.innerHTML = doc.data().sender + ':' + doc.data().text;
               t.classList.add('msgs');
               document.getElementsByClassName('chatbox')[0].append(t);
@@ -73,4 +69,16 @@
       if (event.keyCode === 13) {
           Send();
       }
+  }
+
+  function leave() {
+      db.doc(`rooms/${roomname}`).get().then(function(doc) {
+          let updater = doc.data().currentPlayer - 1;
+          db.doc(`rooms/${roomname}`).update({
+              currentPlayer: updater
+          }).then(function() {
+              window.location.href = 'mafia.html'
+          })
+      })
+
   }

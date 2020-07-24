@@ -64,6 +64,7 @@ document.getElementById("cancel").onclick = () => {
 document.getElementById("create2").onclick = () => {
     if (
         document.getElementById("name").value != "" &&
+        document.getElementById("creatername").value != "" &&
         (document.getElementById("privateroom").checked == true ||
             document.getElementById("publicroom").checked == true)
     ) {
@@ -75,7 +76,7 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
-            });
+            })
         } else {
             db.doc(`rooms/${roomname}`).set({
                 status: "Private",
@@ -83,16 +84,42 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
-            });
+            })
         }
+
+        firebase
+            .auth()
+            .signInAnonymously()
+            .catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+            });
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                var isAnonymous = user.isAnonymous;
+                let thename = document.getElementById("creatername").value;
+                console.log(thename)
+                var uid = user.uid;
+                console.log(uid);
+                console.log(thename)
+                console.log(roomname)
+                db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
+                    name: `${thename}`
+                }).then(function() {
+                    window.location.href = `mafia2.html?r=${roomname}`;
+                })
+            }
+        })
         document.getElementById("privateroom").checked = false;
         document.getElementById("publicroom").checked = false;
         document.getElementById("name").value = "";
         document.getElementById("button2").style.display = "none";
         document.getElementById("button").style.display = "flex";
+
     }
-};
-// render rooms
+}
+
 const renderRoom = (name, status, currentPlayer) => {
     let room = document.createElement("div");
     let roominfo = document.createElement("div");

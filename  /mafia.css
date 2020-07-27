@@ -159,13 +159,15 @@ body {
 }
 
 #roomoptioncontainer {
-    color: white;
-    width: 60%;
-    font-size: 15px;
-    display: flex;
-    flex-direction: row;
-    margin-left: 10%;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+}
+
+#passwordcont {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  margin-left: 2%;
 }
 
 #cancel {
@@ -343,13 +345,12 @@ input {
 }
 
 .oroh {
-    background: #E88262;
-    ;
-    border: 1px solid #E6E6E6;
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 10px;
-    color: white;
+  background: #E88262;
+  border: 1px solid #E6E6E6;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  color: white;
 }
 
 .bolih {
@@ -361,6 +362,23 @@ input {
 }
 
 .d {
-    display: flex;
-    flex-direction: row-reverse;
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+#ppassword {
+  color: white;
+  width: 60%;
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  margin-left: 10%;
+  justify-content: space-between;
+}
+
+#passwordinput {
+  width: 80%;
+  color: white;
+  margin-top: 1%;
+  height: calc(20%+10px);
 }

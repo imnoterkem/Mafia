@@ -11,31 +11,43 @@ const app = firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore(app);
 
+let joinClicked = false;
+
 var docRef = db.collection("rooms");
 // get data
 docRef
     .orderBy("createdAt")
     .get()
-    .then(function(querySnapshot) {
+    .then(function (querySnapshot) {
         clearRenderedRooms();
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
             renderRoom(doc.name, doc.status, doc.currentPlayer);
         });
     })
-    .catch(function(error) {
+    .catch(function (error) {
         console.log("Error getting documents: ", error);
     });
 // listen data
-docRef.onSnapshot(function(querySnapshot) {
+docRef.onSnapshot(function (querySnapshot) {
+
     clearRenderedRooms();
     let rooms = [];
-    querySnapshot.forEach(function(doc) {
+    querySnapshot.forEach(function (doc) {
         // console.log(doc.id, " => ", doc.data());
-        rooms.push(doc.data());
+        console.log(doc.data());
+        // if(doc.data().currentPlayer==0){
+        //     doc.data().delete();
+        // }
+        let data = doc.data();
+        data['id'] = doc.id;
+        rooms.push(data);
     });
     rooms
         .sort((a, b) => a.createdAt - b.createdAt)
         .forEach((e) => {
+            if(e.currentPlayer == 0){
+                db.doc(`rooms/${e.name}`).delete();
+            }
             renderRoom(e.name, e.status, e.currentPlayer);
         });
 });
@@ -61,6 +73,17 @@ document.getElementById("cancel").onclick = () => {
 };
 
 // create room
+const priv = () => {
+    console.log("noice");
+    let passwordinput = document.createElement("input");
+    let passwordcont = document.createElement("div");
+    passwordcont.setAttribute("id", "passwordcont");
+    passwordinput.setAttribute("id", "passwordinput");
+    passwordcont.innerText = "Room Password";
+    passwordcont.appendChild(passwordinput);
+    document.getElementById("roomoptioncontainer").appendChild(passwordcont);
+};
+
 document.getElementById("create2").onclick = () => {
     if (
         document.getElementById("name").value != "" &&
@@ -249,34 +272,29 @@ const renderRoom = (name, status, currentPlayer) => {
             // }
 
             oroh.onclick = () => {
-                docRef.get().then(function() {
-                    let x = currentPlayer + 1;
-                    db.collection("rooms").doc(name).update({
-                        currentPlayer: x,
-                    });
-                });
                 firebase
                     .auth()
                     .signInAnonymously()
-                    .catch(function(error) {
+                    .catch(function (error) {
                         var errorCode = error.code;
                         var errorMessage = error.message;
+                        console.log(errorCode, " ", errorMessage);
                     });
-
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user && askname.value !== '') {
-                        var isAnonymous = user.isAnonymous;
+                firebase.auth().onAuthStateChanged(function (user) {
+                    if (user && askname.value !== "") {
                         var uid = user.uid;
-                        console.log(uid);
-                        console.log(askname.value)
-                        console.log(name)
-                        db.collection(`rooms/${name}/users`).doc(`${uid}`).set({
-                            name: `${askname.value}`
-                        }).then(function() {
-                            window.location.href = `mafia2.html?r=${name}`;
-                        })
-                    } else {
-                        console.log('gg1');
+                        if (!joinClicked) {
+                            joinClicked = true;
+                            joinRoom(name, uid);
+                        }
+                        db.collection(`rooms/${name}/users`)
+                            .doc(`${uid}`)
+                            .set({
+                                name: `${askname.value}`,
+                            })
+                            .then(function () {
+                                window.location.href = `mafia2.html?r=${name}`;
+                            });
                     }
                 });
             };
@@ -298,4 +316,43 @@ const search = () => {
 const hidesearchinput = () => {
     document.getElementById("searchinput").style.display = "none";
     document.getElementById("create").style.display = "flex";
+};
+
+const createRoom = (status, name) => {
+    console.log("yeayeayea");
+    const room = {
+        limit: 7,
+        currentPlayer: 1,
+        createdAt: new Date().toISOString(),
+        status: status ? "Public" : "Private",
+        name: name,
+    };
+
+    db.doc(`rooms/${name}`)
+        .set(room)
+        .then((doc) => {
+            return (window.location.href = `mafia2.html?r=${name}`);
+        })
+        .catch((err) => console.log(err));
+};
+
+const joinRoom = (name, uid) => {
+    db.runTransaction((t) => {
+        let ref = db.collection("rooms").doc(name);
+        return t.get(ref).then((doc) => {
+            if (doc.data().currentPlayer < 8) {
+                t.update(ref, {
+                    currentPlayer: ++doc.data().currentPlayer,
+                    latestJoiner: uid,
+                });
+            }
+        });
+    })
+        .then(() => {
+            return console.log("joined  room");
+        })
+        .catch((err) => {
+            console.log(err);
+            return console.log("room's full");
+        });
 };

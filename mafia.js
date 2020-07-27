@@ -29,15 +29,25 @@ docRef
     });
 // listen data
 docRef.onSnapshot(function (querySnapshot) {
+
     clearRenderedRooms();
     let rooms = [];
     querySnapshot.forEach(function (doc) {
         // console.log(doc.id, " => ", doc.data());
-        rooms.push(doc.data());
+        console.log(doc.data());
+        // if(doc.data().currentPlayer==0){
+        //     doc.data().delete();
+        // }
+        let data = doc.data();
+        data['id'] = doc.id;
+        rooms.push(data);
     });
     rooms
         .sort((a, b) => a.createdAt - b.createdAt)
         .forEach((e) => {
+            if(e.currentPlayer == 0){
+                db.doc(`rooms/${e.name}`).delete();
+            }
             renderRoom(e.name, e.status, e.currentPlayer);
         });
 });
@@ -63,17 +73,19 @@ document.getElementById("cancel").onclick = () => {
 };
 
 // create room
+const priv = () => {
+    console.log("noice");
+    let passwordinput = document.createElement("input");
+    let passwordcont = document.createElement("div");
+    passwordcont.setAttribute("id", "passwordcont");
+    passwordinput.setAttribute("id", "passwordinput");
+    passwordcont.innerText = "Room Password";
+    passwordcont.appendChild(passwordinput);
+    document.getElementById("roomoptioncontainer").appendChild(passwordcont);
+};
+
 document.getElementById("create2").onclick = () => {
-    document.getElementById("privateroom").onclick = () => {
-        console.log("noice");
-        let passwordinput = document.createElement("input");
-        let passwordcont = document.createElement("div");
-        passwordcont.setAttribute("id", "passwordcont");
-        passwordcont.innerText = "Room Password";
-        passwordcont.appendChild(passwordinput);
-        document.getElementById("smallcontainer").appendChild(passwordcont);
-    };
-    if (document.getElementById("name").value != "" &&(document.getElementById("privateroom").checked == true || document.getElementById("publicroom").checked == true)) {
+    if ((document.getElementById("name").value != "" && document.getElementById('passwordinput')) && (document.getElementById("privateroom").checked == true || document.getElementById("publicroom").checked == true)) {
         console.log("dadad");
         let isPublic = false;
         let roomname = document.getElementById("name").value;
@@ -226,19 +238,22 @@ const renderRoom = (name, status, currentPlayer) => {
                         var errorMessage = error.message;
                         console.log(errorCode, " ", errorMessage);
                     });
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user && askname.value !== '') {
+                firebase.auth().onAuthStateChanged(function (user) {
+                    if (user && askname.value !== "") {
                         var uid = user.uid;
                         if (!joinClicked) {
                             joinClicked = true;
                             joinRoom(name, uid);
                         }
-                        db.collection(`rooms/${name}/users`).doc(`${uid}`).set({
-                            name: `${askname.value}`
-                        }).then(function() {
-                            window.location.href = `mafia2.html?r=${name}`;
-                        })
-                    } 
+                        db.collection(`rooms/${name}/users`)
+                            .doc(`${uid}`)
+                            .set({
+                                name: `${askname.value}`,
+                            })
+                            .then(function () {
+                                window.location.href = `mafia2.html?r=${name}`;
+                            });
+                    }
                 });
             };
         };

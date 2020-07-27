@@ -26,14 +26,17 @@
                         </div>
                         <input type="text" id="searchinput" style="display: none;">
                     </div>
-                    <div id="button2" style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
+                    <div id="button2"
+                        style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
                         <button id="create" onclick="show()">+</button>
                         <div id="smallcontainer">
                             <div id="roomname">Room Name<input id="name"></div>
                             <div id="optiontext">Your room is:</div>
                             <div id="roomoptioncontainer">
-                                <div>Public<input id="publicroom" type="radio" name="public"></div>
-                                <div>Private<input id="privateroom" type="radio" name="public"></div>
+                                <div id="ppassword">
+                                    <div>Public<input id="publicroom" type="radio" name="public"></div>
+                                    <div>Private<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
+                                </div>
                             </div>
                             <div id="buttoncontainer"><button id="cancel">Cancel</button><button id="create2">Create Room</button></div>
                         </div>

@@ -16,15 +16,29 @@
           var isAnonymous = user.isAnonymous;
           useruid = user.uid;
           console.log(useruid);
+
       } else {
 
       }
   });
+  let roomname = new URL(window.location.href).searchParams.get("r");
+  db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(function(querySnapshot) {
+      document.getElementsByClassName('users')[0].innerHTML = '';
+      querySnapshot.forEach(function(doc) {
+          let t = document.createElement('div');
+          t.classList.add('zambuulin');
+          t.innerHTML = doc.data().name;
+          document.getElementsByClassName('users')[0].appendChild(t)
+
+      })
+
+
+  })
   console.log(useruid);
   const ready = () => {
       document.getElementById("ready").classList.toggle('green');
   }
-  let roomname = new URL(window.location.href).searchParams.get("r");
+
   const Send = () => {
       const Input = document.getElementById('Input');
       if (Input.value === '') {
@@ -74,10 +88,12 @@
   function leave() {
       db.doc(`rooms/${roomname}`).get().then(function(doc) {
           let updater = doc.data().currentPlayer - 1;
+          db.doc(`rooms/${roomname}/users/${useruid}`).delete();
           db.doc(`rooms/${roomname}`).update({
               currentPlayer: updater
           }).then(function() {
-              window.location.href = 'mafia.html'
+
+              window.location.href = 'index.html';
           })
       })
 

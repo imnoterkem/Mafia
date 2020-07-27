@@ -53,7 +53,7 @@ body {
     align-items: center;
 }
 
-#zambuulin {
+.zambuulin {
     background: #39373C;
     border: 0.7px solid #000000;
     box-sizing: border-box;
@@ -111,6 +111,7 @@ input {
     box-sizing: border-box;
     color: white;
 }
+
 .readyOrNot {
     display: flex;
     justify-content: space-between;
@@ -143,14 +144,17 @@ input {
 
  ::placeholder {
     color: #BBBBBB;
-  }
-  button {
-      outline: none;
-  }
-  .msgs{
-      height: 5%;
-      width: 100%;
-  }
+}
+
+button {
+    outline: none;
+}
+
+.msgs {
+    width: 100%;
+    word-wrap: break-word;
+    word-break: break-all;
+}
 
 #welcome {
     display: flex;
@@ -158,21 +162,16 @@ input {
     border: 0.7px solid #000000;
     box-sizing: border-box;
     border-radius: 10px 10px 0px 0px;
-    width:40vw;
+    width: 40vw;
     height: 6vh;
     text-align: center;
     align-items: center;
     justify-content: center;
     color: #B0C73E;
-}    
-  
-button {
-    outline: none;
 }
 
-.msgs {
-    height: 5%;
-    width: 100%;
+button {
+    outline: none;
 }
 
 ::-webkit-scrollbar {

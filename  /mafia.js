@@ -29,7 +29,6 @@ docRef
     });
 // listen data
 docRef.onSnapshot(function (querySnapshot) {
-
     clearRenderedRooms();
     let rooms = [];
     querySnapshot.forEach(function (doc) {
@@ -39,13 +38,13 @@ docRef.onSnapshot(function (querySnapshot) {
         //     doc.data().delete();
         // }
         let data = doc.data();
-        data['id'] = doc.id;
+        data["id"] = doc.id;
         rooms.push(data);
     });
     rooms
         .sort((a, b) => a.createdAt - b.createdAt)
         .forEach((e) => {
-            if(e.currentPlayer == 0){
+            if (e.currentPlayer == 0) {
                 db.doc(`rooms/${e.name}`).delete();
             }
             renderRoom(e.name, e.status, e.currentPlayer);
@@ -99,49 +98,48 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
-            })
+            });
         } else {
             db.doc(`rooms/${roomname}`).set({
                 status: "Private",
+                password: document.getElementById("passwordinput").value,
                 name: roomname,
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
-            })
+            });
         }
 
         firebase
             .auth()
             .signInAnonymously()
-            .catch(function(error) {
+            .catch(function (error) {
                 var errorCode = error.code;
                 var errorMessage = error.message;
             });
 
-        firebase.auth().onAuthStateChanged(function(user) {
+        firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
-                var isAnonymous = user.isAnonymous;
                 let thename = document.getElementById("creatername").value;
-                console.log(thename)
                 var uid = user.uid;
-                console.log(uid);
-                console.log(thename)
-                console.log(roomname)
-                db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
-                    name: `${thename}`
-                }).then(function() {
-                    window.location.href = `mafia2.html?r=${roomname}`;
-                })
+                db.collection(`rooms/${roomname}/users`)
+                    .doc(`${uid}`)
+                    .set({
+                        name: `${thename}`,
+                    })
+                    .then(function () {
+                        window.location.href = `mafia2.html?r=${roomname}`;
+                    });
             }
-        })
+        });
         document.getElementById("privateroom").checked = false;
         document.getElementById("publicroom").checked = false;
         document.getElementById("name").value = "";
+        document.getElementById("creatername").value = "";
         document.getElementById("button2").style.display = "none";
         document.getElementById("button").style.display = "flex";
-
     }
-}
+};
 
 const renderRoom = (name, status, currentPlayer) => {
     let room = document.createElement("div");
@@ -259,45 +257,35 @@ const renderRoom = (name, status, currentPlayer) => {
             bolih.onclick = () => {
                 contForForm.parentNode.removeChild(contForForm);
             };
-            // if (askname.value != "") {
-            //   oroh.onclick = () => {
-            //     docRef.get().then(function () {
-            //       let x = currentPlayer + 1;
-            //       db.collection("rooms").doc(name).update({
-            //         currentPlayer: x,
-            //       });
-            //     });
-            //     window.location.href = `mafia2.html?name=${name}`;
-            //   };
-            // }
-
-            oroh.onclick = () => {
-                firebase
-                    .auth()
-                    .signInAnonymously()
-                    .catch(function (error) {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        console.log(errorCode, " ", errorMessage);
-                    });
-                firebase.auth().onAuthStateChanged(function (user) {
-                    if (user && askname.value !== "") {
-                        var uid = user.uid;
-                        if (!joinClicked) {
-                            joinClicked = true;
-                            joinRoom(name, uid);
+            if (name.password == askpassword.value) {
+                oroh.onclick = () => {
+                    firebase
+                        .auth()
+                        .signInAnonymously()
+                        .catch(function (error) {
+                            var errorCode = error.code;
+                            var errorMessage = error.message;
+                            console.log(errorCode, " ", errorMessage);
+                        });
+                    firebase.auth().onAuthStateChanged(function (user) {
+                        if (user && askname.value !== "") {
+                            var uid = user.uid;
+                            if (!joinClicked) {
+                                joinClicked = true;
+                                joinRoom(name, uid);
+                            }
+                            db.collection(`rooms/${name}/users`)
+                                .doc(`${uid}`)
+                                .set({
+                                    name: `${askname.value}`,
+                                })
+                                .then(function () {
+                                    window.location.href = `mafia2.html?r=${name}`;
+                                });
                         }
-                        db.collection(`rooms/${name}/users`)
-                            .doc(`${uid}`)
-                            .set({
-                                name: `${askname.value}`,
-                            })
-                            .then(function () {
-                                window.location.href = `mafia2.html?r=${name}`;
-                            });
-                    }
-                });
-            };
+                    });
+                };
+            }
         };
     } else {
         room.onclick = () => {

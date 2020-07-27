@@ -51,21 +51,16 @@ body {
     position: relative;
 }
 
-.geometrics {
-    position: relative;
-    width: 45%;
-    height: auto;
-}
-
 .board {
     width: 45%;
     height: 90%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-end;
     background-image: url('../assets/Group 38.png');
     background-repeat: no-repeat;
     background-size: contain;
+    justify-content: space-evenly;
 }
 
 .right {
@@ -145,4 +140,13 @@ Input {
     color: #c4c4c4;
 }
 
+.huzur {
+    display: flex;
+    flex-direction: row;
+    width: 17%;
+    height: 15%;
+    border: 1px solid white;
+    background-color: black;
+    border-radius: 8%;
+}
 

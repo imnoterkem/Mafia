@@ -21,7 +21,7 @@ body {
     display: flex;
     flex-grow: 1;
     align-items: center;
-    background-image: url('./assets/Group20.png');
+    background-image: url('../assets/Group20.png');
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -51,48 +51,16 @@ body {
     position: relative;
 }
 
-.geometrics {
-    position: relative;
-    width: 45%;
-    height: auto;
-}
-
-#circle {
-    border-radius: 50%;
-    width: 12px;
-    height: 12px;
-    background: #666666; 
-    margin-bottom: 5%;
-}
-
-#line1 {
-    position: absolute;
-    width: 49%;
-    border: 2px solid #C4C4C4;
-    background-color: #C4C4C4;
-    transform: rotate(8deg);
-    left: 50%;
-    top: 2.8%;
-}
-
-#line2 {
-    position: absolute;
-    width: 49%;
-    border: 2px solid #C4C4C4;
-    background-color: #C4C4C4;
-    transform: rotate(-8deg);
-    right: 50%;
-    top: 2.8%; 
-}
-
 .board {
     width: 45%;
     height: 90%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: url('./assets/Group 38.png');
+    flex-direction: row;
+    align-items: flex-end;
+    background-image: url('../assets/Group 38.png');
     background-repeat: no-repeat;
+    background-size: contain;
+    justify-content: space-evenly;
 }
 
 .right {
@@ -172,4 +140,13 @@ Input {
     color: #c4c4c4;
 }
 
+.huzur {
+    display: flex;
+    flex-direction: row;
+    width: 17%;
+    height: 15%;
+    border: 1px solid white;
+    background-color: black;
+    border-radius: 8%;
+}
 

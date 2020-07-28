@@ -21,7 +21,7 @@ docRef
     .then(function (querySnapshot) {
         clearRenderedRooms();
         querySnapshot.forEach(function (doc) {
-            renderRoom(doc.name, doc.status, doc.currentPlayer);
+            renderRoom(doc.name, doc.status, doc.currentPlayer, doc.password);
         });
     })
     .catch(function (error) {
@@ -33,7 +33,7 @@ docRef.onSnapshot(function (querySnapshot) {
     let rooms = [];
     querySnapshot.forEach(function (doc) {
         // console.log(doc.id, " => ", doc.data());
-        console.log(doc.data());
+        //console.log(doc.data());
         // if(doc.data().currentPlayer==0){
         //     doc.data().delete();
         // }
@@ -47,7 +47,8 @@ docRef.onSnapshot(function (querySnapshot) {
             if (e.currentPlayer == 0) {
                 db.doc(`rooms/${e.name}`).delete();
             }
-            renderRoom(e.name, e.status, e.currentPlayer);
+            //console.log(e.password);
+            renderRoom(e.name, e.status, e.currentPlayer, e.password);
         });
 });
 
@@ -141,7 +142,7 @@ document.getElementById("create2").onclick = () => {
     }
 };
 
-const renderRoom = (name, status, currentPlayer) => {
+const renderRoom = (name, status, currentPlayer, password) => {
     let room = document.createElement("div");
     let roominfo = document.createElement("div");
     let roomtop = document.createElement("div");
@@ -229,13 +230,8 @@ const renderRoom = (name, status, currentPlayer) => {
             oroh.setAttribute("class", "oroh");
 
             if (status == "Private") {
+                let x = password;
                 let roomstatus = document.createElement("div");
-                // let roomstatustext = document.createElement("div");
-                // roomstatus.setAttribute("class", "roomstatus");
-                // room.appendChild(roomstatus);
-                // roomstatus.appendChild(roomstatustext);
-                // roomstatus.appendChild(image);
-                // roomstatustext.innerText = status;
                 roomstatus.style.height = "20%";
                 let askpassword = document.createElement("input"); //
                 let askpasscon = document.createElement("div"); //
@@ -244,20 +240,63 @@ const renderRoom = (name, status, currentPlayer) => {
                 askpasscon.innerText = "Password"; //
                 askpasscon.appendChild(askpassword); //
                 askcontainer.appendChild(askpasscon); //
-            }
 
-            confirm.appendChild(bolih);
-            confirm.appendChild(oroh);
-            asknamecon.appendChild(askname);
-            askcontainer.appendChild(asknamecon);
-            askcontainer.appendChild(confirm);
-            contForForm.appendChild(askcontainer);
-            contForForm.style.marginRight = "20%";
-            room.appendChild(contForForm);
-            bolih.onclick = () => {
-                contForForm.parentNode.removeChild(contForForm);
-            };
-            if (name.password == askpassword.value) {
+                confirm.appendChild(bolih);
+                confirm.appendChild(oroh);
+                asknamecon.appendChild(askname);
+                askcontainer.appendChild(asknamecon);
+                askcontainer.appendChild(confirm);
+                contForForm.appendChild(askcontainer);
+                contForForm.style.marginRight = "20%";
+                room.appendChild(contForForm);
+                oroh.onclick = () => {
+                    let sk = askpassword.value;
+                    if (sk == x) {
+                        firebase
+                            .auth()
+                            .signInAnonymously()
+                            .catch(function (error) {
+                                var errorCode = error.code;
+                                var errorMessage = error.message;
+                                console.log(errorCode, " ", errorMessage);
+                            });
+                        firebase.auth().onAuthStateChanged(function (user) {
+                            if (user && askname.value !== "") {
+                                var uid = user.uid;
+                                if (!joinClicked) {
+                                    joinClicked = true;
+                                    joinRoom(name, uid);
+                                }
+                                db.collection(`rooms/${name}/users`)
+                                    .doc(`${uid}`)
+                                    .set({
+                                        name: `${askname.value}`,
+                                    })
+                                    .then(function () {
+                                        window.location.href = `mafia2.html?r=${name}`;
+                                    });
+                            }
+                        });
+                    }
+                };
+            } else {
+                confirm.appendChild(bolih);
+                confirm.appendChild(oroh);
+                asknamecon.appendChild(askname);
+                askcontainer.appendChild(asknamecon);
+                askcontainer.appendChild(confirm);
+                contForForm.appendChild(askcontainer);
+                contForForm.style.marginRight = "20%";
+                room.appendChild(contForForm);
+                bolih.onclick = () => {
+                    contForForm.parentNode.removeChild(contForForm);
+                };
+
+                docRef.get().then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
+                        console.log(doc.name);
+                    });
+                });
                 oroh.onclick = () => {
                     firebase
                         .auth()
@@ -286,11 +325,9 @@ const renderRoom = (name, status, currentPlayer) => {
                     });
                 };
             }
-        };
-    } else {
-        room.onclick = () => {
-            // room.style.border = "1px solid red";
-            // room.style.border = "0.7px solid #000000";
+            bolih.onclick = () => {
+                contForForm.parentNode.removeChild(contForForm);
+            };
         };
     }
 };

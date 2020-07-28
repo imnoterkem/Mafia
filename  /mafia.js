@@ -18,20 +18,20 @@ var docRef = db.collection("rooms");
 docRef
     .orderBy("createdAt")
     .get()
-    .then(function (querySnapshot) {
+    .then(function(querySnapshot) {
         clearRenderedRooms();
         querySnapshot.forEach(function (doc) {
             renderRoom(doc.name, doc.status, doc.currentPlayer, doc.password);
         });
     })
-    .catch(function (error) {
+    .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
 // listen data
 docRef.onSnapshot(function (querySnapshot) {
     clearRenderedRooms();
     let rooms = [];
-    querySnapshot.forEach(function (doc) {
+    querySnapshot.forEach(function(doc) {
         // console.log(doc.id, " => ", doc.data());
         //console.log(doc.data());
         // if(doc.data().currentPlayer==0){
@@ -363,16 +363,16 @@ const createRoom = (status, name) => {
 
 const joinRoom = (name, uid) => {
     db.runTransaction((t) => {
-        let ref = db.collection("rooms").doc(name);
-        return t.get(ref).then((doc) => {
-            if (doc.data().currentPlayer < 8) {
-                t.update(ref, {
-                    currentPlayer: ++doc.data().currentPlayer,
-                    latestJoiner: uid,
-                });
-            }
-        });
-    })
+            let ref = db.collection("rooms").doc(name);
+            return t.get(ref).then((doc) => {
+                if (doc.data().currentPlayer < 8) {
+                    t.update(ref, {
+                        currentPlayer: ++doc.data().currentPlayer,
+                        latestJoiner: uid,
+                    });
+                }
+            });
+        })
         .then(() => {
             return console.log("joined  room");
         })

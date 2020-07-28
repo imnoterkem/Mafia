@@ -16,13 +16,17 @@
           var isAnonymous = user.isAnonymous;
           useruid = user.uid;
           console.log(useruid);
-
+          document.getElementById('lolo').innerHTML = roomname;
       } else {
 
       }
   });
+
   let roomname = new URL(window.location.href).searchParams.get("r");
+
+
   db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(function(querySnapshot) {
+
       document.getElementsByClassName('users')[0].innerHTML = '';
       querySnapshot.forEach(function(doc) {
           let t = document.createElement('div');
@@ -40,7 +44,8 @@
   }
 
   const Send = () => {
-      const Input = document.getElementById('Input');
+      let Input = document.getElementById('Input');
+
       if (Input.value === '') {
           return;
       }
@@ -49,6 +54,14 @@
           s++;
       }
       Input.value = Input.value.slice(s, Input.value.length)
+      let useless = document.createElement('div');
+      db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+          useless.innerHTML = doc.data().name + ':' + Input.value;
+          useless.classList.add('msgs');
+          document.getElementsByClassName('chatbox')[0].appendChild(useless);
+      })
+
+
       db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
           let sendername = doc.data().name;
           console.log(Input.value)
@@ -57,10 +70,11 @@
               text: Input.value,
               sender: sendername
           }).then(function() {
-              Input.value = "";
+              document.getElementById('Input').value = '';
               document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
           })
       })
+
   }
 
   console.log(roomname)
@@ -86,15 +100,14 @@
   }
 
   function leave() {
+      console.log('fkfkkfkfkf');
       db.doc(`rooms/${roomname}`).get().then(function(doc) {
           let updater = doc.data().currentPlayer - 1;
           db.doc(`rooms/${roomname}/users/${useruid}`).delete();
           db.doc(`rooms/${roomname}`).update({
               currentPlayer: updater
           }).then(function() {
-
               window.location.href = 'index.html';
           })
       })
-
   }

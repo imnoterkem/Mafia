@@ -35,7 +35,7 @@ body {
     justify-content: flex-start;
 }
 
-.roomName {
+.noname {
     background: #322F37;
     border: 0.7px solid #000000;
     box-sizing: border-box;

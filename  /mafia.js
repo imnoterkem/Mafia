@@ -18,21 +18,21 @@ var docRef = db.collection("rooms");
 docRef
     .orderBy("createdAt")
     .get()
-    .then(function (querySnapshot) {
+    .then(function(querySnapshot) {
         clearRenderedRooms();
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
             renderRoom(doc.name, doc.status, doc.currentPlayer);
         });
     })
-    .catch(function (error) {
+    .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
 // listen data
-docRef.onSnapshot(function (querySnapshot) {
+docRef.onSnapshot(function(querySnapshot) {
 
     clearRenderedRooms();
     let rooms = [];
-    querySnapshot.forEach(function (doc) {
+    querySnapshot.forEach(function(doc) {
         // console.log(doc.id, " => ", doc.data());
         console.log(doc.data());
         // if(doc.data().currentPlayer==0){
@@ -45,7 +45,7 @@ docRef.onSnapshot(function (querySnapshot) {
     rooms
         .sort((a, b) => a.createdAt - b.createdAt)
         .forEach((e) => {
-            if(e.currentPlayer == 0){
+            if (e.currentPlayer == 0) {
                 db.doc(`rooms/${e.name}`).delete();
             }
             renderRoom(e.name, e.status, e.currentPlayer);
@@ -275,12 +275,12 @@ const renderRoom = (name, status, currentPlayer) => {
                 firebase
                     .auth()
                     .signInAnonymously()
-                    .catch(function (error) {
+                    .catch(function(error) {
                         var errorCode = error.code;
                         var errorMessage = error.message;
                         console.log(errorCode, " ", errorMessage);
                     });
-                firebase.auth().onAuthStateChanged(function (user) {
+                firebase.auth().onAuthStateChanged(function(user) {
                     if (user && askname.value !== "") {
                         var uid = user.uid;
                         if (!joinClicked) {
@@ -292,7 +292,7 @@ const renderRoom = (name, status, currentPlayer) => {
                             .set({
                                 name: `${askname.value}`,
                             })
-                            .then(function () {
+                            .then(function() {
                                 window.location.href = `mafia2.html?r=${name}`;
                             });
                     }
@@ -338,16 +338,16 @@ const createRoom = (status, name) => {
 
 const joinRoom = (name, uid) => {
     db.runTransaction((t) => {
-        let ref = db.collection("rooms").doc(name);
-        return t.get(ref).then((doc) => {
-            if (doc.data().currentPlayer < 8) {
-                t.update(ref, {
-                    currentPlayer: ++doc.data().currentPlayer,
-                    latestJoiner: uid,
-                });
-            }
-        });
-    })
+            let ref = db.collection("rooms").doc(name);
+            return t.get(ref).then((doc) => {
+                if (doc.data().currentPlayer < 8) {
+                    t.update(ref, {
+                        currentPlayer: ++doc.data().currentPlayer,
+                        latestJoiner: uid,
+                    });
+                }
+            });
+        })
         .then(() => {
             return console.log("joined  room");
         })

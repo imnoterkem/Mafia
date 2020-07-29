@@ -200,3 +200,8 @@ button {
  ::-webkit-scrollbar-thumb:hover {
     background: #555;
 }
+
+.switch {
+    border: 5px solid green;
+    border-collapse: collapse;
+}

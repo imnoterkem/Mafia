@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="mafia.css">
 </head>
 
-<body onbeforeunload="lol()">
+<body>
     <div id="header"></div>
     <div id="bottom">
         <div id="container">
@@ -33,8 +33,10 @@
                             <div id='roomname'>Your Name<input id='creatername' style="width: 80%;"></div>
                             <div id="optiontext">Your room is:</div>
                             <div id="roomoptioncontainer">
-                                <div>Public<input id="publicroom" type="radio" name="public"></div>
-                                <div>Private<input id="privateroom" type="radio" name="public"></div>
+                                <div id="ppassword">
+                                    <div>Public<input id="publicroom" type="radio" name="public"></div>
+                                    <div>Private<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
+                                </div>
                             </div>
                             <div id="buttoncontainer"><button id="cancel">Cancel</button><button id="create2">Create Room</button></div>
                         </div>

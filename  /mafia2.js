@@ -31,16 +31,17 @@
       querySnapshot.forEach(function(doc) {
           let t = document.createElement('div');
           t.classList.add('zambuulin');
+          t.id = useruid
           t.innerHTML = doc.data().name;
           document.getElementsByClassName('users')[0].appendChild(t)
 
       })
-
-
   })
   console.log(useruid);
+
   const ready = () => {
       document.getElementById("ready").classList.toggle('green');
+      document.getElementById(`${useruid}`).classList.toggle('switch');
   }
 
   const Send = () => {
@@ -100,8 +101,9 @@
   }
 
   function leave() {
-      console.log('fkfkkfkfkf');
+      console.log("lol")
       db.doc(`rooms/${roomname}`).get().then(function(doc) {
+          console.log('fkfkkfkfkf');
           let updater = doc.data().currentPlayer - 1;
           db.doc(`rooms/${roomname}/users/${useruid}`).delete();
           db.doc(`rooms/${roomname}`).update({
@@ -110,4 +112,8 @@
               window.location.href = 'index.html';
           })
       })
+      console.log('fksdgdfg');
   }
+  window.addEventListener('beforeunload', function() {
+      leave();
+  });

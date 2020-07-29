@@ -102,6 +102,7 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
+                ready: 0
             })
         } else {
             db.doc(`rooms/${roomname}`).set({
@@ -110,6 +111,7 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
+                ready: 0
             })
         }
 
@@ -132,6 +134,7 @@ document.getElementById("create2").onclick = () => {
                 console.log(roomname)
                 db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
                     name: `${thename}`
+
                 }).then(function() {
                     window.location.href = `mafia2.html?r=${roomname}`;
                 })

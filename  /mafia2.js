@@ -38,12 +38,34 @@
       })
   })
   console.log(useruid);
-
+  let clicked = 0
   const ready = () => {
       document.getElementById("ready").classList.toggle('green');
       document.getElementById(`${useruid}`).classList.toggle('switch');
+      if (clicked % 2 === 0) {
+          db.doc(`rooms/${roomname}`).get().then(function(doc) {
+              let readynumber;
+              readynumber = doc.data().ready + 1
+              db.doc(`rooms/${roomname}`).update({
+                  ready: readynumber
+              })
+          })
+      } else {
+          db.doc(`rooms/${roomname}`).get().then(function(doc) {
+              let readynumber;
+              readynumber = doc.data().ready - 1;
+              db.doc(`rooms/${roomname}`).update({
+                  ready: readynumber
+              })
+          })
+      }
+      clicked = clicked + 1;
   }
-
+  db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
+      if (doc.data().ready >= 7) {
+          window.location.href = `mafia3.html?r=${roomname}`
+      };
+  })
   const Send = () => {
       let Input = document.getElementById('Input');
 

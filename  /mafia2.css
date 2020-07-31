@@ -122,7 +122,7 @@ input {
     margin-top: 3%;
     width: 35vw;
     height: 5vh;
-    background: #A6A6A6;
+    background: #3AC348;
     border: 0.7px solid #B3B3B3;
     box-sizing: border-box;
     border-radius: 10px;
@@ -130,7 +130,7 @@ input {
 }
 
 .green {
-    background: #3AC348 !important;
+    background: #a6a6a6!important;
 }
 
 #L {

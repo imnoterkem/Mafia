@@ -31,13 +31,16 @@ db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(functio
         t.classList.add('zambuulin');
         t.id = useruid
         t.innerHTML = doc.data().name;
+        if (doc.data().ready) {
+            t.style.border = "5px solid green"
+        }
         document.getElementsByClassName('users')[0].appendChild(t)
     })
 })
 console.log(useruid);
 let clicked = 0
 const ready = () => {
-
+        document.getElementById("ready").classList.toggle('green');
         if (clicked % 2 === 0) {
             db.doc(`rooms/${roomname}`).get().then(function(doc) {
                 let readynumber;
@@ -45,6 +48,8 @@ const ready = () => {
                 db.doc(`rooms/${roomname}`).update({
                     ready: readynumber
                 })
+
+
             })
             db.doc(`rooms/${roomname}/users/${useruid}`).update({
                 ready: true
@@ -60,6 +65,7 @@ const ready = () => {
                     ready: readynumber
                 })
             })
+
         }
         clicked = clicked + 1;
     }

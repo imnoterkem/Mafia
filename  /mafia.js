@@ -100,7 +100,11 @@ document.getElementById("cancel").onclick = () => {
     document.getElementById("publicroom").checked = false;
     document.getElementById("name").value = "";
     document.getElementById("creatername").value = "";
-    document.getElementById("roomoptioncontainer").removeChild(document.getElementById("passwordcont"));
+    if (document.getElementById("passwordcont")) {
+        document
+            .getElementById("roomoptioncontainer")
+            .removeChild(document.getElementById("passwordcont"));
+    }
 };
 
 // create room
@@ -115,9 +119,11 @@ const priv = () => {
 };
 
 const publ = () => {
-    document
-        .getElementById("roomoptioncontainer")
-        .removeChild(document.getElementById("passwordcont"));
+    if (document.getElementById("passwordcont")) {
+        document
+            .getElementById("roomoptioncontainer")
+            .removeChild(document.getElementById("passwordcont"));
+    }
 };
 
 document.getElementById("create2").onclick = () => {
@@ -166,12 +172,14 @@ document.getElementById("create2").onclick = () => {
                 if (user) {
                     let thename = document.getElementById("creatername").value;
                     var uid = user.uid;
+                    console.log(thename)
                     db.collection(`rooms/${roomname}/users`)
                         .doc(`${uid}`)
                         .set({
                             name: `${thename}`,
                         })
                         .then(function () {
+                            document.getElementById("creatername").value = "";
                             window.location.href = `mafia2.html?r=${roomname}`;
                         });
                 }
@@ -181,9 +189,13 @@ document.getElementById("create2").onclick = () => {
         document.getElementById("privateroom").checked = false;
         document.getElementById("publicroom").checked = false;
         document.getElementById("name").value = "";
-        document.getElementById("creatername").value = "";
+        
         document.getElementById("button2").style.display = "none";
-        document.getElementById("roomoptioncontainer").removeChild(document.getElementById("passwordcont"));
+        if (document.getElementById("passwordcont")) {
+            document
+                .getElementById("roomoptioncontainer")
+                .removeChild(document.getElementById("passwordcont"));
+        }
         document.getElementById("button").style.display = "flex";
     }
 };
@@ -373,20 +385,14 @@ const renderRoom = (name, status, currentPlayer, password) => {
 };
 
 const search = () => {
-    document.getElementById("search").style.width = "60%";
-    document
-        .getElementById("search")
-        .appendChild(document.getElementById("searchinput"));
     document.getElementById("button").style.width = "80%";
     document.getElementById("create").style.display = "none";
     document.getElementById("searchinput").style.display = "flex";
     document.getElementById("cancelsearch").style.display = "flex";
     document.getElementById("searchroom").style.display = "flex";
     document.getElementById("search").style.width = "80%";
-    document
-        .getElementById("search")
-        .appendChild(document.getElementById("searchinput"));
     document.getElementById("searchinput").style.height = "90%";
+    document.getElementById("searchinput").style.width = "92%";
 };
 
 const joinRoom = (name, uid) => {

@@ -82,6 +82,8 @@ body {
 }
 
 #search{
+    display: flex;
+    align-items: center;
     border: 1px solid black;
     background-color: #332f37;
     box-shadow: black 0px 1px 1px 1px;

@@ -14,7 +14,6 @@ const db = firebase.firestore(app);
 let joinClicked = false;
 
 var docRef = db.collection("rooms");
-// get data
 docRef
     .orderBy("createdAt")
     .get()
@@ -133,8 +132,8 @@ document.getElementById("create2").onclick = () => {
                 console.log(thename)
                 console.log(roomname)
                 db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
-                    name: `${thename}`
-
+                    name: `${thename}`,
+                    ready: false
                 }).then(function() {
                     window.location.href = `mafia2.html?r=${roomname}`;
                 })
@@ -297,6 +296,7 @@ const renderRoom = (name, status, currentPlayer) => {
                             .doc(`${uid}`)
                             .set({
                                 name: `${askname.value}`,
+                                ready: false
                             })
                             .then(function() {
                                 window.location.href = `mafia2.html?r=${name}`;

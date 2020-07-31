@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mafia</title>
-    <!-- <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script> -->
-    <link rel="stylesheet" href="mafia3.css">\
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+
+    <link rel="stylesheet" href="mafia3.css">
 
 </head>
 
@@ -15,30 +17,54 @@
     <div class="head"></div>
     <div class="body">
         <div class="h">
-            
-        <div class="moon"></div>
-        <div class="back">
-            <div class="board">
-                <h2 class="night">шөнө 1</h2>
-                <div class="my_huzur"></div> 
-                <div class="huzur"></div> 
-                <div class="huzur"></div> 
-                <div class="huzur"></div> 
-                <div class="huzur"></div> 
-                <div class="huzur"></div> 
-                <div class="huzur"></div> 
-            </div>
-            <div class="right">
-                <div class="chatbox">
-                    <div class="display"></div>
-                    <div class="input">
-                        <input id="Input" type="text" placeholder="     | энд мессежээ бичнэ үү">
+
+            <div class="moon"></div>
+            <div class="back">
+                <div class="board">
+                    <h2 class="night">шөнө 1</h2>
+                    <div class="cards">
+                        <div class="my_huzur">
+                            <div class="player-name"></div>
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
+                        <div class="huzur">
+
+                            <img class="card-image" src="../assets/huzur.png" alt="">
+                        </div>
                     </div>
-                    <button class="ready" onclick="ready()">бэлэн?</button>
+
+                </div>
+                <div class="right">
+                    <div class="chatbox">
+                        <div class="display"></div>
+                        <div class="input">
+                            <input id="Input" type="text" placeholder="     | энд мессежээ бичнэ үү">
+                        </div>
+                        <button class="ready" onclick="ready()">бэлэн?</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </body>
 <script src="mafia3.js"></script>

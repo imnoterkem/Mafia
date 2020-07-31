@@ -49,7 +49,7 @@ const hidesearchinput = () => {
     document.getElementById("cancelsearch").style.display = "none";
     document.getElementById("searchroom").style.display = "none";
     document.getElementById("button").style.width = "15%";
-    document.getElementById('search').style.width="35px";
+    document.getElementById("search").style.width = "35px";
     docRef
         .orderBy("createdAt")
         .get()
@@ -96,6 +96,11 @@ document.getElementById("cancel").onclick = () => {
     document.getElementById("button2").style.display = "none";
     document.getElementById("button").style.display = "flex";
     document.getElementById("ROOMS").style.overflowY = "scroll";
+    document.getElementById("privateroom").checked = false;
+    document.getElementById("publicroom").checked = false;
+    document.getElementById("name").value = "";
+    document.getElementById("creatername").value = "";
+    document.getElementById("roomoptioncontainer").removeChild(document.getElementById("passwordcont"));
 };
 
 // create room
@@ -178,6 +183,7 @@ document.getElementById("create2").onclick = () => {
         document.getElementById("name").value = "";
         document.getElementById("creatername").value = "";
         document.getElementById("button2").style.display = "none";
+        document.getElementById("roomoptioncontainer").removeChild(document.getElementById("passwordcont"));
         document.getElementById("button").style.display = "flex";
     }
 };
@@ -367,15 +373,20 @@ const renderRoom = (name, status, currentPlayer, password) => {
 };
 
 const search = () => {
-    // document.getElementById('search').style.width="60%";
-    // document.getElementById('search').appendChild(document.getElementById('searchinput'));
+    document.getElementById("search").style.width = "60%";
+    document
+        .getElementById("search")
+        .appendChild(document.getElementById("searchinput"));
     document.getElementById("button").style.width = "80%";
     document.getElementById("create").style.display = "none";
     document.getElementById("searchinput").style.display = "flex";
     document.getElementById("cancelsearch").style.display = "flex";
     document.getElementById("searchroom").style.display = "flex";
-    document.getElementById('search').style.width="80%";
-    document.getElementById('searchinput').style.height="90%"
+    document.getElementById("search").style.width = "80%";
+    document
+        .getElementById("search")
+        .appendChild(document.getElementById("searchinput"));
+    document.getElementById("searchinput").style.height = "90%";
 };
 
 const joinRoom = (name, uid) => {

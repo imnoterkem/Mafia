@@ -122,7 +122,7 @@ input {
     margin-top: 3%;
     width: 35vw;
     height: 5vh;
-    background: #A6A6A6;
+    background: #3AC348;
     border: 0.7px solid #B3B3B3;
     box-sizing: border-box;
     border-radius: 10px;
@@ -130,7 +130,7 @@ input {
 }
 
 .green {
-    background: #3AC348 !important;
+    background: #a6a6a6!important;
 }
 
 #L {
@@ -151,7 +151,7 @@ button {
 }
 
 .msgs {
-    width: 100%;
+    width: 90%;
     word-wrap: break-word;
     word-break: break-all;
 }
@@ -199,4 +199,9 @@ button {
 
  ::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+.switch {
+    border: 5px solid green;
+    border-collapse: collapse;
 }

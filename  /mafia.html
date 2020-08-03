@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mafia</title>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.15.5/firebase-auth.js"></script>
+    <link rel="stylesheet" href="mafia.css">
+</head>
+
+<body>
+    <div id="header"></div>
+    <div id="bottom">
+        <div id="container">
+            <div id="roomlist">
+                <div id="text">Join a room</div>
+                <div id="rooms">
+                    <div id="button">
+                        <button id="create" onclick="show()">+</button>
+                        <div id="search" onclick="search()">
+                            <div id="ins"></div>
+                            <div id="int"></div>
+                        </div>
+                        <input type="text" id="searchinput" style="display: none;">
+                    </div>
+                    <div id="button2"
+                        style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
+                        <button id="create" onclick="show()">+</button>
+                        <div id="smallcontainer">
+                            <div id="roomname">Room Name<input id="name"></div>
+                            <div id='roomname'>Your Name<input id='creatername' style="width: 80%;"></div>
+                            <div id="optiontext">Your room is:</div>
+                            <div id="roomoptioncontainer">
+                                <div id="ppassword">
+                                    <div>Public<input id="publicroom" type="radio" name="public"></div>
+                                    <div>Private<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
+                                </div>
+                            </div>
+                            <div id="buttoncontainer"><button id="cancel">Cancel</button><button id="create2">Create Room</button></div>
+                        </div>
+                    </div>
+                    <div id="ROOMS"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="mafia.js"></script>
+
+</html>

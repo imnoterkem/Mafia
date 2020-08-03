@@ -53,9 +53,6 @@ const ready = () => {
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
             ready: true
         })
-        if (doc.data().ready >= 7) {
-            window.location.href = `mafia3.html?r=${roomname}`
-        };
     } else {
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
             ready: false
@@ -67,9 +64,6 @@ const ready = () => {
                 ready: readynumber
             })
         })
-        if (doc.data().ready >= 7) {
-            window.location.href = `mafia3.html?r=${roomname}`
-        };
     }
 
     clicked = clicked + 1;

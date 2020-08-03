@@ -27,7 +27,7 @@ docRef.onSnapshot(function(querySnapshot) {
     rooms
         .sort((a, b) => a.createdAt - b.createdAt)
         .forEach((e) => {
-            if (e.currentPlayer == 0) {
+            if (e.currentPlayer <= 0) {
                 db.doc(`rooms/${e.name}`).delete();
             }
             renderRoom(e.name, e.status, e.currentPlayer, e.password);

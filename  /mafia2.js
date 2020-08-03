@@ -43,8 +43,7 @@ const ready = () => {
     document.getElementById("ready").classList.toggle('green');
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
-            let readynumber;
-            readynumber = doc.data().ready + 1
+            let readynumber=doc.data().ready + 1;
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
@@ -58,8 +57,7 @@ const ready = () => {
             ready: false
         })
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
-            let readynumber;
-            readynumber = doc.data().ready - 1;
+            let readynumber = doc.data().ready - 1;
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
@@ -69,7 +67,7 @@ const ready = () => {
     clicked = clicked + 1;
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-    if (doc.data().ready >= 7) {
+    if (doc.data().ready == 7) {
         window.location.href = `mafia3.html?r=${roomname}`
     };
 })
@@ -135,14 +133,16 @@ function leave() {
         console.log('fkfkkfkfkf');
         let updater = doc.data().currentPlayer - 1;
         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
+        console.log(`rooms/${roomname}/users/${useruid}`);
         db.doc(`rooms/${roomname}`).update({
             currentPlayer: updater
-        }).then(function() {
+         })
+         .then(function() {
             window.location.href = 'index.html';
         })
     })
     console.log('fksdgdfg');
 }
-window.addEventListener('beforeunload', function() {
-    leave();
-});
+// window.addEventListener('beforeunload', function() {
+//     leave();
+// });

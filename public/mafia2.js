@@ -5,10 +5,14 @@ var firebaseConfig = {
     projectId: "team-up-73173",
     storageBucket: "team-up-73173.appspot.com",
     messagingSenderId: "1030300585767",
-    appId: "1:1030300585767:web:6577af963515d152b32302"
+    appId: "1:1030300585767:web:6577af963515d152b32302",
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const app = firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore(app);
+
+let roomname = new URL(window.location.href).searchParams.get("r");
+
 let useruid;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -26,8 +30,6 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (){
         ready: 0
     })
 })
-
-let roomname = new URL(window.location.href).searchParams.get("r");
 
 
 db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(function(querySnapshot) {

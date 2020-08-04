@@ -1,6 +1,9 @@
 const ready = () => {
     document.getElementsByClassName("ready")[0].style.background = "#3AC348";
 }
+let roomname = new URL(window.location.href).searchParams.get("r");
+
+let useruid;
 var firebaseConfig = {
     apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
     authDomain: "team-up-73173.firebaseapp.com",
@@ -45,7 +48,6 @@ function shuffle(array) {
     return array;
 }
 
-let useruid;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
@@ -56,7 +58,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
-let roomname = new URL(window.location.href).searchParams.get("r");
+
 const Send = () => {
 
     const Input = document.getElementById('Input');

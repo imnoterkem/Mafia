@@ -69,7 +69,7 @@ const ready = () => {
     clicked = clicked + 1;
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-    if (doc.data().ready >= 7) {
+    if (doc.data().ready == 7) {
         window.location.href = `mafia3.html?r=${roomname}`
     };
 })
@@ -135,14 +135,16 @@ function leave() {
         console.log('fkfkkfkfkf');
         let updater = doc.data().currentPlayer - 1;
         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
+        console.log(`rooms/${roomname}/users/${useruid}`);
         db.doc(`rooms/${roomname}`).update({
-            currentPlayer: updater
-        }).then(function() {
-            window.location.href = 'index.html';
-        })
+                currentPlayer: updater
+            })
+            .then(function() {
+                window.location.href = 'index.html';
+            })
     })
     console.log('fksdgdfg');
 }
-window.addEventListener('beforeunload', function() {
-    leave();
-});
+// window.addEventListener('beforeunload', function() {
+//     leave();
+// });

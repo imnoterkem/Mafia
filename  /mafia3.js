@@ -1,7 +1,17 @@
 const ready = () => {
     document.getElementsByClassName("ready")[0].style.background = "#3AC348";
 }
-
+var firebaseConfig = {
+    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+    authDomain: "team-up-73173.firebaseapp.com",
+    databaseURL: "https://team-up-73173.firebaseio.com",
+    projectId: "team-up-73173",
+    storageBucket: "team-up-73173.appspot.com",
+    messagingSenderId: "1030300585767",
+    appId: "1:1030300585767:web:6577af963515d152b32302",
+};
+const app = firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(app);
 db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
     let sendername = doc.data().name;
@@ -34,17 +44,7 @@ function shuffle(array) {
 
     return array;
 }
-var firebaseConfig = {
-    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
-    authDomain: "team-up-73173.firebaseapp.com",
-    databaseURL: "https://team-up-73173.firebaseio.com",
-    projectId: "team-up-73173",
-    storageBucket: "team-up-73173.appspot.com",
-    messagingSenderId: "1030300585767",
-    appId: "1:1030300585767:web:6577af963515d152b32302",
-};
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
+
 let useruid;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

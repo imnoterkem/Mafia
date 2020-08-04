@@ -44,7 +44,7 @@ const ready = () => {
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
             let readynumber;
-            readynumber = doc.data().ready + 1
+            readynumber = parseInt(doc.data().ready + 1)
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
@@ -53,23 +53,17 @@ const ready = () => {
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
             ready: true
         })
-        if (doc.data().ready >= 7) {
-            window.location.href = `mafia3.html?r=${roomname}`
-        };
     } else {
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
             ready: false
         })
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
             let readynumber;
-            readynumber = doc.data().ready - 1;
+            readynumber = parseInt(doc.data().ready - 1);
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
         })
-        if (doc.data().ready >= 7) {
-            window.location.href = `mafia3.html?r=${roomname}`
-        };
     }
 
     clicked = clicked + 1;

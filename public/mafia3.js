@@ -30,7 +30,9 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
 db.doc(`rooms/${roomname}`).get().then(function(doc) {
     if (!doc.data().shuffled) {
-
+        db.doc(`rooms/${roomname}`).update({
+            shuffled: true
+        })
     }
 })
 

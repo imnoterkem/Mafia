@@ -28,6 +28,11 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
     Input.value = '';
 })
 
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    if (!doc.data().shuffled) {
+
+    }
+})
 
 function shuffle(array) {
     var currentIndex = array.length,

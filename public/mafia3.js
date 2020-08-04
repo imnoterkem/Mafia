@@ -28,6 +28,12 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
     Input.value = '';
 })
 
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    if (!doc.data().shuffled) {
+
+    }
+})
+
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -80,10 +86,8 @@ const Send = () => {
             Input.value = "";
         });
 
-    document.getElementsByClassName(
-        "chatbox"
-    )[0].scrollTop = document.getElementsByClassName("chatbox")[0].scrollHeight;
-};
+    document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
+}
 
 console.log(roomname);
 
@@ -93,18 +97,15 @@ db.collection(`rooms`)
     .orderBy("createdAt")
     .onSnapshot(function (querySnapshot) {
         console.log("eqeq");
-        document.getElementsByClassName("display")[0].innerHTML = "";
-        querySnapshot.forEach(function (doc) {
-            const t = document.createElement("div");
-            console.log(doc.data().text);
-            t.innerHTML = doc.data().sender + ":" + doc.data().text;
-            t.classList.add("msgs");
-            document.getElementsByClassName("display")[0].append(t);
-            document.getElementsByClassName(
-                "display"
-            )[0].scrollTop = document.getElementsByClassName(
-                "chatbox"
-            )[0].scrollHeight;
+        document.getElementsByClassName('display')[0].innerHTML = ''
+        querySnapshot.forEach(function(doc) {
+            const t = document.createElement("div")
+            console.log(doc.data().text)
+            t.innerHTML = doc.data().sender + ':' + doc.data().text;
+            t.classList.add('msgs');
+            document.getElementsByClassName('display')[0].append(t);
+            document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
+
         });
     });
 let input = document.getElementById("Input");

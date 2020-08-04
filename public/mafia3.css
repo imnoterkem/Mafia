@@ -111,17 +111,23 @@ body {
     text-align: center;
     justify-content: center;
     align-items: center;
-    color: white;
-    background-color: #B2B2B2;
     height: 7%;
-    width: 95%;
+    width: 97%;
     border-radius: 10px;
     margin-top: 5%;
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
+    background: #3AC348;
+    color: white;
+    border: none;
+    outline: none;
 }
+
+.green {
+    background: green!important;
+} 
 
 .input {
     display: flex;

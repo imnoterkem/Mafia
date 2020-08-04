@@ -1,8 +1,55 @@
-const ready = () => {
-    document.getElementsByClassName("ready")[0].style.background = "#3AC348";
-}
+var firebaseConfig = {
+    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
+    authDomain: "team-up-73173.firebaseapp.com",
+    databaseURL: "https://team-up-73173.firebaseio.com",
+    projectId: "team-up-73173",
+    storageBucket: "team-up-73173.appspot.com",
+    messagingSenderId: "1030300585767",
+    appId: "1:1030300585767:web:6577af963515d152b32302",
+};
+const app = firebase.initializeApp(firebaseConfig);
 
-db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+const db = firebase.firestore(app);
+
+let roomname = new URL(window.location.href).searchParams.get("r");
+
+let useruid;
+
+let clicked = 0;
+const ready = () => {
+    document.getElementsByClassName("ready")[0].classList.toggle('green');
+    if (clicked % 2 === 0) {
+        db.doc(`rooms/${roomname}`).get().then(function (doc) {
+            let readynumber = doc.data().ready + 1;
+            db.doc(`rooms/${roomname}`).update({
+                ready: readynumber
+            })
+
+        })
+        db.doc(`rooms/${roomname}/users/${useruid}`).update({
+            ready: true
+        })
+    } else {
+        db.doc(`rooms/${roomname}/users/${useruid}`).update({
+            ready: false
+        })
+        db.doc(`rooms/${roomname}`).get().then(function (doc) {
+            let readynumber = doc.data().ready - 1;
+            db.doc(`rooms/${roomname}`).update({
+                ready: readynumber
+            })
+        })
+    }
+
+    clicked = clicked + 1;
+}
+db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
+    if (doc.data().ready == 7) {
+        document.getElementsByClassName('h').style.background = "linear-gradient(180deg, #62B8E8 0%, #FFFFFF 100%)";
+    };
+})
+
+db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
 
     let sendername = doc.data().name;
 
@@ -34,19 +81,7 @@ function shuffle(array) {
 
     return array;
 }
-var firebaseConfig = {
-    apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
-    authDomain: "team-up-73173.firebaseapp.com",
-    databaseURL: "https://team-up-73173.firebaseio.com",
-    projectId: "team-up-73173",
-    storageBucket: "team-up-73173.appspot.com",
-    messagingSenderId: "1030300585767",
-    appId: "1:1030300585767:web:6577af963515d152b32302",
-};
-const app = firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(app);
-let useruid;
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
@@ -56,7 +91,6 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
-let roomname = new URL(window.location.href).searchParams.get("r");
 const Send = () => {
 
     const Input = document.getElementById('Input');
@@ -67,7 +101,7 @@ const Send = () => {
     if (Input.value.trim() === '') return;
 
     Input.value = Input.value.trim();
-    db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+    db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
 
         let sendername = doc.data().name;
 
@@ -86,10 +120,10 @@ const Send = () => {
 console.log(roomname)
 
 db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt')
-    .onSnapshot(function(querySnapshot) {
+    .onSnapshot(function (querySnapshot) {
         console.log("eqeq");
         document.getElementsByClassName('display')[0].innerHTML = ''
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
             const t = document.createElement("div")
             console.log(doc.data().text)
             t.innerHTML = doc.data().sender + ':' + doc.data().text;

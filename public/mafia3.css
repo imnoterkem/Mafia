@@ -106,13 +106,13 @@ body {
     background-color: #C5874E;
 }
 
-.ready {
+#ready {
     display: flex;
     text-align: center;
     justify-content: center;
     align-items: center;
     color: white;
-    background-color: #B2B2B2;
+    background-color: #3AC348;
     height: 7%;
     width: 95%;
     border-radius: 10px;
@@ -181,4 +181,8 @@ Input {
     width: 10%;
     height: 70%;
     margin: 5px;
+}
+
+.green {
+    background: #a6a6a6!important;
 }

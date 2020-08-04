@@ -21,6 +21,12 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
+db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (){
+    db.doc(`rooms/${roomname}/users/${useruid}`).update({
+        ready: 0
+    })
+})
+
 let roomname = new URL(window.location.href).searchParams.get("r");
 
 

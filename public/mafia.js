@@ -145,6 +145,9 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
+                ready: 0,
+                role: 0,
+                shuffled: false
             });
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
@@ -167,6 +170,9 @@ document.getElementById("create2").onclick = () => {
                 createdAt: Date.now(),
                 limit: 7,
                 currentPlayer: 1,
+                ready: 0,
+                role: 0,
+                shuffled: false
             });
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {

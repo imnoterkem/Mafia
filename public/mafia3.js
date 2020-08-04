@@ -28,6 +28,7 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
     Input.value = '';
 })
 
+
 function shuffle(array) {
     var currentIndex = array.length,
         temporaryValue, randomIndex;
@@ -82,7 +83,7 @@ const Send = () => {
         Input.value = '';
     })
 
-    document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
+    document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 }
 
 console.log(roomname)
@@ -97,7 +98,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
             t.innerHTML = doc.data().sender + ':' + doc.data().text;
             t.classList.add('msgs');
             document.getElementsByClassName('display')[0].append(t);
-            document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
+            document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 
         });
 

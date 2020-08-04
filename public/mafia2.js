@@ -49,7 +49,8 @@ const ready = () => {
     document.getElementById("ready").classList.toggle('green');
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
-            let readynumber=doc.data().ready + 1;
+            let readynumber;
+            readynumber = parseInt(doc.data().ready + 1)
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
@@ -63,7 +64,8 @@ const ready = () => {
             ready: false
         })
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
-            let readynumber = doc.data().ready - 1;
+            let readynumber;
+            readynumber = parseInt(doc.data().ready - 1);
             db.doc(`rooms/${roomname}`).update({
                 ready: readynumber
             })
@@ -141,11 +143,11 @@ function leave() {
         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
         console.log(`rooms/${roomname}/users/${useruid}`);
         db.doc(`rooms/${roomname}`).update({
-            currentPlayer: updater
-         })
-         .then(function() {
-            window.location.href = 'index.html';
-        })
+                currentPlayer: updater
+            })
+            .then(function() {
+                window.location.href = 'index.html';
+            })
     })
     console.log('fksdgdfg');
 }

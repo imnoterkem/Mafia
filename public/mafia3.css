@@ -140,6 +140,34 @@ body {
     height: 80%;
     border-radius: 10px 10px 0 0;
     background-color: #626262;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    border-radius: 50px;
+    height: 20px;
+}
+
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: 39373C;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 Input {
@@ -160,6 +188,7 @@ Input {
     height: 20%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 
 .card-image {

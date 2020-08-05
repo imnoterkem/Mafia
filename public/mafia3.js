@@ -1,5 +1,5 @@
 const ready = () => {
-    document.getElementsByClassName("ready")[0].style.background = "#3AC348";
+    document.getElementsqByClassName("ready")[0].style.background = "#3AC348";
 }
 let roomname = new URL(window.location.href).searchParams.get("r");
 
@@ -30,7 +30,9 @@ db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
 db.doc(`rooms/${roomname}`).get().then(function(doc) {
     if (!doc.data().shuffled) {
-
+        db.doc(`rooms/${roomname}`).update({
+            shuffled: true
+        })
     }
 })
 

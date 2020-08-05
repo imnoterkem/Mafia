@@ -69,9 +69,9 @@ const ready = () => {
     clicked = clicked + 1;
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-    if (doc.data().ready == 7) {
+    if (doc.data().ready >= 7) {
         window.location.href = `mafia3.html?r=${roomname}`
-    };
+    }
 })
 const Send = () => {
     let Input = document.getElementById('Input');
@@ -86,7 +86,7 @@ const Send = () => {
     Input.value = Input.value.slice(s, Input.value.length)
     let useless = document.createElement('div');
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
-        useless.innerHTML = doc.data().name + ':' + Input.value;
+        useless.innerHTML = doc.data().name + ' : ' + Input.value;
         useless.classList.add('msgs');
         document.getElementsByClassName('chatbox')[0].appendChild(useless);
     })
@@ -114,7 +114,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
         document.getElementsByClassName('chatbox')[0].innerHTML = ''
         querySnapshot.forEach(function(doc) {
             const t = document.createElement("div")
-            t.innerHTML = doc.data().sender + ':' + doc.data().text;
+            t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
             document.getElementsByClassName('chatbox')[0].append(t);
             document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
@@ -132,19 +132,20 @@ document.onkeyup = (event) => {
 function leave() {
     console.log("lol")
     db.doc(`rooms/${roomname}`).get().then(function(doc) {
-        console.log('fkfkkfkfkf');
+
         let updater = doc.data().currentPlayer - 1;
         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
-        console.log(`rooms/${roomname}/users/${useruid}`);
+        console.log("asf")
         db.doc(`rooms/${roomname}`).update({
                 currentPlayer: updater
             })
             .then(function() {
+                console.log("adsfa");
                 window.location.href = 'index.html';
             })
     })
-    console.log('fksdgdfg');
+
 }
-// window.addEventListener('beforeunload', function() {
-//     leave();
-// });
+window.addEventListener('beforeunload', function() {
+    alert("lol");
+});

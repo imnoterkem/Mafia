@@ -15,24 +15,56 @@ var firebaseConfig = {
 };
 const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore(app);
-db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var isAnonymous = user.isAnonymous;
+        useruid = user.uid;
+        console.log(useruid);
+        // document.getElementById('lolo').innerHTML = roomname;
+    } else {
 
-    let sendername = doc.data().name;
+    }
+});
+// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
-    db.collection(`rooms/${roomname}/Chat`).add({
+//     console.log(roomname, ' ', useruid)
+//     console.log(doc.data());
+//     console.log(doc.data().name)
+//     let sendername = doc.data().name;
 
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        text: Input.value,
-        sender: sendername
-    })
-    Input.value = '';
-})
+//     db.collection(`rooms/${roomname}/Chat`).add({
 
+//         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+//         text: Input.value,
+//         sender: sendername
+//     })
+//     Input.value = '';
+// })
+let players = [];
 db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    console.log(doc.data().shuffled)
     if (!doc.data().shuffled) {
         db.doc(`rooms/${roomname}`).update({
             shuffled: true
         })
+        let arr = []
+        db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(docu) {
+                arr.push(docu.id);
+            })
+            players = shuffle(arr);
+            db.doc(`rooms/${roomname}`).update({
+                shuffledArray: players,
+                gameStarted: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                console.log('done')
+
+            }).catch((err) => console.log(err))
+        })
+
+
+
+
     }
 })
 
@@ -67,28 +99,38 @@ firebase.auth().onAuthStateChanged(function(user) {
 });
 
 
+let sending = false;
+
 const Send = () => {
 
     const Input = document.getElementById('Input');
-    if (Input.value === '') {
-        return;
-    }
+    if (Input.value === '') return;
+
     let s = 0;
     if (Input.value.trim() === '') return;
 
     Input.value = Input.value.trim();
-    db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
-        let sendername = doc.data().name;
+    if (!sending) {
+        db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+            sending = true;
 
-        db.collection(`rooms/${roomname}/Chat`).add({
+            let sendername = doc.data().name;
 
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            text: Input.value,
-            sender: sendername
+            db.collection(`rooms/${roomname}/Chat`).add({
+
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                text: Input.value,
+                sender: sendername
+            }).then(() => {
+                Input.value = '';
+                sending = false;
+
+            })
         })
-        Input.value = '';
-    })
+    }
+
+
 
     document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 }
@@ -101,8 +143,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
         document.getElementsByClassName('display')[0].innerHTML = ''
         querySnapshot.forEach(function(doc) {
             const t = document.createElement("div")
-            console.log(doc.data().text)
-            t.innerHTML = doc.data().sender + ':' + doc.data().text;
+            t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;

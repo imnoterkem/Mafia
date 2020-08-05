@@ -16,57 +16,83 @@ let roomname = new URL(window.location.href).searchParams.get("r");
 let useruid;
 
 let clicked = 0;
+//readyg shalgadiin
 const ready = () => {
     document.getElementsByClassName("ready")[0].classList.toggle('green');
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
             let readynumber = doc.data().ready + 1;
-            db.doc(`rooms/${roomname}`).update({
-                ready: readynumber
-            })
+            db.doc(`rooms/${roomname}`).update
+                ({
+                    ready: readynumber
+                })
 
         })
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: true
-        })
-    } else {
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: false
-        })
+        db.doc(`rooms/${roomname}/users/${useruid}`).update
+            ({
+                ready: true
+            })
+    }
+    else {
+        db.doc(`rooms/${roomname}/users/${useruid}`).update
+            ({
+                ready: false
+            })
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
             let readynumber = doc.data().ready - 1;
-            db.doc(`rooms/${roomname}`).update({
-                ready: readynumber
-            })
+            db.doc(`rooms/${roomname}`).update
+                ({
+                    ready: readynumber
+                })
         })
     }
 
     clicked = clicked + 1;
 }
+// udur bolgodiin
 db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
+    console.log(doc.data());
     if (doc.data().ready == 7) {
-        document.getElementsByClassName('h').style.background = "linear-gradient(180deg, #62B8E8 0%, #FFFFFF 100%)";
-    };
+        if (document.getElementsByClassName('h')[0].background ===  "url('../assets/Group20.png')no-repeats") {
+            console.log('nice');
+            document.getElementsByClassName('h')[0].style.background = "linear-gradient(180deg, #62B8E8 0%, #FFFFFF 100%)";
+            // db.doc(`rooms/${roomname}`).update({
+            //     ready: 1
+            // });
+            document.getElementsByClassName('ready')[0].background = "#3AC348"
+        }
+        else {
+            document.getElementsByClassName('h')[0].background == "url('../assets/Group20.png')no-repeats";
+            // db.doc(`rooms/${roomname}`).update({
+            //     ready: 1
+            // });
+            document.getElementsByClassName('ready')[0].background = "#3AC348"
+        }
+    }
+
 })
 
-db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) 
+// {
 
-    let sendername = doc.data().name;
+//     let sendername = doc.data().name;
 
-    db.collection(`rooms/${roomname}/Chat`).add({
+//     db.collection(`rooms/${roomname}/Chat`).add
+//     ({
 
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        text: Input.value,
-        sender: sendername
-    })
-    Input.value = '';
-})
+//         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+//         text: Input.value,
+//         sender: sendername
+//     })
+//     Input.value = '';
+// })
 
-db.doc(`rooms/${roomname}`).get().then(function(doc) {
+db.doc(`rooms/${roomname}`).get().then(function (doc) {
     if (!doc.data().shuffled) {
-        db.doc(`rooms/${roomname}`).update({
-            shuffled: true
-        })
+        db.doc(`rooms/${roomname}`).update
+            ({
+                shuffled: true
+            })
     }
 })
 
@@ -89,12 +115,14 @@ function shuffle(array) {
 
     return array;
 }
+
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
         console.log(useruid);
-    } else {
+    }
+    else {
 
     }
 });
@@ -114,12 +142,13 @@ const Send = () => {
 
         let sendername = doc.data().name;
 
-        db.collection(`rooms/${roomname}/Chat`).add({
+        db.collection(`rooms/${roomname}/Chat`).add
+            ({
 
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            text: Input.value,
-            sender: sendername
-        })
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                text: Input.value,
+                sender: sendername
+            })
         Input.value = '';
     })
 

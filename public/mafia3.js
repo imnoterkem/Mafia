@@ -29,21 +29,17 @@ firebase.auth().onAuthStateChanged(function (user) {
     } else {
     }
 });
-// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
-//     console.log(roomname, ' ', useruid)
-//     console.log(doc.data());
-//     console.log(doc.data().name)
-//     let sendername = doc.data().name;
+db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
+    let i = 0;
+    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
+    doc.forEach(function(docu) {
+        document.getElementsByClassName("player-name")[i].style.color = color[i]
+        document.getElementsByClassName("player-name")[i++].innerHTML = docu.data().name
 
-//     db.collection(`rooms/${roomname}/Chat`).add({
+    })
+})
 
-//         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-//         text: Input.value,
-//         sender: sendername
-//     })
-//     Input.value = '';
-// })
 let players = [];
 // db.doc(`rooms/${roomname}`).get().then(function(doc) {
 //     console.log(doc.data().shuffled)

@@ -44,9 +44,12 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
             shuffled: true
         })
         let arr = []
+
         db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
             querySnapshot.forEach(function(docu) {
                 arr.push(docu.id);
+                console.log(docu.id);
+
             })
             players = shuffle(arr);
             db.doc(`rooms/${roomname}`).update({

@@ -9,8 +9,8 @@ body {
     height: 12%;
 }
 
-.body {
-    background: linear-gradient(180deg, #001447 0%, #000000 100%);
+.container {
+    background: linear-gradient(to bottom, #62b8e8, #FFFFFF);
     height: 88%;
 }
 
@@ -23,12 +23,12 @@ body {
     padding: 10px;
 }
 
-.h {
+#h {
     height: 100%;
     display: flex;
     flex-grow: 1;
     align-items: center;
-    background-image: url('../assets/Group20.png');
+    background-image: url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png');
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -37,7 +37,8 @@ body {
 .moon {
     display: flex;
     align-self: start;
-    background-color: #FFE99C;
+    /* background-color: #FFE99C; */
+    background-color: #F2D365;
     width: 100px;
     height: 100px;
     margin-left: 4%;
@@ -46,6 +47,7 @@ body {
     border-radius: 70%;
     filter: blur(8px);
 }
+
 
 .back {
     display: flex;
@@ -64,7 +66,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    background-image: url('../assets/Group 38.png');
+    background-image: url('/Users/rgS/Desktop/mafia/Mafia/public/assets/board.png');
     background-repeat: no-repeat;
     background-size: contain;
     justify-content: space-between;
@@ -76,6 +78,13 @@ body {
     color: white;
     left: 10%;
     top: 10%;
+    height: 5%;
+    width: 15%;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .right {
@@ -212,4 +221,17 @@ Input {
 
 .green {
     background: #a6a6a6!important;
+}
+
+#timer{
+    position: absolute;
+    right: 10%;
+    top: 10%;
+    height: 5%;
+    width: 40%;
+    color: white;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

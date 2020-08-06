@@ -17,7 +17,8 @@ body {
 .msgs {
     word-wrap: break-word;
     word-break: break-all;
-    background-color: green;
+    /* background-color: green; */
+    color: #ffff;
     border-radius: 10px;
     margin: 3px 0px;
     padding: 10px;
@@ -121,14 +122,22 @@ body {
     color: white;
     background-color: #3AC348;
     height: 7%;
-    width: 95%;
+    width: 97%;
     border-radius: 10px;
     margin-top: 5%;
     font-family: Roboto;
     font-style: normal;
     font-weight: bold;
     font-size: 20px;
+    background: #3AC348;
+    color: white;
+    border: none;
+    outline: none;
 }
+
+.green {
+    background: green!important;
+} 
 
 .input {
     display: flex;

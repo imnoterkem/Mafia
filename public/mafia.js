@@ -146,7 +146,6 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                role: 0,
                 shuffled: false
             });
             firebase.auth().onAuthStateChanged(function(user) {
@@ -157,6 +156,8 @@ document.getElementById("create2").onclick = () => {
                         .doc(`${uid}`)
                         .set({
                             name: `${thename}`,
+                            ready: false,
+                            role: 0
                         })
                         .then(function() {
                             window.location.href = `mafia2.html?r=${roomname}`;
@@ -171,7 +172,6 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                role: 0,
                 shuffled: false
             });
             firebase.auth().onAuthStateChanged(function(user) {
@@ -183,6 +183,8 @@ document.getElementById("create2").onclick = () => {
                         .doc(`${uid}`)
                         .set({
                             name: `${thename}`,
+                            ready: false,
+                            role: 0
                         })
                         .then(function() {
                             document.getElementById("creatername").value = "";
@@ -351,7 +353,8 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                     .doc(`${uid}`)
                                     .set({
                                         name: `${askname.value}`,
-                                        ready: false
+                                        ready: false,
+                                        role: 0
                                     })
                                     .then(function() {
                                         window.location.href = `mafia2.html?r=${name}`;

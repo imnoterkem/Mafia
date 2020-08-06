@@ -10,6 +10,7 @@ var firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore(app);
+<<<<<<< HEAD
 
 let roomname = new URL(window.location.href).searchParams.get("r");
 
@@ -93,6 +94,54 @@ db.doc(`rooms/${roomname}`).get().then(function (doc) {
             ({
                 shuffled: true
             })
+=======
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var isAnonymous = user.isAnonymous;
+        useruid = user.uid;
+        console.log(useruid);
+        // document.getElementById('lolo').innerHTML = roomname;
+    } else {
+
+    }
+});
+
+db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
+    let i = 0;
+    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
+    doc.forEach(function(docu) {
+        document.getElementsByClassName("player-name")[i].style.color = color[i]
+        document.getElementsByClassName("player-name")[i++].innerHTML = docu.data().name
+
+    })
+})
+
+let players = [];
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    console.log(doc.data().shuffled)
+    if (!doc.data().shuffled) {
+        db.doc(`rooms/${roomname}`).update({
+            shuffled: true
+        })
+        let arr = []
+        db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(docu) {
+                arr.push(docu.id);
+            })
+            players = shuffle(arr);
+            db.doc(`rooms/${roomname}`).update({
+                shuffledArray: players,
+                gameStarted: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                console.log('done')
+
+            }).catch((err) => console.log(err))
+        })
+
+
+
+
+>>>>>>> 89b2d947aff108a8e491d889266f61df4eb99937
     }
 })
 
@@ -128,29 +177,53 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 
+let sending = false;
+
 const Send = () => {
 
     const Input = document.getElementById('Input');
-    if (Input.value === '') {
-        return;
-    }
+    if (Input.value === '') return;
+
     let s = 0;
     if (Input.value.trim() === '') return;
 
     Input.value = Input.value.trim();
+<<<<<<< HEAD
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+=======
+>>>>>>> 89b2d947aff108a8e491d889266f61df4eb99937
 
-        let sendername = doc.data().name;
+    if (!sending) {
+        db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+            sending = true;
 
+            let sendername = doc.data().name;
+
+<<<<<<< HEAD
         db.collection(`rooms/${roomname}/Chat`).add
             ({
+=======
+            db.collection(`rooms/${roomname}/Chat`).add({
+>>>>>>> 89b2d947aff108a8e491d889266f61df4eb99937
 
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 text: Input.value,
                 sender: sendername
+<<<<<<< HEAD
             })
         Input.value = '';
     })
+=======
+            }).then(() => {
+                Input.value = '';
+                sending = false;
+
+            })
+        })
+    }
+
+
+>>>>>>> 89b2d947aff108a8e491d889266f61df4eb99937
 
     document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 }
@@ -163,8 +236,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
         document.getElementsByClassName('display')[0].innerHTML = ''
         querySnapshot.forEach(function (doc) {
             const t = document.createElement("div")
-            console.log(doc.data().text)
-            t.innerHTML = doc.data().sender + ':' + doc.data().text;
+            t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;

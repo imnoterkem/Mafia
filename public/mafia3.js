@@ -1,9 +1,3 @@
-const ready = () => {
-    document.getElementsByClassName("ready")[0].style.background = "#3AC348";
-}
-let roomname = new URL(window.location.href).searchParams.get("r");
-
-let useruid;
 var firebaseConfig = {
     apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
     authDomain: "team-up-73173.firebaseapp.com",
@@ -14,6 +8,7 @@ var firebaseConfig = {
     appId: "1:1030300585767:web:6577af963515d152b32302",
 };
 const app = firebase.initializeApp(firebaseConfig);
+
 const db = firebase.firestore(app);
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {

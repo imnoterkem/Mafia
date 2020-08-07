@@ -1,7 +1,6 @@
 const ready = () => {
     document.getElementById("ready").style.background = "#6BFF7A";
 };
-let roomname = new URL(window.location.href).searchParams.get("r");
 
 let useruid;
 var firebaseConfig = {
@@ -17,9 +16,11 @@ const app = firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore(app);
 
+let roomname = new URL(window.location.href).searchParams.get("r");
+
 db.doc(`rooms/${roomname}`).update({
-    time: 'day'
-})
+    time: "day",
+});
 
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
@@ -31,40 +32,59 @@ firebase.auth().onAuthStateChanged(function (user) {
     }
 });
 
-db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
-    let i = 0;
-    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
-    doc.forEach(function(docu) {
-        document.getElementsByClassName("player-name")[i].style.color = color[i]
-        document.getElementsByClassName("player-name")[i++].innerHTML = docu.data().name
-
-    })
-})
+db.collection(`rooms/${roomname}/users`)
+    .get()
+    .then(function (doc) {
+        let i = 0;
+        let color = [
+            "#5781EC",
+            "#FFB4B4",
+            "#ECDE5C",
+            "#FFB03A",
+            "#0AA119",
+            "#A812EE",
+            "#FFFFFF",
+        ];
+        doc.forEach(function (docu) {
+            document.getElementsByClassName("player-name")[i].style.color =
+                color[i];
+            document.getElementsByClassName("player-name")[
+                i++
+            ].innerHTML = docu.data().name;
+        });
+    });
 
 let players = [];
-// db.doc(`rooms/${roomname}`).get().then(function(doc) {
-//     console.log(doc.data().shuffled)
-//     if (!doc.data().shuffled) {
-//         db.doc(`rooms/${roomname}`).update({
-//             shuffled: true
-//         })
-//         let arr = []
-//         db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-//             querySnapshot.forEach(function(docu) {
-//                 arr.push(docu.id);
-//             })
-//             players = shuffle(arr);
-//             db.doc(`rooms/${roomname}`).update({
-//                 shuffledArray: players,
-//                 gameStarted: firebase.firestore.FieldValue.serverTimestamp()
-//             }).then(() => {
-//                 console.log('done')
+db.doc(`rooms/${roomname}`)
+    .get()
+    .then(function (doc) {
+        console.log(doc.data().shuffled);
+        if (!doc.data().shuffled) {
+            db.doc(`rooms/${roomname}`).update({
+                shuffled: true,
+            });
+            let arr = [];
 
-//             }).catch((err) => console.log(err))
-//         })
-
-//     }
-// })
+            db.collection(`rooms/${roomname}/users`)
+                .get()
+                .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (docu) {
+                        arr.push(docu.id);
+                        console.log(docu.id);
+                    });
+                    players = shuffle(arr);
+                    db.doc(`rooms/${roomname}`)
+                        .update({
+                            shuffledArray: players,
+                            gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
+                        })
+                        .then(() => {
+                            console.log("done");
+                        })
+                        .catch((err) => console.log(err));
+                });
+        }
+    });
 
 function shuffle(array) {
     var currentIndex = array.length,
@@ -132,6 +152,10 @@ const Send = () => {
     )[0].scrollTop = document.getElementsByClassName("display")[0].scrollHeight;
 };
 
+document.getElementsByClassName(
+    "display"
+)[0].scrollTop = document.getElementsByClassName("display")[0].scrollHeight;
+
 console.log(roomname);
 
 db.collection(`rooms`)
@@ -160,37 +184,37 @@ document.onkeyup = (event) => {
     }
 };
 
-let timer = 3;
+let timer = 60;
 let day = true;
 
-// const mainTimer = () => {
-//     document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
-//     if(timer<=0){
-//         timer=3;
-//         db.doc(`rooms/${roomname}`).get().then(function(doc){
-//             if(doc.data().time=='day'){
-//                 console.log('nice');
-//                 document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/nighttown.png')";
-//                 document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #001447, #000000)";
-//                 document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     time: 'night'
-//                 })
-//             }
-//             if(doc.data().time=="night"){
-//                 console.log('sdfsdf')
-//                 document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png')";
-//                 document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-//                 document.getElementsByClassName('moon')[0].style.background = "#F2D365";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     time: 'day'
-//                 })
-//             }
-//         })
-//     }
-//     else{
-//         timer--;
-//     }
-// };
+const mainTimer = () => {
+    document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
+    if(timer<=0){
+        timer=60;
+        db.doc(`rooms/${roomname}`).get().then(function(doc){
+            if(doc.data().time=='day'){
+                console.log('nice');
+                document.getElementsByClassName('h')[0].style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/nighttown.png')";
+                document.getElementsByClassName('body')[0].style.background="linear-gradient(to bottom, #001447, #000000)";
+                document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
+                db.doc(`rooms/${roomname}`).update({
+                    time: 'night'
+                })
+            }
+            if(doc.data().time=="night"){
+                console.log('sdfsdf')
+                document.getElementsByClassName('h')[0].style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png')";
+                document.getElementsByClassName('body')[0].style.background="linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+                document.getElementsByClassName('moon')[0].style.background = "#F2D365";
+                db.doc(`rooms/${roomname}`).update({
+                    time: 'day'
+                })
+            }
+        })
+    }
+    else{
+        timer--;
+    }
+};
 
-// let mainT = setInterval(mainTimer, 1000);
+let mainT = setInterval(mainTimer, 1000);

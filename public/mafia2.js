@@ -73,6 +73,7 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
         window.location.href = `mafia3.html?r=${roomname}`
     }
 })
+
 const Send = () => {
     let Input = document.getElementById('Input');
 

@@ -9,7 +9,7 @@ body {
     height: 12%;
 }
 
-.container {
+.body {
     background: linear-gradient(to bottom, #62b8e8, #FFFFFF);
     height: 88%;
 }
@@ -24,12 +24,12 @@ body {
     padding: 10px;
 }
 
-#h {
+.h {
     height: 100%;
     display: flex;
     flex-grow: 1;
     align-items: center;
-    background-image: url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png');
+    background-image: url('assets/daytown.png');
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -38,7 +38,7 @@ body {
 .moon {
     display: flex;
     align-self: start;
-    background-color: #F2D365;
+    background-color: #FFE99C;
     width: 100px;
     height: 100px;
     margin-left: 4%;
@@ -47,7 +47,6 @@ body {
     border-radius: 70%;
     filter: blur(8px);
 }
-
 
 .back {
     display: flex;
@@ -61,12 +60,12 @@ body {
 }
 
 .board {
-    width: 70%;
+    width: 50%;
     height: 90%;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    background-image: url('/Users/rgS/Desktop/mafia/Mafia/public/assets/board.png');
+    background-image: url('assets/board.png');
     background-repeat: no-repeat;
     background-size: contain;
     justify-content: space-between;
@@ -78,13 +77,7 @@ body {
     color: white;
     left: 10%;
     top: 10%;
-    height: 5%;
-    width: 15%;
-    color: white;
     font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .right {
@@ -99,7 +92,7 @@ body {
     border: #222025 15px solid;
     border-radius: 10px;
     height: 90%;
-    width: 60%;
+    width: 80%;
     background-color: #222025;
     align-items: center;
     flex-direction: column;
@@ -113,13 +106,11 @@ body {
     background-color: #C5874E;
 }
 
-#ready {
+.ready {
     display: flex;
     text-align: center;
     justify-content: center;
     align-items: center;
-    color: white;
-    background-color: #3AC348;
     height: 7%;
     width: 97%;
     border-radius: 10px;
@@ -136,7 +127,7 @@ body {
 
 .green {
     background: green!important;
-} 
+}
 
 .input {
     display: flex;
@@ -202,35 +193,34 @@ Input {
     width: 100%;
     height: 20%;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap; 
-    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
+.card-image {
+    width: 100%;
+    height: 100%;
+}
 
-/* .card-image:hover {
+.huzur {
+    width: 11%;
+    height: 70%;
+    margin: 5px;
+}
+
+.card-image:hover {
     box-shadow: 0px 0px 10px 10px #FDFF8F;
-} */
+}
 
-/* .my_huzur {
+.my_huzur {
     width: 10%;
     height: 70%;
     margin: 5px;
-} */
-
-.green {
-    background: #a6a6a6!important;
 }
 
 #timer{
     position: absolute;
-    right: 10%;
     top: 10%;
-    height: 5%;
-    width: 40%;
+    right: 10%;
     color: white;
     font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }

@@ -38,7 +38,6 @@ body {
 .moon {
     display: flex;
     align-self: start;
-    /* background-color: #FFE99C; */
     background-color: #F2D365;
     width: 100px;
     height: 100px;
@@ -62,7 +61,7 @@ body {
 }
 
 .board {
-    width: 50%;
+    width: 70%;
     height: 90%;
     display: flex;
     flex-direction: row;
@@ -100,7 +99,7 @@ body {
     border: #222025 15px solid;
     border-radius: 10px;
     height: 90%;
-    width: 80%;
+    width: 60%;
     background-color: #222025;
     align-items: center;
     flex-direction: column;
@@ -203,30 +202,21 @@ Input {
     width: 100%;
     height: 20%;
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: row;
+    flex-wrap: wrap; 
     justify-content: space-between;
 }
 
-.card-image {
-    width: 100%;
-    height: 100%;
-}
 
-.huzur {
-    width: 11%;
-    height: 70%;
-    margin: 5px;
-}
-
-.card-image:hover {
+/* .card-image:hover {
     box-shadow: 0px 0px 10px 10px #FDFF8F;
-}
+} */
 
-.my_huzur {
+/* .my_huzur {
     width: 10%;
     height: 70%;
     margin: 5px;
-}
+} */
 
 .green {
     background: #a6a6a6!important;

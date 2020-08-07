@@ -1,3 +1,9 @@
+const ready = () => {
+    document.getElementById("ready").style.background = "#6BFF7A";
+};
+let roomname = new URL(window.location.href).searchParams.get("r");
+
+let useruid;
 var firebaseConfig = {
     apiKey: "AIzaSyC78FRamszBxuCmSeL8ZGhduuXeqqrBnf4",
     authDomain: "team-up-73173.firebaseapp.com",
@@ -157,34 +163,34 @@ document.onkeyup = (event) => {
 let timer = 3;
 let day = true;
 
-const mainTimer = () => {
-    document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
-    if(timer<=0){
-        timer=3;
-        db.doc(`rooms/${roomname}`).get().then(function(doc){
-            if(doc.data().time=='day'){
-                console.log('nice');
-                document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/nighttown.png')";
-                document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #001447, #000000)";
-                document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
-                db.doc(`rooms/${roomname}`).update({
-                    time: 'night'
-                })
-            }
-            if(doc.data().time=="night"){
-                console.log('sdfsdf')
-                document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png')";
-                document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-                document.getElementsByClassName('moon')[0].style.background = "#F2D365";
-                db.doc(`rooms/${roomname}`).update({
-                    time: 'day'
-                })
-            }
-        })
-    }
-    else{
-        timer--;
-    }
-};
+// const mainTimer = () => {
+//     document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
+//     if(timer<=0){
+//         timer=3;
+//         db.doc(`rooms/${roomname}`).get().then(function(doc){
+//             if(doc.data().time=='day'){
+//                 console.log('nice');
+//                 document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/nighttown.png')";
+//                 document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #001447, #000000)";
+//                 document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
+//                 db.doc(`rooms/${roomname}`).update({
+//                     time: 'night'
+//                 })
+//             }
+//             if(doc.data().time=="night"){
+//                 console.log('sdfsdf')
+//                 document.getElementById('h').style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png')";
+//                 document.getElementsByClassName('container')[0].style.background="linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+//                 document.getElementsByClassName('moon')[0].style.background = "#F2D365";
+//                 db.doc(`rooms/${roomname}`).update({
+//                     time: 'day'
+//                 })
+//             }
+//         })
+//     }
+//     else{
+//         timer--;
+//     }
+// };
 
-let mainT = setInterval(mainTimer, 1000);
+// let mainT = setInterval(mainTimer, 1000);

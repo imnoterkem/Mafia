@@ -10,7 +10,7 @@ body {
 }
 
 .body {
-    background: linear-gradient(180deg, #001447 0%, #000000 100%);
+    background: linear-gradient(to bottom, #62b8e8, #ffffff);
     height: 88%;
 }
 
@@ -29,7 +29,7 @@ body {
     display: flex;
     flex-grow: 1;
     align-items: center;
-    background-image: url('../assets/Group20.png');
+    background-image: url('assets/daytown.png');
     background-size: contain;
     background-position: bottom;
     background-repeat: no-repeat;
@@ -65,7 +65,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    background-image: url('../assets/Group 38.png');
+    background-image: url('assets/board.png');
     background-repeat: no-repeat;
     background-size: contain;
     justify-content: space-between;

@@ -15,17 +15,19 @@ let roomname = new URL(window.location.href).searchParams.get("r");
 let useruid;
 
 let clicked = 0;
+
+db.doc(`rooms/${roomname}`).update({
+    ready: 0
+})
 //readyg shalgadiin
 const ready = () => {
     document.getElementsByClassName("ready")[0].classList.toggle('green');
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
             let readynumber = doc.data().ready + 1;
-            db.doc(`rooms/${roomname}`).update
-                ({
-                    ready: readynumber
-                })
-
+            db.doc(`rooms/${roomname}`).update({
+                ready: readynumber
+            })
         })
         db.doc(`rooms/${roomname}/users/${useruid}`).update
             ({
@@ -39,10 +41,9 @@ const ready = () => {
             })
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
             let readynumber = doc.data().ready - 1;
-            db.doc(`rooms/${roomname}`).update
-                ({
+            db.doc(`rooms/${roomname}`).update({
                     ready: readynumber
-                })
+            })
         })
     }
 
@@ -52,19 +53,27 @@ const ready = () => {
 db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
     console.log(doc.data());
     if (doc.data().ready == 7) {
-        if (document.getElementsByClassName('h')[0].background ===  "url('../assets/Group20.png')no-repeats") {
+        if (doc.data().time=='day') {
             console.log('nice');
-            document.getElementsByClassName('h')[0].style.background = "linear-gradient(180deg,     #62B8E8 0%, #FFFFFF 100%)";
-            // db.doc(`rooms/${roomname}`).update({
-            //     ready: 1
-            // });
+            document.getElementsByClassName('h')[0].style.background = "linear-gradient(to bottom, #001447, #000000)";
+            document.getElementsByClassName('body')[0].backgroundImage = "url('assets/nighttown.png')";
+            db.doc(`rooms/${roomname}`).update({
+                time: 'night'
+            });
+            db.doc(`rooms/${roomname}`).update({
+                ready: 0
+            })
             document.getElementsByClassName('ready')[0].background = "#3AC348"
         }
-        else {
-            document.getElementsByClassName('h')[0].background == "url('../assets/Group20.png')no-repeats";
-            // db.doc(`rooms/${roomname}`).update({
-            //     ready: 1
-            // });
+        if (doc.data().time=='night') {
+            document.getElementsByClassName('h')[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+            document.getElementsByClassName('body')[0].backgroundImage = "url('assets/daytown.png')";
+            db.doc(`rooms/${roomname}`).update({
+                time: 'day'
+            });
+            db.doc(`rooms/${roomname}`).update({
+                ready: 0
+            })
             document.getElementsByClassName('ready')[0].background = "#3AC348"
         }
     }
@@ -177,3 +186,6 @@ document.onkeyup = (event) => {
         Send();
     }
 }
+
+
+

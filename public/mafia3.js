@@ -15,12 +15,12 @@ firebase.auth().onAuthStateChanged(function(user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
         console.log(useruid);
-        // document.getElementById('lolo').innerHTML = roomname;
+        // document.getElementById('lolo').innerHTML = roomname; 
     } else {
 
     }
 });
-
+let roomname = new URL(window.location.href).searchParams.get("r");
 db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
     let i = 0;
     let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']

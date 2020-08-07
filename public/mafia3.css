@@ -10,11 +10,7 @@ body {
 }
 
 .body {
-<<<<<<< HEAD
-    background: linear-gradient(to bottom, #62b8e8, #ffffff);
-=======
     background: linear-gradient(to bottom, #62b8e8, #FFFFFF);
->>>>>>> d359627150bf7e23fdfaa10771f7462bd3359315
     height: 88%;
 }
 

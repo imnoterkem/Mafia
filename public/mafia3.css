@@ -10,7 +10,11 @@ body {
 }
 
 .body {
+<<<<<<< HEAD
     background: linear-gradient(to bottom, #62b8e8, #ffffff);
+=======
+    background: linear-gradient(to bottom, #62b8e8, #FFFFFF);
+>>>>>>> d359627150bf7e23fdfaa10771f7462bd3359315
     height: 88%;
 }
 
@@ -77,6 +81,7 @@ body {
     color: white;
     left: 10%;
     top: 10%;
+    font-size: 20px;
 }
 
 .right {
@@ -126,7 +131,7 @@ body {
 
 .green {
     background: green!important;
-} 
+}
 
 .input {
     display: flex;
@@ -214,4 +219,12 @@ Input {
     width: 10%;
     height: 70%;
     margin: 5px;
+}
+
+#timer{
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    color: white;
+    font-size: 20px;
 }

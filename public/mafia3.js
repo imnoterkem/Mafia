@@ -12,13 +12,23 @@ const db = firebase.firestore(app);
 
 let roomname = new URL(window.location.href).searchParams.get("r");
 let useruid;
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
+        var isAnonymous = user.isAnonymous;
+        useruid = user.uid;
+        console.log(useruid);
+    }
+    else {
+
+    }
+});
 let clicked = 0;
 
-let roles = ['citizen', 'citizen', 'citizen', 'doctor', 'police', 'mafia', 'mafia'];
+// let roles = ['citizen', 'citizen', 'citizen', 'doctor', 'police', 'mafia', 'mafia'];
 
-db.doc(`rooms/${roomname}`).get().then(function(arr){
-    console.log(arr.data().shuffledArray[0]);
-})
+// db.doc(`rooms/${roomname}`).get().then(function(arr){
+//     console.log(arr.data().shuffledArray[0]);
+// })
 
 db.doc(`rooms/${roomname}`).update({
     ready: 0
@@ -28,8 +38,17 @@ db.doc(`rooms/${roomname}`).update({
     time: 'day'
 })
 
+// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(docc){
+//     console.log(useruid)
+//     console.log(docc.data().name);
+//     console.log("ntgs")
+// });
+
 //readyg shalgadiin
 const ready = () => {
+    db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+        console.log(doc.data().name)
+    })
     document.getElementsByClassName("ready")[0].classList.toggle('green');
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
@@ -61,7 +80,6 @@ const ready = () => {
 // udur bolgodiin
 let shunu = document.createElement('div').innerHTML='шөнө 111'
 db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
-    console.log(doc.data());
     if (doc.data().ready == 7) {
         if (doc.data().time=='day') {
             console.log('nice');
@@ -90,21 +108,6 @@ db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
     }
 
 })
-
-// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) 
-// {
-
-//     let sendername = doc.data().name;
-
-//     db.collection(`rooms/${roomname}/Chat`).add
-//     ({
-
-//         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-//         text: Input.value,
-//         sender: sendername
-//     })
-//     Input.value = '';
-// })
 
 db.doc(`rooms/${roomname}`).get().then(function (doc) {
     if (!doc.data().shuffled) {
@@ -135,16 +138,7 @@ function shuffle(array) {
     return array;
 }
 
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        var isAnonymous = user.isAnonymous;
-        useruid = user.uid;
-        console.log(useruid);
-    }
-    else {
 
-    }
-});
 
 
 const Send = () => {
@@ -198,7 +192,6 @@ document.onkeyup = (event) => {
 }
 
 let timer = 120;
-let day = true;
 const mainTimer = () => {
     document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
     if(timer<=0){

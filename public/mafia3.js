@@ -14,8 +14,6 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
-        console.log(useruid);
-        // document.getElementById('lolo').innerHTML = roomname; 
     } else {
 
     }
@@ -30,11 +28,11 @@ db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
 
     })
 })
-
 let players = [];
 db.doc(`rooms/${roomname}`).get().then(function(doc) {
     console.log(doc.data().shuffled)
     if (!doc.data().shuffled) {
+
         db.doc(`rooms/${roomname}`).update({
             shuffled: true
         })
@@ -46,6 +44,7 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
                 console.log(docu.id);
 
             })
+        }).then(() => {
             players = shuffle(arr);
             db.doc(`rooms/${roomname}`).update({
                 shuffledArray: players,
@@ -55,10 +54,6 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
 
             }).catch((err) => console.log(err))
         })
-
-
-
-
     }
 })
 
@@ -81,17 +76,6 @@ function shuffle(array) {
 
     return array;
 }
-
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        var isAnonymous = user.isAnonymous;
-        useruid = user.uid;
-        console.log(useruid);
-    } else {
-
-    }
-});
-
 
 let sending = false;
 

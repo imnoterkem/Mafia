@@ -24,13 +24,16 @@ db.doc(`rooms/${roomname}`).update({
     time: 'day'
 })
 
-//readyg shalgadiin
 const ready = () => {
+    while 
     document.getElementsByClassName("ready")[0].classList.toggle('green');
-    if (clicked % 2 === 0) {
-        db.doc(`rooms/${roomname}`).get().then(function (doc) {
+    if (clicked % 2 === 0) 
+    {
+        db.doc(`rooms/${roomname}`).get().then(function (doc) 
+        {
             let readynumber = doc.data().ready + 1;
-            db.doc(`rooms/${roomname}`).update({
+            db.doc(`rooms/${roomname}`).update
+            ({
                 ready: readynumber
             })
         })
@@ -51,7 +54,7 @@ const ready = () => {
             })
         })
     }
-
+}
     clicked = clicked + 1;
 }
 // udur bolgodiin
@@ -70,6 +73,38 @@ db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
                 ready: 0
             })
             document.getElementsByClassName('ready')[0].background = "#3AC348"
+            const ready = () => {
+                document.getElementsByClassName("ready")[0].classList.toggle('green');
+                if (clicked % 2 === 0) 
+                {
+                    db.doc(`rooms/${roomname}`).get().then(function (doc) 
+                    {
+                        let readynumber = doc.data().ready + 1;
+                        db.doc(`rooms/${roomname}`).update
+                        ({
+                            ready: readynumber
+                        })
+                    })
+                    db.doc(`rooms/${roomname}/users/${useruid}`).update
+                        ({
+                            ready: true
+                        })
+                }
+                else {
+                    db.doc(`rooms/${roomname}/users/${useruid}`).update
+                        ({
+                            ready: false
+                        })
+                    db.doc(`rooms/${roomname}`).get().then(function (doc) {
+                        let readynumber = doc.data().ready - 1;
+                        db.doc(`rooms/${roomname}`).update({
+                            ready: readynumber
+                        })
+                    })
+                }
+            }
+                clicked = clicked + 1;
+            }
         }
         if (doc.data().time=='night') {
             document.getElementsByClassName('h')[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
@@ -193,12 +228,12 @@ document.onkeyup = (event) => {
     }
 }
 
-let timer = 120;
+let timer = 10;
 let day = true;
 const mainTimer = () => {
     document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
     if(timer<=0){
-        timer=120;
+        timer = 10;
         db.doc(`rooms/${roomname}`).get().then(function(doc){
             if(doc.data().time=='day'){
                 console.log('nice');
@@ -223,6 +258,8 @@ const mainTimer = () => {
                 db.doc(`rooms/${roomname}`).update({
                     ready: 0
                 })
+
+                document.getElementById('Input').disabled=true;
             }
         })
     }

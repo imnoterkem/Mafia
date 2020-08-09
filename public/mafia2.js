@@ -147,6 +147,3 @@ function leave() {
     })
 
 }
-window.addEventListener('beforeunload', function() {
-    alert("lol");
-});

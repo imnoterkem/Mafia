@@ -141,6 +141,29 @@ body {
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+#Input {
+    width: 83%;
+    height: 50%;
+    background: #858585;
+    outline: none;
+    border: none;
+    color: #c4c4c4;
+}
+
+::placeholder {
+    color: #c4c4c4;
+}
+
+#send {
+    width: 12%;
+    height: 50%;
+    background: #62B8E8;
+    border: 1px solid #C8C8C8;
+    box-sizing: border-box;
+    color: white;
+    outline: none;
+}
+
 .display {
     width: 98%;
     height: 80%;
@@ -176,18 +199,6 @@ body {
     background: #555;
 }
 
-Input {
-    width: 90%;
-    height: 50%;
-    background: #858585;
-    outline: none;
-    border: none;
-    color: #c4c4c4;
-}
-
-::placeholder {
-    color: #c4c4c4;
-}
 
 .cards {
     width: 100%;

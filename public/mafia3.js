@@ -8,13 +8,17 @@ var firebaseConfig = {
     appId: "1:1030300585767:web:6577af963515d152b32302",
 };
 const app = firebase.initializeApp(firebaseConfig);
-
 const db = firebase.firestore(app);
+
 let roomname = new URL(window.location.href).searchParams.get("r");
-
 let useruid;
-
 let clicked = 0;
+
+let roles = ['citizen', 'citizen', 'citizen', 'doctor', 'police', 'mafia', 'mafia'];
+
+db.doc(`rooms/${roomname}`).get().then(function(arr){
+    console.log(arr.data().shuffledArray[0]);
+})
 
 db.doc(`rooms/${roomname}`).update({
     ready: 0

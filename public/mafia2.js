@@ -10,6 +10,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 let useruid;
+
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
@@ -17,7 +18,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
     } else {
-
+        t
     }
 });
 
@@ -70,6 +71,7 @@ const ready = () => {
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
     if (doc.data().ready >= 7) {
+        console.log("here")
         window.location.href = `mafia3.html?r=${roomname}`
     }
 })
@@ -135,6 +137,7 @@ function leave() {
     db.doc(`rooms/${roomname}`).get().then(function(doc) {
 
         let updater = doc.data().currentPlayer - 1;
+        console.log("hdh")
         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
         console.log("asf")
         db.doc(`rooms/${roomname}`).update({

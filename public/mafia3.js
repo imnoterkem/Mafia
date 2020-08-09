@@ -19,7 +19,15 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 let roomname = new URL(window.location.href).searchParams.get("r");
-
+db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
+    let i = 0;
+    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
+    doc.forEach(function(docu) {
+        document.getElementsByClassName("player-name")[i].style.color = color[i]
+        document.getElementsByClassName("player-name")[i].innerHTML = docu.data().name
+        i++;
+    })
+})
 let useruid;
 
 let clicked = 0;

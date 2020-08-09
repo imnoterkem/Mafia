@@ -19,6 +19,11 @@ let clicked = 0;
 db.doc(`rooms/${roomname}`).update({
     ready: 0
 })
+
+db.doc(`rooms/${roomname}`).update({
+    time: 'day'
+})
+
 //readyg shalgadiin
 const ready = () => {
     document.getElementsByClassName("ready")[0].classList.toggle('green');
@@ -42,7 +47,7 @@ const ready = () => {
         db.doc(`rooms/${roomname}`).get().then(function (doc) {
             let readynumber = doc.data().ready - 1;
             db.doc(`rooms/${roomname}`).update({
-                    ready: readynumber
+                ready: readynumber
             })
         })
     }
@@ -178,7 +183,6 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
             t.classList.add('msgs');
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
-
         });
 
     });
@@ -189,5 +193,42 @@ document.onkeyup = (event) => {
     }
 }
 
+let timer = 120;
+let day = true;
+const mainTimer = () => {
+    document.getElementById("timer").innerHTML = `Auto-Skipping in: ${timer}`;
+    if(timer<=0){
+        timer=120;
+        db.doc(`rooms/${roomname}`).get().then(function(doc){
+            if(doc.data().time=='day'){
+                console.log('nice');
+                document.getElementsByClassName('h')[0].style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/nighttown.png')";
+                document.getElementsByClassName('body')[0].style.background="linear-gradient(to bottom, #001447, #000000)";
+                document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
+                db.doc(`rooms/${roomname}`).update({
+                    time: 'night'
+                })
+                db.doc(`rooms/${roomname}`).update({
+                    ready: 0
+                })
+            }
+            if(doc.data().time=="night"){
+                console.log('sdfsdf')
+                document.getElementsByClassName('h')[0].style.backgroundImage="url('/Users/rgS/Desktop/mafia/Mafia/public/assets/daytown.png')";
+                document.getElementsByClassName('body')[0].style.background="linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+                document.getElementsByClassName('moon')[0].style.background = "#F2D365";
+                db.doc(`rooms/${roomname}`).update({
+                    time: 'day'
+                })
+                db.doc(`rooms/${roomname}`).update({
+                    ready: 0
+                })
+            }
+        })
+    }
+    else{
+        timer--;
+    }
+};
 
-
+let mainT = setInterval(mainTimer, 1000);

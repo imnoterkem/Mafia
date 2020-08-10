@@ -330,3 +330,14 @@ const mainTimer = () => {
 };
 
 let mainT = setInterval(mainTimer, 1000);
+
+
+
+
+
+//shono bolsni dara
+db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+    if (doc.data().role === "mafia") {
+
+    }
+})

@@ -10,10 +10,14 @@ var firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore(app);
-firebase.auth().onAuthStateChanged(function (user) {
+
+let useruid;
+
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
+
     } else {
 
     }
@@ -21,8 +25,8 @@ firebase.auth().onAuthStateChanged(function (user) {
 let roomname = new URL(window.location.href).searchParams.get("r");
 db.collection(`rooms/${roomname}/users`).get().then(function (doc) {
     let i = 0;
-    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
-    doc.forEach(function (docu) {
+    let color = ['#DE5656', '#FF9900', '#FFE600', '#0AA119', '#2D5EDA', '#782B8B', '#E95CCA']
+    doc.forEach(function(docu) {
         document.getElementsByClassName("player-name")[i].style.color = color[i]
         document.getElementsByClassName("player-name")[i].innerHTML = docu.data().name
         db.doc(`rooms/${roomname}/users/${docu.id}`).update({
@@ -48,12 +52,6 @@ db.doc(`rooms/${roomname}`).get().then(function (doc) {
     }
 
 })
-
-
-
-
-let useruid;
-
 let clicked = 0;
 
 db.doc(`rooms/${roomname}`).update({
@@ -65,8 +63,7 @@ db.doc(`rooms/${roomname}`).update({
 })
 let players = [];
 
-
-db.doc(`rooms/${roomname}`).get().then(function (doc) {
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
     console.log(doc.data().shuffled)
     if (!doc.data().shuffled) {
 
@@ -107,7 +104,6 @@ db.doc(`rooms/${roomname}`).get().then(function (doc) {
                         })
                     }
                 }
-                console.log("sdfsd");
 
             }).catch((err) => console.log(err))
         })
@@ -249,7 +245,6 @@ function shuffle(array) {
 }
 
 let sending = false;
-
 const Send = () => {
 
     const Input = document.getElementById('Input');
@@ -260,20 +255,23 @@ const Send = () => {
     if (Input.value.trim() === '') return;
 
     Input.value = Input.value.trim();
-    db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+    if (!sending) {
+        sending = true;
+        db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+            let sendername = doc.data().name;
+            let color = doc.data().colors;
+            db.collection(`rooms/${roomname}/Chat`).add({
 
-        let sendername = doc.data().name;
-        let color = doc.data().colors;
-        db.collection(`rooms/${roomname}/Chat`).add({
-
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            text: Input.value,
-            sender: sendername,
-            color: color
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                text: Input.value,
+                sender: sendername,
+                color: color
+            }).then(() => {
+                sending = false;
+            })
+            Input.value = '';
         })
-        Input.value = '';
-    })
-
+    }
     document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 }
 
@@ -337,3 +335,19 @@ const mainTimer = () => {
 };
 
 let mainT = setInterval(mainTimer, 1000);
+// firebase.auth().onAuthStateChanged(function(user) {
+//     if (user) {
+//         var isAnonymous = user.isAnonymous;
+//         let useless = user.uid;
+//         db.doc(`rooms/${roomname}/users/${useless}`).get().then(function(doc) {
+//             console.log(doc.data().role);
+//         })
+//     }
+// });
+// shono bolsni dara
+// console.log(useruid)
+// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
+//     if (doc.data().role === "mafia") {
+//         document.getElementsByClassName('card-image')[0].onclick = document.getElementsByClassName('card-image')[0].style.border.color = "red"
+//     }
+// })

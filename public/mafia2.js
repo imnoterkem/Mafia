@@ -73,6 +73,8 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
     if (doc.data().ready >= 7) {
         console.log("here")
         window.location.href = `mafia3.html?r=${roomname}`
+
+
     }
 })
 

@@ -94,7 +94,7 @@ const Send = () => {
         document.getElementsByClassName('chatbox')[0].appendChild(useless);
     })
 
-
+ 
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
         let sendername = doc.data().name;
         console.log(Input.value)

@@ -125,43 +125,42 @@ db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
         }
     }
 })
-//send
 db.doc(`rooms/${roomname}`).get().then(function (doc) {
-    if (doc.data().time == 'day') {
-        const Send = () => {
-            let Input = document.getElementById('Input');
-        
-            if (Input.value === '') {
-                return;
-            }
-            let s = 0;
-            while (Input.value[s] === " ") {
-                s++;
-            }
-            Input.value = Input.value.slice(s, Input.value.length)
-            let useless = document.createElement('div');
-            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
-                useless.innerHTML = doc.data().name + ' : ' + Input.value;
-                useless.classList.add('msgs');
-                document.getElementsByClassName('chatbox')[0].appendChild(useless);
-            })
-        
-        
-            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
-                let sendername = doc.data().name;
-                console.log(Input.value)
-                db.collection(`rooms/${roomname}/Chat`).add({
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    text: Input.value,
-                    sender: sendername
-                }).then(function() {
-                    document.getElementById('Input').value = '';
-                    document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
-                })
-            })
-        
+    console.log("idadadaa")
+    const Send = () => {
+        let Input = document.getElementById('Input');
+
+        if (Input.value === '') {
+            return;
         }
+        let s = 0;
+        while (Input.value[s] === " ") {
+            s++;
+        }
+        Input.value = Input.value.slice(s, Input.value.length)
+        let useless = document.createElement('div');
+        db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+            useless.innerHTML = doc.data().name + ' : ' + Input.value;
+            useless.classList.add('msgs');
+            document.getElementsByClassName('chatbox')[0].appendChild(useless);
+        })
+
+
+        db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+            let sendername = doc.data().name;
+            console.log(Input.value)
+            db.collection(`rooms/${roomname}/Chat`).add({
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                text: Input.value,
+                sender: sendername
+            }).then(function () {
+                document.getElementById('Input').value = '';
+                document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
+            })
+        })
+
     }
+
 })
 let input = document.getElementById("Input");
 document.onkeyup = (event) => {
@@ -228,8 +227,9 @@ const mainTimer = () => {
             console.log(doc.data().time)
 
             if (doc.data().time == 'day') {
+                document.getElementById('send').disabled = false;
                 console.log('nice');
-                document.getElementsByClassName('h')[0].style.backgroundImage = "url('/assets/nighttown.png')";
+                document.getElementsByClassName('h')[0].style.backgroundImage ="url('assets/daytown.png')";
                 document.getElementsByClassName('body')[0].style.background = "linear-gradient(to bottom, #001447, #000000)";
                 document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
                 db.doc(`rooms/${roomname}`).update({
@@ -240,8 +240,10 @@ const mainTimer = () => {
                 })
             }
             if (doc.data().time == "night") {
+                document.getElementById('send').disabled = true;
+                console.log(document.getElementById('send').disabled);
                 console.log('sdfsdf')
-                document.getElementsByClassName('h')[0].style.backgroundImage = "url('assets/daytown.png')";
+                document.getElementsByClassName('h')[0].style.backgroundImage =  "url('/assets/nighttown.png')";
                 document.getElementsByClassName('body')[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
                 document.getElementsByClassName('moon')[0].style.background = "#F2D365";
                 db.doc(`rooms/${roomname}`).update({

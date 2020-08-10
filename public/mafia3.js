@@ -25,9 +25,33 @@ db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
     doc.forEach(function(docu) {
         document.getElementsByClassName("player-name")[i].style.color = color[i]
         document.getElementsByClassName("player-name")[i].innerHTML = docu.data().name
+        db.doc(`rooms/${roomname}/users/${docu.id}`).update({
+            colors: color[i]
+        });
         i++;
+
     })
 })
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    if (!doc.data().isChatDeleted) {
+        db.doc(`rooms/${ roomname }`).update({
+            isChatDeleted: true
+        })
+        db.collection(`rooms/${ roomname }/Chat`).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
+
+                db.collection(`rooms/${roomname}/Chat`).doc(`${doc.id}`).delete().then(function() {}).catch(function(error) {
+                    console.error("Error removing document: ", error);
+                });
+            });
+        });
+    }
+
+})
+
+
+
+
 let useruid;
 
 let clicked = 0;
@@ -40,6 +64,8 @@ db.doc(`rooms/${roomname}`).update({
     time: 'day'
 })
 let players = [];
+
+
 db.doc(`rooms/${roomname}`).get().then(function(doc) {
     console.log(doc.data().shuffled)
     if (!doc.data().shuffled) {
@@ -67,13 +93,11 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
                         db.doc(`rooms/${roomname}/users/${players[i]}`).update({
                             role: "citizen"
                         })
-                    }
-                    if (i === 4) {
+                    } else if (i === 4) {
                         db.doc(`rooms/${roomname}/users/${players[i]}`).update({
                             role: "doctor"
                         })
-                    }
-                    if (i === 5) {
+                    } else if (i === 5) {
                         db.doc(`rooms/${roomname}/users/${players[i]}`).update({
                             role: "police"
                         })
@@ -195,12 +219,13 @@ const Send = () => {
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
 
         let sendername = doc.data().name;
-
+        let color = doc.data().colors;
         db.collection(`rooms/${roomname}/Chat`).add({
 
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             text: Input.value,
-            sender: sendername
+            sender: sendername,
+            color: color
         })
         Input.value = '';
     })
@@ -212,13 +237,12 @@ console.log(roomname)
 
 db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt')
     .onSnapshot(function(querySnapshot) {
-        console.log("eqeq");
         document.getElementsByClassName('display')[0].innerHTML = ''
         querySnapshot.forEach(function(doc) {
             const t = document.createElement("div")
-            console.log(doc.data().text)
-            t.innerHTML = doc.data().sender + ':' + doc.data().text;
+            t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
+            t.style.color = doc.data().color;
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
         });

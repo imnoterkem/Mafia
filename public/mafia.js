@@ -146,7 +146,8 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                shuffled: false
+                shuffled: false,
+                isChatDeleted: false
             });
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
@@ -172,7 +173,9 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                shuffled: false
+                shuffled: false,
+                isChatDeleted: false
+
             });
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
@@ -427,10 +430,11 @@ const joinRoom = (name, uid) => {
         let ref = db.collection("rooms").doc(name);
         return t.get(ref).then((doc) => {
             if (doc.data().currentPlayer < 8) {
-                t.update(ref, {
-                    currentPlayer: ++doc.data().currentPlayer,
-                    latestJoiner: uid,
-                });
+                nowplayer = 1 + doc.data().currentPlayer,
+                    t.update(ref, {
+                        currentPlayer: nowplayer,
+                        latestJoiner: uid,
+                    });
             }
         });
     }).then(() => {

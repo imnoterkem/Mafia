@@ -21,7 +21,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 let roomname = new URL(window.location.href).searchParams.get("r");
 db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
     let i = 0;
-    let color = ['#5781EC', '#FFB4B4', '#ECDE5C', '#FFB03A', '#0AA119', '#A812EE', '#FFFFFF']
+    let color = ['#DE5656', '#FF9900', '#FFE600', '#0AA119', '#2D5EDA', '#782B8B', '#E95CCA']
     doc.forEach(function(docu) {
         document.getElementsByClassName("player-name")[i].style.color = color[i]
         document.getElementsByClassName("player-name")[i].innerHTML = docu.data().name

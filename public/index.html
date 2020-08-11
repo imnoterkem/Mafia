@@ -20,11 +20,11 @@
                 <div id="rooms">
                     <div id="button">
                         <button id="create" onclick="show()">+</button>
-                        <div id="search" onclick="search()">
-                            <div id="ins"></div>
-                            <div id="int"></div>
+                        <div id="search" onclick="search()"><img src="icons/searchicon.png">
+                            <input type="text" id="searchinput" style="display: none;">
                         </div>
-                        <input type="text" id="searchinput" style="display: none;">
+                        <button id="cancelsearch" style="display: none;" onclick="hidesearchinput()">X</button>
+                        <button id="searchroom" style="display: none;" onclick="searchrooms()">🔎</button>
                     </div>
                     <div id="button2" style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
                         <button id="create" onclick="show()">+</button>
@@ -50,3 +50,6 @@
 <script src="mafia.js"></script>
 
 </html>
+
+
+

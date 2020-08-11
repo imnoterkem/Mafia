@@ -363,6 +363,7 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
             });
     }
 })
+var recover;
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
@@ -401,22 +402,27 @@ firebase.auth().onAuthStateChanged(function(user) {
                 }
             } else if (doc.data().role === "doctor") {
                 console.log("mafia");
+
                 for (let i = 0; i < 7; i++) {
                     document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
                         for (let j = 0; j < 7; j++) {
                             document.getElementsByClassName('card-image')[j].style.boxShadow = null
                         }
                         if (i !== importantvar) {
-                            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                                console.log(querySnapshot.docs[i].id)
-                                db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
-                                    alive: true
-                                });
-                            })
+                            recover = i;
+                            console.log(recover)
                             document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px green"
                         }
                     })
                 }
+                console.log(recover)
+
+                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                    console.log(querySnapshot.docs[recover].id)
+                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[recover].id}`).update({
+                        alive: true
+                    });
+                })
             }
         })
     }

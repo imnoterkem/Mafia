@@ -70,7 +70,12 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
         });
     }
 });
+<<<<<<< HEAD
 firebase.auth().onAuthStateChanged(function(user) {
+=======
+// let useruid;
+firebase.auth().onAuthStateChanged(function (user) {
+>>>>>>> 76fb96635058b2e948b20c61a2ca8d2e75d20118
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
@@ -312,7 +317,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
             const t = document.createElement("div")
             t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
-            t.style.color = doc.data().color;
+            // t.style.color = doc.data().color;
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
         });

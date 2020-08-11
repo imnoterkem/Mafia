@@ -15,15 +15,27 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
+        db.doc(`rooms/${roomname}/users/${useruid}`).update({
+            alive: true
+        })
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
     } else {
-        t
+        db.doc(`rooms/${roomname}`).get().then(function(doc) {
+
+            let updater = doc.data().currentPlayer - 1;
+            console.log("hdh")
+            db.doc(`rooms/${roomname}/users/${useruid}`).delete();
+            console.log("asf")
+            db.doc(`rooms/${roomname}`).update({
+                currentPlayer: updater
+            })
+
+        })
     }
 });
 
 let roomname = new URL(window.location.href).searchParams.get("r");
-
 
 db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(function(querySnapshot) {
     document.getElementsByClassName('users')[0].innerHTML = '';
@@ -96,7 +108,7 @@ const Send = () => {
         document.getElementsByClassName('chatbox')[0].appendChild(useless);
     })
 
- 
+
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
         let sendername = doc.data().name;
         console.log(Input.value)

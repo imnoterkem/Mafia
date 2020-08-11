@@ -17,46 +17,65 @@ firebase.auth().onAuthStateChanged(function(user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
 
-    } else {
-    }
+    } else {}
 });
 let roomname = new URL(window.location.href).searchParams.get("r");
-db.collection(`rooms/${roomname}/users`).get().then(function (doc) {
-    let i = 0;
-    let color = ['#DE5656', '#FF9900', '#FFE600', '#0AA119', '#2D5EDA', '#782B8B', '#E95CCA']
+db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
+    let k = 0;
+    let color = ['#DE5656', '#FF9900', '#FFE600', '#0AA119', '#2D5EDA', '#782B8B', '#E95CCA'];
+    let mycard;
+    // db.doc()
     doc.forEach(function(docu) {
-        document.getElementsByClassName("player-name")[i].style.color = color[i]
-        document.getElementsByClassName("player-name")[i].innerHTML = docu.data().name
+        document.getElementsByClassName("player-name")[k].style.color = color[k]
+        document.getElementsByClassName("player-name")[k].innerHTML = docu.data().name
         db.doc(`rooms/${roomname}/users/${docu.id}`).update({
-            colors: color[i]
+            colors: color[k]
         });
-        i++;
+        console.log(useruid)
+        console.log(docu.id)
+        if (docu.id === useruid) {
+            importantvar = k;
+            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(docs) {
+                if (docs.data().role === "citizen") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/irgen.png"
+                } else if (docs.data().role === "mafia") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/mafia.png"
+                } else if (docs.data().role === "police") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/police.png"
+                } else if (docs.data().role === "doctor") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/doctor.png"
+                }
+
+            }).then(() => {
+                k++;
+            })
+        } else {
+            k++;
+        }
 
     })
 })
-db.doc(`rooms/${roomname}`).get().then(function (doc) {
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
     if (!doc.data().isChatDeleted) {
         db.doc(`rooms/${roomname}`).update({
             isChatDeleted: true
         })
-        db.collection(`rooms/${roomname}/Chat`).get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
+        db.collection(`rooms/${roomname}/Chat`).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
 
-                db.collection(`rooms/${roomname}/Chat`).doc(`${doc.id}`).delete().then(function () { }).catch(function (error) {
+                db.collection(`rooms/${roomname}/Chat`).doc(`${doc.id}`).delete().then(function() {}).catch(function(error) {
                     console.error("Error removing document: ", error);
                 });
             });
         });
     }
 });
-let useruid;
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
         console.log(useruid);
-    } else {
-    }
+    } else {}
 });
 let clicked = 0;
 
@@ -77,9 +96,8 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
             shuffled: true
         })
         let arr = []
-
-        db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
-            querySnapshot.forEach(function (docu) {
+        db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+            querySnapshot.forEach(function(docu) {
                 arr.push(docu.id);
                 console.log(docu.id);
 
@@ -87,96 +105,72 @@ db.doc(`rooms/${roomname}`).get().then(function(doc) {
         }).then(() => {
             players = shuffle(arr);
             db.doc(`rooms/${roomname}`).update({
-                shuffled: true,
-            });
-            let arr = [];
-
-            db.collection(`rooms/${roomname}/users`)
-                .get()
-                .then(function (querySnapshot) {
-                    querySnapshot.forEach(function (docu) {
-                        arr.push(docu.id);
-                        console.log(docu.id);
-                    });
+                    shuffled: true,
+                    shuffledArray: players,
+                    gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then(() => {
-                    players = shuffle(arr);
-                    db.doc(`rooms/${roomname}`)
-                        .update({
-                            shuffledArray: players,
-                            gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
-                        })
-                        .then(() => {
-                            console.log("done");
-                            for (let i = 0; i < players.length; i++) {
-                                if (i < 3) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "citizen",
-                                    });
-                                }
-                                if (i === 4) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "doctor",
-                                    });
-                                }
-                                if (i === 5) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "police",
-                                    });
-                                } else {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "mafia",
-                                    });
-                                }
-                            }
-                            console.log("sdfsd");
-                        })
-                    })
+                    for (let i = 0; i < players.length; i++) {
+                        if (i < 3) {
+                            db.doc(
+                                `rooms/${roomname}/users/${players[i]}`
+                            ).update({
+                                role: "citizen",
+                            });
+                        } else if (i === 4) {
+                            db.doc(
+                                `rooms/${roomname}/users/${players[i]}`
+                            ).update({
+                                role: "doctor",
+                            });
+                        } else if (i === 5) {
+                            db.doc(
+                                `rooms/${roomname}/users/${players[i]}`
+                            ).update({
+                                role: "police",
+                            });
+                        } else {
+                            db.doc(
+                                `rooms/${roomname}/users/${players[i]}`
+                            ).update({
+                                role: "mafia",
+                            });
+                        }
+                    }
                 })
-// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(docc){
-//     console.log(useruid)
-//     console.log(docc.data().name);
-//     console.log("ntgs")
-//});
-
-//readyg shalgadiin
-const ready = () => {
-    document.getElementsByClassName("ready")[0].classList.toggle('green');
-    if (clicked % 2 === 0) {
-        db.doc(`rooms/${roomname}`).get().then(function (doc) {
-            let readynumber = doc.data().ready + 1;
-            db.doc(`rooms/${roomname}`).update({
-                ready: readynumber
-            })
-        })
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: true
-        })
-    } else {
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: false
-        })
-        db.doc(`rooms/${roomname}`).get().then(function (doc) {
-            let readynumber = doc.data().ready - 1;
-            db.doc(`rooms/${roomname}`).update({
-                ready: readynumber
-            })
         })
     }
+})
 
-    clicked = clicked + 1;
-}
-// udur bolgodiin
+const ready = () => {
+        document.getElementsByClassName("ready")[0].classList.toggle('green');
+        if (clicked % 2 === 0) {
+            db.doc(`rooms/${roomname}`).get().then(function(doc) {
+                let readynumber = doc.data().ready + 1;
+                db.doc(`rooms/${roomname}`).update({
+                    ready: readynumber
+                })
+            })
+            db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                ready: true
+            })
+        } else {
+            db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                ready: false
+            })
+            db.doc(`rooms/${roomname}`).get().then(function(doc) {
+                let readynumber = doc.data().ready - 1;
+                db.doc(`rooms/${roomname}`).update({
+                    ready: readynumber
+                })
+            })
+        }
+
+        clicked = clicked + 1;
+    }
+    // udur bolgodiin
 let shunu = document.createElement('div').innerHTML = 'шөнө 111'
-db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
+db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
     console.log(doc.data());
     if (doc.data().ready == 7) {
         if (doc.data().time == 'day') {
@@ -205,8 +199,7 @@ db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
         }
     }
 })
-//send
-db.doc(`rooms/${roomname}`).get().then(function (doc) {
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
     if (doc.data().time == 'day') {
         const Send = () => {
             let Input = document.getElementById('Input');
@@ -220,21 +213,21 @@ db.doc(`rooms/${roomname}`).get().then(function (doc) {
             }
             Input.value = Input.value.slice(s, Input.value.length)
             let useless = document.createElement('div');
-            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
                 useless.innerHTML = doc.data().name + ' : ' + Input.value;
                 useless.classList.add('msgs');
                 document.getElementsByClassName('chatbox')[0].appendChild(useless);
             })
 
 
-            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function (doc) {
+            db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
                 let sendername = doc.data().name;
                 console.log(Input.value)
                 db.collection(`rooms/${roomname}/Chat`).add({
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     text: Input.value,
                     sender: sendername
-                }).then(function () {
+                }).then(function() {
                     document.getElementById('Input').value = '';
                     document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
                 })
@@ -254,7 +247,7 @@ document.onkeyup = (event) => {
     }
 }
 
-db.doc(`rooms/${roomname}`).get().then(function (doc) {
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
     if (!doc.data().shuffled) {
         db.doc(`rooms/${roomname}`).update({
             shuffled: true
@@ -312,15 +305,10 @@ const Send = () => {
     document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
 }
 
-    document.getElementsByClassName(
-        "display"
-    )[0].scrollTop = document.getElementsByClassName("display")[0].scrollHeight;
-};
-
 db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt')
-    .onSnapshot(function (querySnapshot) {
+    .onSnapshot(function(querySnapshot) {
         document.getElementsByClassName('display')[0].innerHTML = ''
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
             const t = document.createElement("div")
             t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
@@ -329,7 +317,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
         });
     });
-let input = document.getElementById("Input");
+
 document.onkeyup = (event) => {
     if (event.keyCode === 13) {
         Send();
@@ -342,53 +330,94 @@ let startedDate;
 
 const mainTimer = () => {
     let nowDate = firebase.firestore.Timestamp.now();
-    
+
     if (!gameStatedDate) {
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function (doc) {
+            .then(function(doc) {
                 gameStatedDate = true;
                 startedDate = doc.data().gameStarted;
             });
     }
     if (startedDate != undefined) {
-    
+
         if (nowDate.seconds - startedDate.seconds > 120) {
             // console.log('game is finished')
         } else {
             // eniig html element deeree haruulna nowDate.seconds - startedDate.seconds
-            document.getElementById('timer').innerHTML=nowDate.seconds - startedDate.seconds;
+            document.getElementById('timer').innerHTML = nowDate.seconds - startedDate.seconds;
         }
     }
 };
 
 let mainT = setInterval(mainTimer, 1000);
 
-db.doc(`rooms/${roomname}`).get().then(function (doc) {
-        while (doc.data().time == "night") {
-            db.doc(`rooms/${roomname}/users/${useruid}`)
-                .get()
-                .then(function (docc) {
-                    if (docc.data().role == "mafia") {
-                        console.log("ad");
-                    }
-                });
-        }
-    })
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    while (doc.data().time == "night") {
+        db.doc(`rooms/${roomname}/users/${useruid}`)
+            .get()
+            .then(function(docc) {
+                if (docc.data().role == "mafia") {
+                    console.log("ad");
+                }
+            });
+    }
 })
-// firebase.auth().onAuthStateChanged(function(user) {
-//     if (user) {
-//         var isAnonymous = user.isAnonymous;
-//         let useless = user.uid;
-//         db.doc(`rooms/${roomname}/users/${useless}`).get().then(function(doc) {
-//             console.log(doc.data().role);
-//         })
-//     }
-// });
-// shono bolsni dara
-// console.log(useruid)
-// db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
-//     if (doc.data().role === "mafia") {
-//         document.getElementsByClassName('card-image')[0].onclick = document.getElementsByClassName('card-image')[0].style.border.color = "red"
-//     }
-// })
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        var isAnonymous = user.isAnonymous;
+        let useless = user.uid;
+        db.doc(`rooms/${roomname}/users/${useless}`).get().then(function(doc) {
+            console.log(doc.data().role);
+            if (doc.data().role === "mafia") {
+                console.log("mafia");
+                for (let i = 0; i < 7; i++) {
+                    document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
+                        for (let j = 0; j < 7; j++) {
+                            document.getElementsByClassName('card-image')[j].style.boxShadow = null
+                        }
+
+                        if (i !== importantvar) {
+                            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot2) {
+                                console.log("dfgdfga")
+                                querySnapshot2.forEach(function(docus) {
+                                    console.log(docus)
+                                    db.doc(`rooms/${roomname}/users/${docus.id}`).update({
+                                        alive: true
+                                    });
+                                })
+                            }).then(() => {
+                                console.log("dfgdfga")
+                                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                                    console.log(querySnapshot.docs[i].id)
+                                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
+                                        alive: false
+                                    });
+                                })
+                            })
+                            document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px red"
+                        }
+                    })
+                }
+            } else if (doc.data().role === "doctor") {
+                console.log("mafia");
+                for (let i = 0; i < 7; i++) {
+                    document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
+                        for (let j = 0; j < 7; j++) {
+                            document.getElementsByClassName('card-image')[j].style.boxShadow = null
+                        }
+                        if (i !== importantvar) {
+                            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                                console.log(querySnapshot.docs[i].id)
+                                db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
+                                    alive: true
+                                });
+                            })
+                            document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px green"
+                        }
+                    })
+                }
+            }
+        })
+    }
+});

@@ -158,7 +158,7 @@ document.getElementById("create2").onclick = () => {
                         .set({
                             name: `${thename}`,
                             ready: false,
-                            role: 0
+                            role: "none"
                         })
                         .then(function() {
                             window.location.href = `mafia2.html?r=${roomname}`;
@@ -187,7 +187,8 @@ document.getElementById("create2").onclick = () => {
                         .set({
                             name: `${thename}`,
                             ready: false,
-                            role: 0
+                            role: "none",
+
                         })
                         .then(function() {
                             document.getElementById("creatername").value = "";
@@ -300,7 +301,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
             let confirm = document.createElement("div");
             let asknamecon = document.createElement("div");
 
-            askname.maxLength= "10";
+            askname.maxLength = "10";
             ask.setAttribute("class", "askcont");
             askname.setAttribute("class", "ask");
             askcontainer.setAttribute("class", "askoption");
@@ -358,7 +359,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                     .set({
                                         name: `${askname.value}`,
                                         ready: false,
-                                        role: 0
+                                        role: "none"
                                     })
                                     .then(function() {
                                         window.location.href = `mafia2.html?r=${name}`;

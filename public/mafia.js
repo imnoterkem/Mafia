@@ -308,9 +308,9 @@ const renderRoom = (name, status, currentPlayer, password) => {
             confirm.setAttribute("class", "confirm");
             contForForm.setAttribute("id", "form");
 
-            asknamecon.innerText = "Your name";
-            bolih.innerText = "Cancel";
-            oroh.innerText = "Join";
+            asknamecon.innerText = "Таны нэр";
+            bolih.innerText = "цуцлах";
+            oroh.innerText = "нэгдэх";
 
             bolih.setAttribute("class", "bolih");
             oroh.setAttribute("class", "oroh");

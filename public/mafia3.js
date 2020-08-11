@@ -284,7 +284,7 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
             const t = document.createElement("div")
             t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
             t.classList.add('msgs');
-            t.style.color = doc.data().color;
+            // t.style.color = doc.data().color;
             document.getElementsByClassName('display')[0].append(t);
             document.getElementsByClassName('display')[0].scrollTop = document.getElementsByClassName('display')[0].scrollHeight;
         });
@@ -306,7 +306,7 @@ const mainTimer = () => {
                 console.log('nice');
                 document.getElementsByClassName('h')[0].style.backgroundImage = "url('assets/nighttown.png')";
                 document.getElementsByClassName('body')[0].style.background = "linear-gradient(to bottom, #001447, #000000)";
-                document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
+                document.getElementsByClassName('moon')[0].style.background = "#FFE99C"
                 db.doc(`rooms/${roomname}`).update({
                     time: 'night'
                 })

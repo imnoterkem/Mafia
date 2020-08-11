@@ -49,7 +49,7 @@ db.doc(`rooms/${roomname}`).get().then(function (doc) {
         });
     }
 });
-let useruid;
+// let useruid;
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         var isAnonymous = user.isAnonymous;

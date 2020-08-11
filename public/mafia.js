@@ -300,6 +300,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
             let confirm = document.createElement("div");
             let asknamecon = document.createElement("div");
 
+            askname.maxLength= "10";
             ask.setAttribute("class", "askcont");
             askname.setAttribute("class", "ask");
             askcontainer.setAttribute("class", "askoption");

@@ -113,7 +113,7 @@ const priv = () => {
     let passwordcont = document.createElement("div");
     passwordcont.setAttribute("id", "passwordcont");
     passwordinput.setAttribute("id", "passwordinput");
-    passwordcont.innerText = "Room Password";
+    passwordcont.innerText = "Өрөөний нууц үг";
     passwordcont.appendChild(passwordinput);
     document.getElementById("roomoptioncontainer").appendChild(passwordcont);
 };

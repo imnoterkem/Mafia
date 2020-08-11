@@ -306,7 +306,7 @@ const mainTimer = () => {
                 console.log('nice');
                 document.getElementsByClassName('h')[0].style.backgroundImage = "url('assets/nighttown.png')";
                 document.getElementsByClassName('body')[0].style.background = "linear-gradient(to bottom, #001447, #000000)";
-                document.getElementsByClassName('moon')[0].style.background = "#FFE99C"
+                document.getElementsByClassName('moon')[0].style.background = "#FFE99C";
                 db.doc(`rooms/${roomname}`).update({
                     time: 'night'
                 })

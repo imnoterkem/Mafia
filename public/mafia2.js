@@ -21,6 +21,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
     } else {
+        console.log("safadsfd")
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
 
             let updater = doc.data().currentPlayer - 1;

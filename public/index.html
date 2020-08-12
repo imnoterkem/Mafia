@@ -26,7 +26,8 @@
                         <button id="cancelsearch" style="display: none;" onclick="hidesearchinput()">X</button>
                         <button id="searchroom" style="display: none;" onclick="searchrooms()">🔎</button>
                     </div>
-                    <div id="button2" style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
+                    <div id="button2"
+                        style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
                         <button id="create" onclick="show()">+</button>
                         <div id="smallcontainer">
                             <div id="roomname">өрөөний нэр<input id="name"></div>
@@ -34,7 +35,7 @@
                             <div id="optiontext">Таны өрөө:</div>
                             <div id="roomoptioncontainer">
                                 <div id="ppassword">
-                                    <div>Олон нийтийн<input id="publicroom" type="radio" name="public"></div>
+                                    <div>Олон нийтийн<input id="publicroom" type="radio" name="public" onchange="publ()"></div>
                                     <div>нууц<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
                                 </div>
                             </div>

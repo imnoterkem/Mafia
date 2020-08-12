@@ -21,6 +21,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
     } else {
+        console.log("safadsfd")
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
 
             let updater = doc.data().currentPlayer - 1;
@@ -83,13 +84,88 @@ const ready = () => {
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
     if (doc.data().ready >= 7) {
-        console.log("here")
-        window.location.href = `mafia3.html?r=${roomname}`
+        let players = [];
+
+        db.doc(`rooms/${roomname}`).get().then(function(doc) {
+            console.log(doc.data().shuffled)
+            if (!doc.data().shuffled) {
+
+                db.doc(`rooms/${roomname}`).update({
+                    shuffled: true
+                })
+                let arr = []
+                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                    querySnapshot.forEach(function(docu) {
+                        arr.push(docu.id);
+                        console.log(docu.id);
+
+                    })
+                }).then(() => {
+                    players = shuffle(arr);
+                    db.doc(`rooms/${roomname}`).update({
+                            shuffled: true,
+                            shuffledArray: players,
+                            gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
+                        })
+                        .then(() => {
+                            for (let i = 0; i < players.length; i++) {
+                                if (i < 3) {
+                                    db.doc(
+                                        `rooms/${roomname}/users/${players[i]}`
+                                    ).update({
+                                        role: "citizen",
+                                    });
+                                } else if (i === 4) {
+                                    db.doc(
+                                        `rooms/${roomname}/users/${players[i]}`
+                                    ).update({
+                                        role: "doctor",
+                                    });
+                                } else if (i === 5) {
+                                    db.doc(
+                                        `rooms/${roomname}/users/${players[i]}`
+                                    ).update({
+                                        role: "police",
+                                    });
+                                } else {
+                                    db.doc(
+                                        `rooms/${roomname}/users/${players[i]}`
+                                    ).update({
+                                        role: "mafia",
+                                    });
+                                }
+                            }
+                            console.log("here")
+                            window.location.href = `mafia3.html?r=${roomname}`
+                        })
+                })
+            }
+        })
+
 
 
     }
 })
 
+function shuffle(array) {
+    var currentIndex = array.length,
+        temporaryValue,
+        randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    console.log("lol");
+    return array;
+}
 const Send = () => {
     let Input = document.getElementById('Input');
 

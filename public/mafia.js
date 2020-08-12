@@ -171,7 +171,7 @@ document.getElementById("create2").onclick = () => {
                                 .set({
                                     name: `${thename}`,
                                     ready: false,
-                                    role: 0
+                                    role: "none"
                                 })
                                 .then(function () {
                                     window.location.href = `mafia2.html?r=${roomname}`;
@@ -200,7 +200,7 @@ document.getElementById("create2").onclick = () => {
                                 .set({
                                     name: `${thename}`,
                                     ready: false,
-                                    role: 0
+                                    role: "none"
                                 })
                                 .then(function () {
                                     document.getElementById("creatername").value = "";

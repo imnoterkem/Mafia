@@ -27,7 +27,6 @@ db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
     let k = 0;
     let color = ['#DE5656', '#FF9900', '#FFE600', '#0AA119', '#2D5EDA', '#782B8B', '#E95CCA'];
     let mycard;
-    // db.doc()
     doc.forEach(function(docu) {
         document.getElementsByClassName("player-name")[k].style.color = color[k]
         document.getElementsByClassName("player-name")[k].innerHTML = docu.data().name
@@ -165,15 +164,17 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
             });
         }
     }
-});
+})
 
-let input = document.getElementById("Input");
-document.onkeyup = (event) => {
-    if (event.keyCode === 13) {
-        console.log();
-        if (day) Send();
+db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    if (!doc.data().shuffled) {
+        db.doc(`rooms/${roomname}`).update({
+            shuffled: true
+        })
     }
-};
+})
+
+
 
 let sending = false;
 const Send = () => {
@@ -213,7 +214,9 @@ db.collection(`rooms`).doc(`${roomname}`).collection('Chat').orderBy('createdAt'
         document.getElementsByClassName('display')[0].innerHTML = ''
         querySnapshot.forEach(function(doc) {
             const t = document.createElement("div")
-            t.innerHTML = doc.data().sender + ' : ' + doc.data().text;
+            let coloredname = doc.data().sender
+            coloredname = coloredname.fontcolor(doc.data().color);
+            t.innerHTML = coloredname + ' : ' + doc.data().text;
             t.classList.add('msgs');
             // t.style.color = doc.data().color;
             document.getElementsByClassName('display')[0].append(t);
@@ -387,59 +390,63 @@ firebase.auth().onAuthStateChanged(function(user) {
         let useless = user.uid;
         db.doc(`rooms/${roomname}/users/${useless}`).get().then(function(doc) {
             console.log(doc.data().role);
-            if (doc.data().role === "mafia") {
-                console.log("mafia");
-                for (let i = 0; i < 7; i++) {
-                    document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
-                        for (let j = 0; j < 7; j++) {
-                            document.getElementsByClassName('card-image')[j].style.boxShadow = null
-                        }
+            if (doc.data().alive) {
+                if (doc.data().role === "mafia") {
+                    console.log("mafia");
+                    for (let i = 0; i < 7; i++) {
+                        document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
+                            for (let j = 0; j < 7; j++) {
+                                document.getElementsByClassName('card-image')[j].style.boxShadow = null
+                            }
 
-                        if (i !== importantvar) {
-                            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot2) {
-                                console.log("dfgdfga")
-                                querySnapshot2.forEach(function(docus) {
-                                    console.log(docus)
-                                    db.doc(`rooms/${roomname}/users/${docus.id}`).update({
-                                        alive: true
-                                    });
+                            if (i !== importantvar) {
+                                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot2) {
+                                    console.log("dfgdfga")
+                                    querySnapshot2.forEach(function(docus) {
+                                        console.log(docus)
+                                        db.doc(`rooms/${roomname}/users/${docus.id}`).update({
+                                            alive: true
+                                        });
+                                    })
+                                }).then(() => {
+                                    console.log("dfgdfga")
+                                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                                        console.log(querySnapshot.docs[i].id)
+                                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
+                                            alive: false
+                                        });
+                                    })
                                 })
-                            }).then(() => {
-                                console.log("dfgdfga")
-                                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                                    console.log(querySnapshot.docs[i].id)
-                                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
-                                        alive: false
-                                    });
-                                })
-                            })
-                            document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px red"
-                        }
+                                document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px red"
+                            }
+                        })
+                    }
+                } else if (doc.data().role === "doctor") {
+                    console.log("mafia");
+
+                    for (let i = 0; i < 7; i++) {
+                        document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
+                            for (let j = 0; j < 7; j++) {
+                                document.getElementsByClassName('card-image')[j].style.boxShadow = null
+                            }
+                            if (i !== importantvar) {
+                                recover = i;
+                                console.log(recover)
+                                document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px green"
+                            }
+                        })
+                    }
+                    console.log(recover)
+
+                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                        console.log(querySnapshot.docs[recover].id)
+                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[recover].id}`).update({
+                            alive: true
+                        });
                     })
                 }
-            } else if (doc.data().role === "doctor") {
-                console.log("mafia");
-
-                for (let i = 0; i < 7; i++) {
-                    document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
-                        for (let j = 0; j < 7; j++) {
-                            document.getElementsByClassName('card-image')[j].style.boxShadow = null
-                        }
-                        if (i !== importantvar) {
-                            recover = i;
-                            console.log(recover)
-                            document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px green"
-                        }
-                    })
-                }
-                console.log(recover)
-
-                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                    console.log(querySnapshot.docs[recover].id)
-                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[recover].id}`).update({
-                        alive: true
-                    });
-                })
+            } else {
+                console.log('sdf')
             }
         })
     }

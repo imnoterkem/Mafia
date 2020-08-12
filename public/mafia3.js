@@ -84,6 +84,8 @@ db.doc(`rooms/${roomname}`)
             });
             let nowT = moment(new Date());
             let parsedDate = moment(gameStarted.toDate());
+
+  
             diffTime = moment.duration(nowT.diff(parsedDate).asMinutes());
         } else {
             let nowT = moment(new Date());
@@ -391,69 +393,140 @@ document.onkeyup = (event) => {
     }
 };
 
+// let gameStatedDate = false;
+
+// let startedDate = undefined;
+
+// let time = 120;
+// let dc = 0;
+// let nc = 0;
+// document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
+// const mainTimer = (timer) => {
+//     let nowDate = moment(new Date());
+
+//     if (!gameStatedDate) {
+//         db.doc(`rooms/${roomname}`)
+//             .get()
+//             .then(function (doc) {
+//                 day = doc.data().day;
+//                 dc=doc.data().dc;
+//                 nc = doc.data().nc;
+//                 startedDate = moment(doc.data().gameStarted.toDate());
+//                 startedDate.add(dc*120, "seconds");
+//                 startedDate.add(nc*30, "seconds");
+//                 gameStatedDate = true;
+//             })
+//     }
+//     // console.log(moment.duration(nowDate.diff(startedDate)).asSeconds());
+//     // console.log(timer);
+//     if (startedDate != undefined) {
+//         if (moment.duration(nowDate.diff(startedDate)).asSeconds() > timer) {
+//             if (day) {
+//                 day = false;
+//                 time = 30;
+//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
+//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
+//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
+//                 db.doc(`rooms/${roomname}`).update({
+//                     dc: dc+1,
+//                     day: false,
+//                 });
+//             } else {
+//                 day = true;
+//                 time = 120;
+//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
+//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
+//                 db.doc(`rooms/${roomname}`).update({
+//                     nc: nc+1,
+//                     day: true,
+//                 });
+//             }
+//         } else {
+//             document.getElementById("timer").innerHTML = nowDate - startedDate;
+//             console.log(startedDate.getSeconds())
+//             console.log("timer arla");
+//         }
+//     }
+// };
+// let role={}, ;
+// db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot){
+//     querySnapshot.forEach(function(doc){
+//         doc.data().name:doc.data().role;
+//     })
+// })
+
 let gameStatedDate = false;
+let startedDate;
+let time = 60;
+let rounds = 1;
+let day = false;
+let badChar = [];
 
-let startedDate = undefined;
-
-let day = true;
-
-let time = 120;
-let dc = 0;
-let nc = 0;
-document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
 const mainTimer = (timer) => {
-    let nowDate = moment(new Date());
+
+    let nowDate = firebase.firestore.Timestamp.now();
 
     if (!gameStatedDate) {
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function (doc) {
-                day = doc.data().day;
-                dc=doc.data().dc;
-                nc = doc.data().nc;
-                startedDate = moment(doc.data().gameStarted.toDate());
-                startedDate.add(dc*120, "seconds")
-                startedDate.add(nc*30, "seconds")
+            .then(function(doc) {
+                console.log(doc.data());
                 gameStatedDate = true;
-            })
+                startedDate = doc.data().gameStarted;
+            });
     }
-
-    console.log(moment.duration(nowDate.diff(startedDate)).asSeconds());
-    console.log(timer);
     if (startedDate != undefined) {
-        if (moment.duration(nowDate.diff(startedDate)).asSeconds() > timer) {
+
+
+        if (nowDate.seconds - startedDate.seconds < timer) {
+
             if (day) {
-                startedDate.add(timer, "seconds");
-                day = false;
-                time = 30;
-                document.getElementsByClassName("body")[0].style.background =
-                    "linear-gradient(to bottom, #001447, #000000) ";
-                document.getElementsByClassName("h")[0].style.backgroundImage =
-                    "url('./assets/nighttown.png')";
-                document.getElementsByClassName("ready")[0].background =
-                    "#3AC348";
-                db.doc(`rooms/${roomname}`).update({
-                    dc: dc+1,
-                    day: false,
-                });
+
+
+
+
             } else {
-                startedDate.add(timer, "seconds");
-                day = true;
-                time = 120;
-                document.getElementsByClassName("body")[0].style.background =
-                    "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-                document.getElementsByClassName("h")[0].style.backgroundImage =
-                    "url('./assets/daytown.png')";
-                document.getElementsByClassName("ready")[0].background =
-                    "#3AC348";
-                db.doc(`rooms/${roomname}`).update({
-                    nc: nc+1,
-                    day: true,
-                });
+                if (index < badChar.length) {
+
+                    if (nowDate.seconds - startedDate.seconds < 20) {
+
+                        if (chat[index] == id) {
+                            
+                        }
+                        
+                        
+                        // muu duruud hiih ymaaa ahiinee
+                        
+                    } else {
+    
+                        index++;
+    
+                    }
+    
+                }
             }
+
+          
+            // togloom yvj baigaa
         } else {
-            document.getElementById("timer").innerHTML = time - moment.duration(nowDate.diff(startedDate)).asSeconds();
-            console.log("timer arla");
+            console.log(nowDate.seconds - startedDate.seconds)
+
+            if (day) {
+
+                startedDate.seconds += 120;
+                timer = 60;
+                
+
+            } else {
+                startedDate.seconds += 60;
+                timer = 120;
+            }
+
+            
+            //togloom duussan 
+            //daraaciinn round
+
         }
     }
 };

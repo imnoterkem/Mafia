@@ -45,7 +45,6 @@ db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
                 } else if (docs.data().role === "doctor") {
                     document.getElementsByClassName("card-image")[k].src = "assets/doctor.png"
                 }
-
             }).then(() => {
                 k++;
             })
@@ -86,61 +85,6 @@ db.doc(`rooms/${roomname}`).update({
 db.doc(`rooms/${roomname}`).update({
     time: "day",
 });
-let players = [];
-
-db.doc(`rooms/${roomname}`).get().then(function(doc) {
-    console.log(doc.data().shuffled)
-    if (!doc.data().shuffled) {
-
-        db.doc(`rooms/${roomname}`).update({
-            shuffled: true
-        })
-        let arr = []
-        db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-            querySnapshot.forEach(function(docu) {
-                arr.push(docu.id);
-                console.log(docu.id);
-
-            })
-        }).then(() => {
-            players = shuffle(arr);
-            db.doc(`rooms/${roomname}`).update({
-                    shuffled: true,
-                    shuffledArray: players,
-                    gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
-                })
-                .then(() => {
-                    for (let i = 0; i < players.length; i++) {
-                        if (i < 3) {
-                            db.doc(
-                                `rooms/${roomname}/users/${players[i]}`
-                            ).update({
-                                role: "citizen",
-                            });
-                        } else if (i === 4) {
-                            db.doc(
-                                `rooms/${roomname}/users/${players[i]}`
-                            ).update({
-                                role: "doctor",
-                            });
-                        } else if (i === 5) {
-                            db.doc(
-                                `rooms/${roomname}/users/${players[i]}`
-                            ).update({
-                                role: "police",
-                            });
-                        } else {
-                            db.doc(
-                                `rooms/${roomname}/users/${players[i]}`
-                            ).update({
-                                role: "mafia",
-                            });
-                        }
-                    }
-                })
-        })
-    }
-})
 
 const ready = () => {
         document.getElementsByClassName("ready")[0].classList.toggle('green');

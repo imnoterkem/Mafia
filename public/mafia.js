@@ -17,10 +17,10 @@ var docRef = db.collection("rooms");
 
 //listen data
 let rooms = [];
-docRef.onSnapshot(function(querySnapshot) {
+docRef.onSnapshot(function (querySnapshot) {
     clearRenderedRooms();
 
-    querySnapshot.forEach(function(doc) {
+    querySnapshot.forEach(function (doc) {
         let data = doc.data();
         data["id"] = doc.id;
 
@@ -55,9 +55,9 @@ const hidesearchinput = () => {
     docRef
         .orderBy("createdAt")
         .get()
-        .then(function(querySnapshot) {
+        .then(function (querySnapshot) {
             clearRenderedRooms();
-            querySnapshot.forEach(function(doc) {
+            querySnapshot.forEach(function (doc) {
                 let data = doc.data();
 
                 renderRoom(
@@ -75,8 +75,8 @@ const searchrooms = () => {
     document.getElementById("ROOMS").innerHTML = "";
     db.collection("rooms")
         .get()
-        .then(function(querySnapshot) {
-            querySnapshot.forEach(function(doc) {
+        .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
                 let data = doc.data();
                 if (document.getElementById("searchinput").value == data.name) {
                     renderRoom(
@@ -103,7 +103,7 @@ document.getElementById("cancel").onclick = () => {
     document.getElementById("privateroom").checked = false;
     document.getElementById("publicroom").checked = false;
     document.getElementById("name").value = "";
-    document.getElementById("creatername").value = "";
+    document.getElementById('createrame').value = "";
     if (document.getElementById("passwordcont")) {
         document
             .getElementById("roomoptioncontainer")
@@ -162,7 +162,7 @@ document.getElementById("create2").onclick = () => {
                         shuffled: false,
                         isChatDeleted: false
                     });
-                    firebase.auth().onAuthStateChanged(function(user) {
+                    firebase.auth().onAuthStateChanged(function (user) {
                         if (user) {
                             let thename = document.getElementById("creatername").value;
                             var uid = user.uid;
@@ -173,7 +173,7 @@ document.getElementById("create2").onclick = () => {
                                     ready: false,
                                     role: 0
                                 })
-                                .then(function() {
+                                .then(function () {
                                     window.location.href = `mafia2.html?r=${roomname}`;
                                 });
                         }
@@ -190,7 +190,7 @@ document.getElementById("create2").onclick = () => {
                         isChatDeleted: false
 
                     });
-                    firebase.auth().onAuthStateChanged(function(user) {
+                    firebase.auth().onAuthStateChanged(function (user) {
                         if (user) {
                             let thename = document.getElementById("creatername").value;
                             var uid = user.uid;
@@ -202,7 +202,7 @@ document.getElementById("create2").onclick = () => {
                                     ready: false,
                                     role: 0
                                 })
-                                .then(function() {
+                                .then(function () {
                                     document.getElementById("creatername").value = "";
                                     window.location.href = `mafia2.html?r=${roomname}`;
                                 });
@@ -210,7 +210,7 @@ document.getElementById("create2").onclick = () => {
                     });
                 }
 
-                firebase.auth().onAuthStateChanged(function(user) {
+                firebase.auth().onAuthStateChanged(function (user) {
                     if (user) {
                         var isAnonymous = user.isAnonymous;
                         let thename = document.getElementById("creatername").value;
@@ -220,36 +220,38 @@ document.getElementById("create2").onclick = () => {
                         console.log(thename)
                         console.log(roomname)
                         db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
-                                name: `${thename}`,
-                                ready: false,
-                                role: "none",
+                            name: `${thename}`,
+                            ready: false,
+                            role: "none",
 
-                            })
-                            .then(function() {
+                        })
+                            .then(function () {
                                 document.getElementById("creatername").value = "";
                                 window.location.href = `mafia2.html?r=${roomname}`;
                             })
                     }
                 })
             } else {
-                console.log("it exists")
+                console.log("it exists");
+                document.getElementById("create2").onclick = () => {
+                    document.getElementById('createrame').value = "";
+                    askname.value = "";
+                }
+                document.getElementById("privateroom").checked = false;
+                document.getElementById("publicroom").checked = false;
+                document.getElementById("name").value = "";
 
-
+                document.getElementById("button2").style.display = "none";
+                if (document.getElementById("passwordcont")) {
+                    document
+                        .getElementById("roomoptioncontainer")
+                        .removeChild(document.getElementById("passwordcont"));
+                }
+                document.getElementById("button").style.display = "flex";
             }
-            document.getElementById("privateroom").checked = false;
-            document.getElementById("publicroom").checked = false;
-            document.getElementById("name").value = "";
-
-            document.getElementById("button2").style.display = "none";
-            if (document.getElementById("passwordcont")) {
-                document
-                    .getElementById("roomoptioncontainer")
-                    .removeChild(document.getElementById("passwordcont"));
-            }
-            document.getElementById("button").style.display = "flex";
         }
-    }
-};
+    };
+}
 //end
 
 const renderRoom = (name, status, currentPlayer, password) => {
@@ -347,7 +349,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                 let askpasscon = document.createElement("div"); //
                 askpassword.setAttribute("class", "ask"); //
                 askpasscon.setAttribute("class", "ask-con"); //
-                askpasscon.innerText = "Password"; //
+                askpasscon.innerText = "Нууц үг"; //
                 askpasscon.appendChild(askpassword); //
                 askcontainer.appendChild(askpasscon); //
 
@@ -365,12 +367,12 @@ const renderRoom = (name, status, currentPlayer, password) => {
                         firebase
                             .auth()
                             .signInAnonymously()
-                            .catch(function(error) {
+                            .catch(function (error) {
                                 var errorCode = error.code;
                                 var errorMessage = error.message;
                                 console.log(errorCode, " ", errorMessage);
                             });
-                        firebase.auth().onAuthStateChanged(function(user) {
+                        firebase.auth().onAuthStateChanged(function (user) {
                             if (user && askname.value !== "") {
                                 var uid = user.uid;
                                 if (!joinClicked) {
@@ -384,7 +386,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                         ready: false,
                                         role: "none"
                                     })
-                                    .then(function() {
+                                    .then(function () {
                                         window.location.href = `mafia2.html?r=${name}`;
                                     });
                             }
@@ -408,12 +410,12 @@ const renderRoom = (name, status, currentPlayer, password) => {
                     firebase
                         .auth()
                         .signInAnonymously()
-                        .catch(function(error) {
+                        .catch(function (error) {
                             var errorCode = error.code;
                             var errorMessage = error.message;
                             console.log(errorCode, " ", errorMessage);
                         });
-                    firebase.auth().onAuthStateChanged(function(user) {
+                    firebase.auth().onAuthStateChanged(function (user) {
                         if (user && askname.value !== "") {
                             var uid = user.uid;
                             if (!joinClicked) {
@@ -425,7 +427,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                 .set({
                                     name: `${askname.value}`,
                                 })
-                                .then(function() {
+                                .then(function () {
                                     window.location.href = `mafia2.html?r=${name}`;
                                 });
                         }
@@ -464,5 +466,5 @@ const joinRoom = (name, uid) => {
         });
     }).then(() => {
         return console.log("joined  room");
-    });
-};
+    })
+}

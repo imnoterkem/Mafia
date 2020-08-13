@@ -135,8 +135,9 @@ console.log(rooms);
 document.getElementById("create2").onclick = () => {
     if (
         rooms.filter((el) => el.name === document.getElementById("name").value)
-            .length > 0
+            .length < 0
     ) {
+    } else {
         if (
             document.getElementById("name").value != "" &&
             document.getElementById("creatername").value != "" &&
@@ -243,9 +244,7 @@ document.getElementById("create2").onclick = () => {
                 .removeChild(document.getElementById("passwordcont"));
         }
         document.getElementById("button").style.display = "flex";
-    
     }
-     
 };
 //end
 

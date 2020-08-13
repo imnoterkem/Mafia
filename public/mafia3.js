@@ -13,6 +13,7 @@ let nightShift = [];
 let useruid;
 let diffTime = 0;
 let dayShift = [];
+let chosenPlayer;
 // console.log(nowT)
 
 firebase.auth().onAuthStateChanged(function (user) {
@@ -41,7 +42,10 @@ db.collection(`rooms/${roomname}/users`)
         ];
         let mycard;
         doc.forEach(function (docu) {
-            players.push(docu.data());
+            players.push({
+                ...docu.data(),
+                uid: docu.id,
+            });
             document.getElementsByClassName("player-name")[k].style.color =
                 color[k];
             document.getElementsByClassName("player-name")[
@@ -287,10 +291,7 @@ document.onkeyup = (event) => {
     }
 };
 
-
-killerDo = () => {
-
-}
+killerDo = () => {};
 
 // let gameStatedDate = false;
 
@@ -364,7 +365,11 @@ let badChar = [];
 let nightTimer = 20;
 let index = 0;
 
-const mainTimer = (timer) => {
+let round = 0;
+
+let mafia = true;
+
+const mainTimer = () => {
     let nowDate = firebase.firestore.Timestamp.now();
 
     if (!gameStatedDate) {
@@ -378,34 +383,63 @@ const mainTimer = (timer) => {
     }
 
     if (startedDate != undefined) {
-        if (nowDate.seconds - startedDate.seconds < timer) {
+        if (nowDate.seconds - startedDate.seconds < time) {
             if (day) {
+                console.log('day')
+                if (dayShift[0].uid === user.uid) {
+                    console.log("yea it is me", user.uid);
+                }
+                console.log(nowDate.seconds - startedDate.seconds);
             } else {
+                console.log("shunu");
+                console.log(nowDate.seconds - startedDate.seconds);
                 if (index < nightShift.length) {
                     if (nowDate.seconds - startedDate.seconds < nightTimer) {
+                        console.log(nightTimer);
+                        if (nightShift[index].uid === useruid) {
+                            switch (index) {
+                                case 0:
+                                if (nowDate.seconds - startedDate.seconds === nightTimer - 1) {
+                                    console.log(chosenPlayer);
+                                    mafiaPlayerAction(chosenPlayer.id);
+                                }
+                                    break;
+                                case 1:
+                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 1) {
+                                    console.log("dfsf")
+                                    doctorPlayerAction(chosenPlayer.id);
+                                    }
 
-                        if (nightShift[index].uid === user.uid ) {
-                            
 
+                                    break;
+                                case 2:
+                                    break;
+                            }
                         }
-
-                    } else {
-                        nightTimer += 20;
-                        index++;
-                    }
+                    } 
+                } else {
+                    nightTimer += 20;
+                    index++;
                 }
             }
 
             // togloom yvj baigaa
         } else {
+            round++;
+            if (round % 2 == 0) {
+                mafia = false;
+            } else {
+                mafia = true;
+            }
             if (day) {
                 startedDate.seconds += 120;
-                timer = 60;
+                time = 60;
                 day = false;
+                index = 0;
             } else {
                 startedDate.seconds += 60;
                 nightTimer = 20;
-                timer = 120;
+                time = 120;
                 day = true;
             }
 
@@ -415,8 +449,52 @@ const mainTimer = (timer) => {
     }
 };
 
+
+for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
+
+   
+    document.getElementsByClassName("card-image")[i].onclick = (e) => {
+
+        for (let j = 0; j < document.getElementsByClassName("card-image").length; j++) {   
+            document.getElementsByClassName("card-image")[j].style.boxShadow = 'none';
+        }
+    
+        document.getElementById(e.target.id).style.boxShadow = '0px 0px 10px 10px red';
+        choosePlayer(e.target.previousElementSibling.innerHTML);
+    }
+}
+
+
+const choosePlayer = (name) => {
+
+    chosenPlayer = [];
+
+    chosenPlayer =  players.filter(el => el.name === name);
+}
+
+const mafiaPlayerAction = (id) => {
+    db.doc(`rooms/${roomname}/users/${id}`).update({
+        alive: false,
+    });
+};
+
+const doctorPlayerAction = (id) => {
+    db.doc(`rooms/${roomname}/users/${id}`).update({
+        alive: true,
+    });
+};
+const policePlayerAction= (id) =>{
+    db.doc(`rooms/${roomname}/users/${id}`).get().then(function(doc){
+        if(doc.data().role=="mafia"){
+            console.log("YES")
+        }
+        else{
+            console.log("NO");
+        }
+    })
+}
 let mainInterval = setInterval(() => {
-    mainTimer(time);
+    mainTimer();
 }, 1000);
 
 db.doc(`rooms/${roomname}`)
@@ -432,71 +510,3 @@ db.doc(`rooms/${roomname}`)
                 });
         }
     });
-var recover;
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-        var isAnonymous = user.isAnonymous;
-        let useless = user.uid;
-        db.doc(`rooms/${roomname}/users/${useless}`).get().then(function(doc) {
-            console.log(doc.data().role);
-            if (doc.data().alive) {
-                if (doc.data().role === "mafia") {
-                    console.log("mafia");
-                    for (let i = 0; i < 7; i++) {
-                        document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
-                            for (let j = 0; j < 7; j++) {
-                                document.getElementsByClassName('card-image')[j].style.boxShadow = null
-                            }
-
-                            if (i !== importantvar) {
-                                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot2) {
-                                    console.log("dfgdfga")
-                                    querySnapshot2.forEach(function(docus) {
-                                        console.log(docus)
-                                        db.doc(`rooms/${roomname}/users/${docus.id}`).update({
-                                            alive: true
-                                        });
-                                    })
-                                }).then(() => {
-                                    console.log("dfgdfga")
-                                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                                        console.log(querySnapshot.docs[i].id)
-                                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i].id}`).update({
-                                            alive: false
-                                        });
-                                    })
-                                })
-                                document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px red"
-                            }
-                        })
-                    }
-                } else if (doc.data().role === "doctor") {
-                    console.log("mafia");
-
-                    for (let i = 0; i < 7; i++) {
-                        document.getElementsByClassName('card-image')[i].addEventListener('click', function() {
-                            for (let j = 0; j < 7; j++) {
-                                document.getElementsByClassName('card-image')[j].style.boxShadow = null
-                            }
-                            if (i !== importantvar) {
-                                recover = i;
-                                console.log(recover)
-                                document.getElementsByClassName('card-image')[i].style.boxShadow = "0px 0px 5px 5px green"
-                            }
-                        })
-                    }
-                    console.log(recover)
-
-                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                        console.log(querySnapshot.docs[recover].id)
-                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[recover].id}`).update({
-                            alive: true
-                        });
-                    })
-                }
-            } else {
-                console.log('sdf')
-            }
-        })
-    }
-});

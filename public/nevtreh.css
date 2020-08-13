@@ -1,0 +1,83 @@
+body {
+    background-color: #222025;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+.top {
+    height: 11vh;
+    width: 100%;
+    background-color: #2b292e;
+    margin: 0px;
+    font-size: 80px;
+    display: flex;
+}
+
+.mafia {
+    display: flex;
+    position: absolute;
+    padding-left: 11vw;
+    padding-top: 2vh;
+    width: auto;
+    height: auto;
+}
+
+/*
+.about {
+    padding-top: 217px;
+    position: absolute;
+    left: 50%;
+    margin-left: -25%;
+}
+.abot {
+    padding-top: 1060px;
+    position: absolute;
+    left: 50%;
+    margin-left: -25%;
+}
+.lang-swtch {
+    height: 30px;
+    width: 70px;
+    border-radius: 10%;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+} */
+
+.buttons {
+    padding-left: 27%;
+    padding-top: 9%;
+
+}
+
+/* .play {
+    border: #8B8B8B solid 3px;
+    border-radius: 100px;
+    color: white;
+    background-color: black;
+    height: 64px;
+    width: 236px;
+   font-size: 30px;
+    position: absolute;
+    top: 59%;
+    left: 56.7%;
+    outline: none;
+} */
+.play {
+    border: #8B8B8B solid 3px;
+    border-radius: 100px;
+    color: white;
+    background-color: black;
+    height: 64px;
+    width: 236px;
+   font-size: 30px;
+    position: absolute;
+    top: 660px;
+    left: 1160px;
+    outline: none;
+}
+.about {
+    padding-left: 25%;
+    padding-top: 5%;
+}

@@ -99,7 +99,7 @@ document.getElementById("cancel").onclick = () => {
     document.getElementById("privateroom").checked = false;
     document.getElementById("publicroom").checked = false;
     document.getElementById("name").value = "";
-    document.getElementById("creatername").value = "";
+    document.getElementById('createrame').value = "";
     if (document.getElementById("passwordcont")) {
         document
             .getElementById("roomoptioncontainer")
@@ -320,7 +320,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                 let askpasscon = document.createElement("div"); //
                 askpassword.setAttribute("class", "ask"); //
                 askpasscon.setAttribute("class", "ask-con"); //
-                askpasscon.innerText = "Password"; //
+                askpasscon.innerText = "Нууц үг"; //
                 askpasscon.appendChild(askpassword); //
                 askcontainer.appendChild(askpasscon); //
 

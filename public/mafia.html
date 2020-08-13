@@ -16,28 +16,31 @@
     <div id="bottom">
         <div id="container">
             <div id="roomlist">
-                <div id="text">Join a room</div>
+                <div id="text">өрөөнд нэгдэх</div>
                 <div id="rooms">
                     <div id="button">
                         <button id="create" onclick="show()">+</button>
-                        <div id="search" onclick="search()"><img src="icons/searchicon.png"></div>
-                        <input type="text" id="searchinput" style="display: none;">
+                        <div id="search" onclick="search()"><img src="icons/searchicon.png">
+                            <input type="text" id="searchinput" style="display: none;">
+                        </div>
+                        <button id="cancelsearch" style="display: none;" onclick="hidesearchinput()">X</button>
+                        <button id="searchroom" style="display: none;" onclick="searchrooms()">🔎</button>
                     </div>
                     <div id="button2"
                         style="height: auto; width: auto; align-items: flex-start; margin-top: 13px; display: none;">
                         <button id="create" onclick="show()">+</button>
                         <div id="smallcontainer">
-                            <div id="roomname">Room Name<input id="name"></div>
-                            <div id='roomname'>Your Name<input id='creatername' style="width: 80%;"></div>
-                            <div id="optiontext">Your room is:</div>
+                            <div id="roomname">өрөөний нэр<input id="name"></div>
+                            <div id='roomname'>Таны нэр<input id='creatername' maxlength= "10" style="width: 80%"></div>
+                            <div id="optiontext">Таны өрөө:</div>
                             <div id="roomoptioncontainer">
                                 <div id="ppassword">
-                                    <div>Public<input id="publicroom" type="radio" name="public"></div>
-                                    <div>Private<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
+                                    <div>Олон нийтийн<input id="publicroom" type="radio" name="public" onchange="publ()"></div>
+                                    <div>нууц<input id="privateroom" type="radio" name="public" onchange="priv()"></div>
                                 </div>
                             </div>
-                            <div id="buttoncontainer"><button id="cancel">Cancel</button><button id="create2">Create Room</button></div>
-                        </div>
+                            <div id="buttoncontainer"><button id="cancel">цуцлах</button><button id="create2">өрөө үүсгэх</button></div>
+                        </div>c
                     </div>
                     <div id="ROOMS"></div>
                 </div>
@@ -48,3 +51,6 @@
 <script src="mafia.js"></script>
 
 </html>
+
+
+

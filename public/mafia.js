@@ -17,10 +17,10 @@ var docRef = db.collection("rooms");
 
 //listen data
 let rooms = [];
-docRef.onSnapshot(function (querySnapshot) {
+docRef.onSnapshot(function(querySnapshot) {
     clearRenderedRooms();
 
-    querySnapshot.forEach(function (doc) {
+    querySnapshot.forEach(function(doc) {
         let data = doc.data();
         data["id"] = doc.id;
 
@@ -55,9 +55,9 @@ const hidesearchinput = () => {
     docRef
         .orderBy("createdAt")
         .get()
-        .then(function (querySnapshot) {
+        .then(function(querySnapshot) {
             clearRenderedRooms();
-            querySnapshot.forEach(function (doc) {
+            querySnapshot.forEach(function(doc) {
                 let data = doc.data();
 
                 renderRoom(
@@ -75,8 +75,8 @@ const searchrooms = () => {
     document.getElementById("ROOMS").innerHTML = "";
     db.collection("rooms")
         .get()
-        .then(function (querySnapshot) {
-            querySnapshot.forEach(function (doc) {
+        .then(function(querySnapshot) {
+            querySnapshot.forEach(function(doc) {
                 let data = doc.data();
                 if (document.getElementById("searchinput").value == data.name) {
                     renderRoom(
@@ -134,125 +134,125 @@ console.log(rooms);
 document.getElementById("create2").onclick = () => {
 
 
-    if (rooms.filter(el => el.name === document.getElementById('name').value).length > 0) {
-        console.log('dada')
-    } else {
-        console.log('none')
-        if (!roomName.exists) {
-            console.log('it does not exist')
-            if (
-                document.getElementById("name").value != "" &&
-                document.getElementById("creatername").value != "" &&
-                (document.getElementById("privateroom").checked == true ||
-                    document.getElementById("publicroom").checked == true)
-            ) {
-                let roomname = document.getElementById("name").value;
+        if (rooms.filter(el => el.name === document.getElementById('name').value).length > 0) {
+            console.log('dada')
+        } else {
+            console.log('none')
+            if (!roomName.exists) {
+                console.log('it does not exist')
                 if (
-                    document.getElementById("privateroom").checked == true &&
-                    document.getElementById("passwordinput").value != ""
+                    document.getElementById("name").value != "" &&
+                    document.getElementById("creatername").value != "" &&
+                    (document.getElementById("privateroom").checked == true ||
+                        document.getElementById("publicroom").checked == true)
                 ) {
-                    db.doc(`rooms/${roomname}`).set({
-                        status: "Private",
-                        password: document.getElementById("passwordinput").value,
-                        name: roomname,
-                        createdAt: Date.now(),
-                        limit: 7,
-                        currentPlayer: 1,
-                        ready: 0,
-                        shuffled: false,
-                        isChatDeleted: false
-                    });
-                    firebase.auth().onAuthStateChanged(function (user) {
-                        if (user) {
-                            let thename = document.getElementById("creatername").value;
-                            var uid = user.uid;
-                            db.collection(`rooms/${roomname}/users`)
-                                .doc(`${uid}`)
-                                .set({
-                                    name: `${thename}`,
-                                    ready: false,
-                                    role: "none"
-                                })
-                                .then(function () {
-                                    window.location.href = `mafia2.html?r=${roomname}`;
-                                });
-                        }
-                    });
-                } else if (document.getElementById("publicroom").checked == true) {
-                    db.doc(`rooms/${roomname}`).set({
-                        status: "Public",
-                        name: roomname,
-                        createdAt: Date.now(),
-                        limit: 7,
-                        currentPlayer: 1,
-                        ready: 0,
-                        shuffled: false,
-                        isChatDeleted: false
+                    let roomname = document.getElementById("name").value;
+                    if (
+                        document.getElementById("privateroom").checked == true &&
+                        document.getElementById("passwordinput").value != ""
+                    ) {
+                        db.doc(`rooms/${roomname}`).set({
+                            status: "Private",
+                            password: document.getElementById("passwordinput").value,
+                            name: roomname,
+                            createdAt: Date.now(),
+                            limit: 7,
+                            currentPlayer: 1,
+                            ready: 0,
+                            shuffled: false,
+                            isChatDeleted: false
+                        });
+                        firebase.auth().onAuthStateChanged(function(user) {
+                            if (user) {
+                                let thename = document.getElementById("creatername").value;
+                                var uid = user.uid;
+                                db.collection(`rooms/${roomname}/users`)
+                                    .doc(`${uid}`)
+                                    .set({
+                                        name: `${thename}`,
+                                        ready: false,
+                                        role: "none"
+                                    })
+                                    .then(function() {
+                                        window.location.href = `mafia2.html?r=${roomname}`;
+                                    });
+                            }
+                        });
+                    } else if (document.getElementById("publicroom").checked == true) {
+                        db.doc(`rooms/${roomname}`).set({
+                            status: "Public",
+                            name: roomname,
+                            createdAt: Date.now(),
+                            limit: 7,
+                            currentPlayer: 1,
+                            ready: 0,
+                            shuffled: false,
+                            isChatDeleted: false
 
-                    });
-                    firebase.auth().onAuthStateChanged(function (user) {
+                        });
+                        firebase.auth().onAuthStateChanged(function(user) {
+                            if (user) {
+                                let thename = document.getElementById("creatername").value;
+                                var uid = user.uid;
+                                console.log(thename)
+                                db.collection(`rooms/${roomname}/users`)
+                                    .doc(`${uid}`)
+                                    .set({
+                                        name: `${thename}`,
+                                        ready: false,
+                                        role: "none"
+                                    })
+                                    .then(function() {
+                                        document.getElementById("creatername").value = "";
+                                        window.location.href = `mafia2.html?r=${roomname}`;
+                                    });
+                            }
+                        });
+                    }
+
+                    firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
+                            var isAnonymous = user.isAnonymous;
                             let thename = document.getElementById("creatername").value;
-                            var uid = user.uid;
                             console.log(thename)
-                            db.collection(`rooms/${roomname}/users`)
-                                .doc(`${uid}`)
-                                .set({
+                            var uid = user.uid;
+                            console.log(uid);
+                            console.log(thename)
+                            console.log(roomname)
+                            db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
                                     name: `${thename}`,
                                     ready: false,
-                                    role: "none"
+                                    role: "none",
+
                                 })
-                                .then(function () {
+                                .then(function() {
                                     document.getElementById("creatername").value = "";
                                     window.location.href = `mafia2.html?r=${roomname}`;
-                                });
+                                })
                         }
-                    });
-                }
-
-                firebase.auth().onAuthStateChanged(function (user) {
-                    if (user) {
-                        var isAnonymous = user.isAnonymous;
-                        let thename = document.getElementById("creatername").value;
-                        console.log(thename)
-                        var uid = user.uid;
-                        console.log(uid);
-                        console.log(thename)
-                        console.log(roomname)
-                        db.collection(`rooms/${roomname}/users`).doc(`${uid}`).set({
-                            name: `${thename}`,
-                            ready: false,
-                            role: "none",
-
-                        })
-                            .then(function () {
-                                document.getElementById("creatername").value = "";
-                                window.location.href = `mafia2.html?r=${roomname}`;
-                            })
+                    })
+                } else {
+                    console.log("it exists");
+                    document.getElementById("create2").onclick = () => {
+                        document.getElementById('createrame').value = "";
+                        askname.value = "";
                     }
-                })
-            } else {
-                console.log("it exists");
-                document.getElementById("create2").onclick = () => {
-                    document.getElementById('createrame').value = "";
-                    askname.value = "";
-                }
-                document.getElementById("privateroom").checked = false;
-                document.getElementById("publicroom").checked = false;
-                document.getElementById("name").value = "";
+                    document.getElementById("privateroom").checked = false;
+                    document.getElementById("publicroom").checked = false;
+                    document.getElementById("name").value = "";
 
-                document.getElementById("button2").style.display = "none";
-                if (document.getElementById("passwordcont")) {
-                    document
-                        .getElementById("roomoptioncontainer")
-                        .removeChild(document.getElementById("passwordcont"));
+                    document.getElementById("button2").style.display = "none";
+                    if (document.getElementById("passwordcont")) {
+                        document
+                            .getElementById("roomoptioncontainer")
+                            .removeChild(document.getElementById("passwordcont"));
+                    }
+                    document.getElementById("button").style.display = "flex";
                 }
-                document.getElementById("button").style.display = "flex";
             }
-        }
-    };
-}
-//end
+        };
+    }
+    //end
 
 const renderRoom = (name, status, currentPlayer, password) => {
     let room = document.createElement("div");
@@ -367,12 +367,12 @@ const renderRoom = (name, status, currentPlayer, password) => {
                         firebase
                             .auth()
                             .signInAnonymously()
-                            .catch(function (error) {
+                            .catch(function(error) {
                                 var errorCode = error.code;
                                 var errorMessage = error.message;
                                 console.log(errorCode, " ", errorMessage);
                             });
-                        firebase.auth().onAuthStateChanged(function (user) {
+                        firebase.auth().onAuthStateChanged(function(user) {
                             if (user && askname.value !== "") {
                                 var uid = user.uid;
                                 if (!joinClicked) {
@@ -386,7 +386,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                         ready: false,
                                         role: "none"
                                     })
-                                    .then(function () {
+                                    .then(function() {
                                         window.location.href = `mafia2.html?r=${name}`;
                                     });
                             }
@@ -410,12 +410,12 @@ const renderRoom = (name, status, currentPlayer, password) => {
                     firebase
                         .auth()
                         .signInAnonymously()
-                        .catch(function (error) {
+                        .catch(function(error) {
                             var errorCode = error.code;
                             var errorMessage = error.message;
                             console.log(errorCode, " ", errorMessage);
                         });
-                    firebase.auth().onAuthStateChanged(function (user) {
+                    firebase.auth().onAuthStateChanged(function(user) {
                         if (user && askname.value !== "") {
                             var uid = user.uid;
                             if (!joinClicked) {
@@ -427,7 +427,7 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                 .set({
                                     name: `${askname.value}`,
                                 })
-                                .then(function () {
+                                .then(function() {
                                     window.location.href = `mafia2.html?r=${name}`;
                                 });
                         }

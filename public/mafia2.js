@@ -16,7 +16,7 @@ firebase.auth().onAuthStateChanged(function(user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            alive: true     
+            alive: true
         })
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
@@ -235,7 +235,7 @@ function leave() {
             })
             .then(function() {
                 console.log("adsfa");
-                window.location.href = 'index.html';
+                window.location.href = 'mafia.html';
             })
     })
 

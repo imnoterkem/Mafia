@@ -369,7 +369,7 @@ let round = 0;
 
 let mafia = true;
 
-const mainTimer = () => { 
+const mainTimer = () => {
     let nowDate = firebase.firestore.Timestamp.now();
 
     if (!gameStatedDate) {
@@ -384,26 +384,45 @@ const mainTimer = () => {
 
     if (startedDate != undefined) {
         // console.log(nowDate.seconds - startedDate.seconds)
+        document.getElementById("timer").innerHTML =
+            time - (nowDate.seconds - startedDate.seconds);
         if (nowDate.seconds - startedDate.seconds < time) {
-
             if (day) {
-                console.log('udur bolood bnaaaaaaaaaa fuuuuu')         ;       
-                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
-                document.getElementsByClassName("ready")[0].background = "#3AC348";
-                    if(nowDate.seconds - startedDate.seconds < 120){
-
-                        console.log('working');
-                    }
-                if (dayShift[index2].uid == useruid) {
-                    console.log("yea it is me", useruid);
+                
+                console.log("day");
+                let voted=false;
+                // console.log('udur bolood bnaaaaaaaaaa fuuuuu');
+                document.getElementsByClassName("body")[0].style.background =
+                    "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+                document.getElementsByClassName("h")[0].style.backgroundImage =
+                    "url('./assets/daytown.png')";
+                document.getElementsByClassName("ready")[0].background =
+                    "#3AC348";
+                for (let i = 0; i < 7; i++) {
+                    document.getElementById(i).onclick = () => {
+                        if (i != importantvar && !voted) {
+                            for (let j = 0; j < 7; j++) {
+                                document.getElementsByClassName("votebox")[
+                                    j
+                                ].style.display = "none";
+                            }
+                            document.getElementsByClassName("votebox")[i].style.display = "flex";
+                            document.getElementsByClassName("votebox")[i].onclick=()=>{
+                                document.getElementsByClassName("votebox")[i].innerHTML='Unvote';
+                                voted=true;
+                            }
+                            console.log("qwsa");
+                        }
+                    };
                 }
-                console.log(nowDate.seconds - startedDate.seconds);
             } else {
-                console.log('shunu bolood bnashd wtf');
-                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
-                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
-                document.getElementsByClassName("ready")[0].background = "#3AC348";
+                // console.log('shunu bolood bnashd wtf');
+                document.getElementsByClassName("body")[0].style.background =
+                    "linear-gradient(to bottom, #001447, #000000) ";
+                document.getElementsByClassName("h")[0].style.backgroundImage =
+                    "url('./assets/nighttown.png')";
+                document.getElementsByClassName("ready")[0].background =
+                    "#3AC348";
                 console.log(nowDate.seconds - startedDate.seconds);
                 if (index < nightShift.length) {
                     if (nowDate.seconds - startedDate.seconds < nightTimer) {
@@ -411,24 +430,30 @@ const mainTimer = () => {
                         if (nightShift[index].uid === useruid) {
                             switch (index) {
                                 case 0:
-                                if (nowDate.seconds - startedDate.seconds === nightTimer - 1) {
-                                    console.log(chosenPlayer);
-                                    mafiaPlayerAction(chosenPlayer.id);
-                                }
+                                    if (
+                                        nowDate.seconds -
+                                            startedDate.seconds ===
+                                        nightTimer - 1
+                                    ) {
+                                        // console.log(chosenPlayer);
+                                        mafiaPlayerAction(chosenPlayer.uid);
+                                    }
                                     break;
                                 case 1:
-                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 21) {
-                                    console.log("dfsf")
-                                    doctorPlayerAction(chosenPlayer.id);
+                                    if (
+                                        nowDate.seconds -
+                                            startedDate.seconds ===
+                                        nightTimer - 21
+                                    ) {
+                                        console.log("dfsf");
+                                        doctorPlayerAction(chosenPlayer.uid);
                                     }
-
-
                                     break;
                                 case 2:
                                     break;
                             }
                         }
-                    } 
+                    }
                 } else {
                     nightTimer += 20;
                     index++;
@@ -461,22 +486,49 @@ const mainTimer = () => {
     }
 };
 
-
+let lasttap;
 for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
     document.getElementsByClassName("card-image")[i].onclick = (e) => {
-        for (let j = 0; j < document.getElementsByClassName("card-image").length; j++) {   
-            document.getElementsByClassName("card-image")[j].style.boxShadow = 'none';
+        lasttap = i;
+        for (
+            let j = 0;
+            j < document.getElementsByClassName("card-image").length;
+            j++
+        ) {
+            document.getElementsByClassName("card-image")[j].style.boxShadow =
+                "none";
         }
-        document.getElementById(e.target.id).style.boxShadow = '0px 0px 10px 10px red';
+        document.getElementById(e.target.id).style.boxShadow =
+            "0px 0px 10px 10px red";
         choosePlayer(e.target.previousElementSibling.innerHTML);
-    }
+    };
 }
 
+updateNnumbers = (numbers) => {
+    for (
+        let i = 0;
+        i < document.getElementsByClassName("vote-count").length;
+        i++
+    ) {
+        document.getElementsByClassName("vote-count")[i].innerHTML = number;
+    }
+};
+
+votePlayer = () => {
+    let numbers = [];
+    db.collection(`rooms/${roomname}/users`).onSnapshot((querySnapshot) => {
+        querySnapshot.forEach(function (doc) {
+            numbers.push(doc.data().vote);
+        });
+        updateNnumbers(numbers);
+    });
+};
 
 const choosePlayer = (name) => {
     chosenPlayer = [];
-    chosenPlayer =  players.filter(el => el.name === name);
-}
+    chosenPlayer = players.filter((el) => el.name === name);
+    console.log(chosenPlayer);
+};
 
 const mafiaPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
@@ -489,16 +541,17 @@ const doctorPlayerAction = (id) => {
         alive: true,
     });
 };
-const policePlayerAction= (id) =>{
-    db.doc(`rooms/${roomname}/users/${id}`).get().then(function(doc){
-        if(doc.data().role=="mafia"){
-            console.log("YES")
-        }
-        else{
-            console.log("NO");
-        }
-    })
-}
+const policePlayerAction = (id) => {
+    db.doc(`rooms/${roomname}/users/${id}`)
+        .get()
+        .then(function (doc) {
+            if (doc.data().role == "mafia") {
+                console.log("YES");
+            } else {
+                console.log("NO");
+            }
+        });
+};
 let mainInterval = setInterval(() => {
     mainTimer();
 }, 1000);

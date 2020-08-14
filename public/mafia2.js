@@ -16,7 +16,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            alive: true     
+            alive: true,
+            vote: 0
         })
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;

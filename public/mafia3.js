@@ -385,13 +385,18 @@ const mainTimer = () => {
     if (startedDate != undefined) {
         if (nowDate.seconds - startedDate.seconds < time) {
             if (day) {
-                console.log('day')
+                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
+                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
+                document.getElementsByClassName("ready")[0].background = "#3AC348";
                 if (dayShift[0].uid === user.uid) {
                     console.log("yea it is me", user.uid);
                 }
                 console.log(nowDate.seconds - startedDate.seconds);
             } else {
-                console.log("shunu");
+
+                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
+                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
+                document.getElementsByClassName("ready")[0].background = "#3AC348";
                 console.log(nowDate.seconds - startedDate.seconds);
                 if (index < nightShift.length) {
                     if (nowDate.seconds - startedDate.seconds < nightTimer) {
@@ -405,7 +410,7 @@ const mainTimer = () => {
                                 }
                                     break;
                                 case 1:
-                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 1) {
+                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 2) {
                                     console.log("dfsf")
                                     doctorPlayerAction(chosenPlayer.id);
                                     }
@@ -451,14 +456,10 @@ const mainTimer = () => {
 
 
 for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
-
-   
     document.getElementsByClassName("card-image")[i].onclick = (e) => {
-
         for (let j = 0; j < document.getElementsByClassName("card-image").length; j++) {   
             document.getElementsByClassName("card-image")[j].style.boxShadow = 'none';
         }
-    
         document.getElementById(e.target.id).style.boxShadow = '0px 0px 10px 10px red';
         choosePlayer(e.target.previousElementSibling.innerHTML);
     }

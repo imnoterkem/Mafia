@@ -474,9 +474,7 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
 
 
 const choosePlayer = (name) => {
-
     chosenPlayer = [];
-
     chosenPlayer =  players.filter(el => el.name === name);
 }
 

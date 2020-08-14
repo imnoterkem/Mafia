@@ -369,7 +369,7 @@ let round = 0;
 
 let mafia = true;
 
-const mainTimer = () => {
+const mainTimer = () => { 
     let nowDate = firebase.firestore.Timestamp.now();
 
     if (!gameStatedDate) {
@@ -383,17 +383,24 @@ const mainTimer = () => {
     }
 
     if (startedDate != undefined) {
+        // console.log(nowDate.seconds - startedDate.seconds)
         if (nowDate.seconds - startedDate.seconds < time) {
+
             if (day) {
-                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
-                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
+                console.log('udur bolood bnaaaaaaaaaa fuuuuu')         ;       
+                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
+                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-                if (dayShift[0].uid === user.uid) {
-                    console.log("yea it is me", user.uid);
+                    if(nowDate.seconds - startedDate.seconds < 120){
+
+                        console.log('working');
+                    }
+                if (dayShift[index2].uid == useruid) {
+                    console.log("yea it is me", useruid);
                 }
                 console.log(nowDate.seconds - startedDate.seconds);
             } else {
-
+                console.log('shunu bolood bnashd wtf');
                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
                 document.getElementsByClassName("ready")[0].background = "#3AC348";
@@ -410,7 +417,7 @@ const mainTimer = () => {
                                 }
                                     break;
                                 case 1:
-                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 2) {
+                                    if (nowDate.seconds - startedDate.seconds === nightTimer - 21) {
                                     console.log("dfsf")
                                     doctorPlayerAction(chosenPlayer.id);
                                     }

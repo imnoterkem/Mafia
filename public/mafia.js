@@ -161,8 +161,15 @@ document.getElementById("create2").onclick = () => {
                         .set({
                             name: `${thename}`,
                         })
+<<<<<<< HEAD
                         .then(function() {
                             window.location.href = `mafia2.html?r=${roomname}`;
+=======
+                        .then(function () {
+                            history.pushState(null, null, `/mafia2.html?r=${roomname}`);
+                                    // window.location.href = `mafia2.html?r=${name}`;
+                                    history.go()
+>>>>>>> e4011b40be0841fdcaf6e5f1d5a76a5d022ba484
                         });
                 }
             });
@@ -191,7 +198,9 @@ document.getElementById("create2").onclick = () => {
                         })
                         .then(function() {
                             document.getElementById("creatername").value = "";
-                            window.location.href = `mafia2.html?r=${roomname}`;
+                            history.pushState(null, null, `/mafia2.html?r=${roomname}`);
+                                    // window.location.href = `mafia2.html?r=${name}`;
+                                    history.go()
                         });
                 }
             });
@@ -211,7 +220,9 @@ document.getElementById("create2").onclick = () => {
                     })
                     .then(function() {
                         document.getElementById("creatername").value = "";
-                        window.location.href = `mafia2.html?r=${roomname}`;
+                        history.pushState(null, null, `/mafia2.html?r=${roomname}`);
+                                    // window.location.href = `mafia2.html?r=${name}`;
+                                    history.go()
                     });
             }
         });
@@ -359,8 +370,15 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                         name: `${askname.value}`,
                                         ready: false,
                                     })
+<<<<<<< HEAD
                                     .then(function() {
                                         window.location.href = `mafia2.html?r=${name}`;
+=======
+                                    .then(function () {
+                                        history.pushState(null, null, `mafia2.html?r=${name}`);
+                                        // window.location.href = `mafia2.html?r=${name}`;
+                                        history.go()
+>>>>>>> e4011b40be0841fdcaf6e5f1d5a76a5d022ba484
                                     });
                             }
                         });
@@ -400,8 +418,14 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                 .set({
                                     name: `${askname.value}`,
                                 })
+<<<<<<< HEAD
                                 .then(function() {
                                     window.location.href = `mafia2.html?r=${name}`;
+=======
+                                .then(function () {
+                                    history.pushState(null, null, `mafia2.html?r=${name}`);
+                                    history.go()
+>>>>>>> e4011b40be0841fdcaf6e5f1d5a76a5d022ba484
                                 });
                         }
                     });

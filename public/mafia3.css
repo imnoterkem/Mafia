@@ -211,6 +211,12 @@ body {
     height: 100%;
 }
 
+.vote-count{
+    display: flex;
+    justify-content: center;
+    font-size: 24px;
+}
+
 .huzur {
     width: 11%;
     height: 70%;
@@ -233,4 +239,15 @@ body {
     right: 10%;
     color: white;
     font-size: 20px;
+}
+.votebox{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    height: 15%;
+    width: 100%;
+    background-color: #3AC348;
+    border: 1px #626262 solid;
+    border-radius: 10px;
+    
 }

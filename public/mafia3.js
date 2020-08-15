@@ -323,7 +323,7 @@ const mainTimer = () => {
                                         nowDate.seconds - startedDate.seconds === nightTimer - 21
                                     ) {
                                         console.log("dfsf");
-                                        doctorPlayerAction(chosenPlayer.id);
+                                        doctorPlayerAction(chosenPlayer[0].uid);
                                     }
                                     break;
                                 case 2:
@@ -405,8 +405,9 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
                     document.getElementsByClassName("votebox")[i].innerHTML = "Voted"
                     db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
                         db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
+                            let temp = parseInt(dco.data().vote) + 1
                             db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
-                                vote: ++dco.data().vote
+                                vote: temp
                             })
                         })
 

@@ -375,21 +375,20 @@ const call = () => {
     for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
 
         document.getElementsByClassName("card-image")[i].onclick = (e) => {
-            // if (!day) {
-            //     for (let j = 0; j < 7; j++) {
-            //         document.getElementsByClassName("votebox")[j].style.display = "none";
-            //     }
-            //     for (
-            //         let j = 0; j < document.getElementsByClassName("card-image").length; j++
-            //     ) {
-            //         document.getElementsByClassName("card-image")[j].style.boxShadow =
-            //             "none";
-            //     }
-            //     document.getElementById(e.target.id).style.boxShadow =
-            //         "0px 0px 10px 10px red";
-            //    choosePlayer(e.target.previousElementSibling.innerHTML);
-            //}
-            if (!voted) {
+            if (!day) {
+                for (let j = 0; j < 7; j++) {
+                    document.getElementsByClassName("votebox")[j].style.display = "none";
+                }
+                for (
+                    let j = 0; j < document.getElementsByClassName("card-image").length; j++
+                ) {
+                    document.getElementsByClassName("card-image")[j].style.boxShadow =
+                        "none";
+                }
+                document.getElementById(e.target.id).style.boxShadow =
+                    "0px 0px 10px 10px red";
+                choosePlayer(e.target.previousElementSibling.innerHTML);
+            } else if (!voted) {
                 for (let f = 0; f < document.getElementsByClassName("card-image").length; f++) {
                     document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
                 }

@@ -1,3 +1,4 @@
 function play() {
-    window.location.href = "mafia.html";      
+    history.pushState(null, null, '/mafia.html');
+    history.go()      
 }

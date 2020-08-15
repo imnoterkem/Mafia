@@ -16,12 +16,11 @@ let dayShift = [];
 let chosenPlayer;
 // console.log(nowT)
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
-    } else {
-    }
+    } else {}
 });
 
 let roomname = new URL(window.location.href).searchParams.get("r");
@@ -29,7 +28,7 @@ let roomname = new URL(window.location.href).searchParams.get("r");
 let players = [];
 db.collection(`rooms/${roomname}/users`)
     .get()
-    .then(function (doc) {
+    .then(function(doc) {
         let k = 0;
         let color = [
             "#DE5656",
@@ -41,7 +40,7 @@ db.collection(`rooms/${roomname}/users`)
             "#E95CCA",
         ];
         let mycard;
-        doc.forEach(function (docu) {
+        doc.forEach(function(docu) {
             players.push({
                 ...docu.data(),
                 uid: docu.id,
@@ -58,7 +57,7 @@ db.collection(`rooms/${roomname}/users`)
                 importantvar = k;
                 db.doc(`rooms/${roomname}/users/${useruid}`)
                     .get()
-                    .then(function (docs) {
+                    .then(function(docs) {
                         if (docs.data().role === "citizen") {
                             document.getElementsByClassName("card-image")[
                                 k
@@ -87,28 +86,28 @@ db.collection(`rooms/${roomname}/users`)
 
         nightShift = players.filter(
             (el) =>
-                el.role === "mafia" ||
-                el.role === "doctor" ||
-                el.role === "police"
+            el.role === "mafia" ||
+            el.role === "doctor" ||
+            el.role === "police"
         );
         dayShift = players.filter((el) => el.role === "citizen");
     });
 db.doc(`rooms/${roomname}`)
     .get()
-    .then(function (doc) {
+    .then(function(doc) {
         if (!doc.data().isChatDeleted) {
             db.doc(`rooms/${roomname}`).update({
                 isChatDeleted: true,
             });
             db.collection(`rooms/${roomname}/Chat`)
                 .get()
-                .then(function (querySnapshot) {
-                    querySnapshot.forEach(function (doc) {
+                .then(function(querySnapshot) {
+                    querySnapshot.forEach(function(doc) {
                         db.collection(`rooms/${roomname}/Chat`)
                             .doc(`${doc.id}`)
                             .delete()
-                            .then(function () { })
-                            .catch(function (error) {
+                            .then(function() {})
+                            .catch(function(error) {
                                 console.error(
                                     "Error removing document: ",
                                     error
@@ -144,10 +143,6 @@ db.doc(`rooms/${roomname}`)
 
 let clicked = 0;
 
-// db.doc(`rooms/${roomname}`).get().then(function(doc){
-//     console.log(doc.data({serverTimestamps: "estimate"}))
-// })
-
 db.doc(`rooms/${roomname}`).update({
     time: "day",
 });
@@ -157,7 +152,7 @@ const ready = () => {
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function (doc) {
+            .then(function(doc) {
                 let readynumber = doc.data().ready + 1;
                 db.doc(`rooms/${roomname}`).update({
                     ready: readynumber,
@@ -172,7 +167,7 @@ const ready = () => {
         });
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function (doc) {
+            .then(function(doc) {
                 let readynumber = doc.data().ready - 1;
                 db.doc(`rooms/${roomname}`).update({
                     ready: readynumber,
@@ -184,43 +179,11 @@ const ready = () => {
 };
 // udur bolgodiin
 let shunu = (document.createElement("div").innerHTML = "шөнө 111");
-db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
-    // console.log(doc.data());
-    // if (doc.data().ready >= 7) {
-    //     if (doc.data().time == "day") {
-    //         console.log("nice");
-    //         document.getElementsByClassName("h")[0].style.background =
-    //             "linear-gradient(to bottom, #001447, #000000)";
-    //         document.getElementsByClassName("body")[0].backgroundImage =
-    //             "url('assets/nighttown.png')";
-    //         document.getElementsByClassName("ready")[0].background = "#3AC348";
-    //         db.doc(`rooms/${roomname}`).update({
-    //             time: "night",
-    //         });
-    //         db.doc(`rooms/${roomname}`).update({
-    //             ready: 0,
-    //         });
-    //     }
-    //     if (doc.data().time == "night") {
-    //         document.getElementsByClassName("h")[0].style.background =
-    //             "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-    //         document.getElementsByClassName("body")[0].backgroundImage =
-    //             "url('assets/daytown.png')";
-    //         document.getElementsByClassName("ready")[0].background = "#3AC348";
-    //         document.getElementsByClassName("night").appendChild(shunu);
-    //         db.doc(`rooms/${roomname}`).update({
-    //             time: "day",
-    //         });
-    //         db.doc(`rooms/${roomname}`).update({
-    //             ready: 0,
-    //         });
-    //     }
-    // }
-});
+
 
 db.doc(`rooms/${roomname}`)
     .get()
-    .then(function (doc) {
+    .then(function(doc) {
         if (!doc.data().shuffled) {
             db.doc(`rooms/${roomname}`).update({
                 shuffled: true,
@@ -242,7 +205,7 @@ const Send = () => {
         sending = true;
         db.doc(`rooms/${roomname}/users/${useruid}`)
             .get()
-            .then(function (doc) {
+            .then(function(doc) {
                 let sendername = doc.data().name;
                 let color = doc.data().colors;
                 db.collection(`rooms/${roomname}/Chat`)
@@ -267,9 +230,9 @@ db.collection(`rooms`)
     .doc(`${roomname}`)
     .collection("Chat")
     .orderBy("createdAt")
-    .onSnapshot(function (querySnapshot) {
+    .onSnapshot(function(querySnapshot) {
         document.getElementsByClassName("display")[0].innerHTML = "";
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
             const t = document.createElement("div");
             let coloredname = doc.data().sender;
             coloredname = coloredname.fontcolor(doc.data().color);
@@ -291,71 +254,7 @@ document.onkeyup = (event) => {
     }
 };
 
-killerDo = () => { };
-
-// let gameStatedDate = false;
-
-// let startedDate = undefined;
-
-// let time = 120;
-// let dc = 0;
-// let nc = 0;
-// document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
-// const mainTimer = (timer) => {
-//     let nowDate = moment(new Date());
-
-//     if (!gameStatedDate) {
-//         db.doc(`rooms/${roomname}`)
-//             .get()
-//             .then(function (doc) {
-//                 day = doc.data().day;
-//                 dc=doc.data().dc;
-//                 nc = doc.data().nc;
-//                 startedDate = moment(doc.data().gameStarted.toDate());
-//                 startedDate.add(dc*120, "seconds");
-//                 startedDate.add(nc*30, "seconds");
-//                 gameStatedDate = true;
-//             })
-//     }
-//     // console.log(moment.duration(nowDate.diff(startedDate)).asSeconds());
-//     // console.log(timer);
-//     if (startedDate != undefined) {
-//         if (moment.duration(nowDate.diff(startedDate)).asSeconds() > timer) {
-//             if (day) {
-//                 day = false;
-//                 time = 30;
-//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
-//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
-//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     dc: dc+1,
-//                     day: false,
-//                 });
-//             } else {
-//                 day = true;
-//                 time = 120;
-//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
-//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     nc: nc+1,
-//                     day: true,
-//                 });
-//             }
-//         } else {
-//             document.getElementById("timer").innerHTML = nowDate - startedDate;
-//             console.log(startedDate.getSeconds())
-//             console.log("timer arla");
-//         }
-//     }
-// };
-// let role={}, ;
-// db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot){
-//     querySnapshot.forEach(function(doc){
-//         doc.data().name:doc.data().role;
-//     })
-// })
-
+killerDo = () => {};
 
 let gameStatedDate = false;
 let startedDate;
@@ -380,22 +279,18 @@ const mainTimer = () => {
         gameStatedDate = true;
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function (doc) {
+            .then(function(doc) {
                 console.log(doc.data());
-               
+
                 startedDate = doc.data().gameStarted;
             });
     }
     if (startedDate != undefined) {
-        console.log(startedDate.seconds)
-        console.log(nowDate.seconds-startedDate.seconds);
         if (nowDate.seconds - startedDate.seconds < time) {
             interval = 1000;
-            console.log(nowDate.seconds-startedDate.seconds);
-        document.getElementById("timer").innerHTML = time - (nowDate.seconds - startedDate.seconds);
+            document.getElementById("timer").innerHTML = time - (nowDate.seconds - startedDate.seconds);
             if (day) {
-                console.log("day");
-                // console.log('udur bolood bnaaaaaaaaaa fuuuuu');
+                    // console.log('udur bolood bnaaaaaaaaaa fuuuuu');
                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
                 document.getElementsByClassName("ready")[0].background = "#3AC348";
@@ -431,6 +326,9 @@ const mainTimer = () => {
                                     }
                                     break;
                                 case 2:
+                                    if(nowDate.seconds  - startedDate.seconds === nightShift -41){
+                                        policePlayerAction(chosenPlayer.uid);
+                                    }
                                     break;
                             }
                         }
@@ -467,9 +365,7 @@ const mainTimer = () => {
         }
     }
 };
-
 const call = () => {
-    
     for (let l = 0; l < 7; l++) {
         document.getElementsByClassName("votebox")[l].style.display = "none";
     }
@@ -477,25 +373,23 @@ const call = () => {
         document.getElementsByClassName("card-image")[h].style.boxShadow = "none";
     }
     for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
-        
+
         document.getElementsByClassName("card-image")[i].onclick = (e) => {
-            if (!day) {
-                for (let j = 0; j < 7; j++) {
-                    document.getElementsByClassName("votebox")[j].style.display = "none";
-                }
-                for (
-                    let j = 0;
-                    j < document.getElementsByClassName("card-image").length;
-                    j++
-                ) {
-                    document.getElementsByClassName("card-image")[j].style.boxShadow =
-                        "none";
-                }
-                document.getElementById(e.target.id).style.boxShadow =
-                    "0px 0px 10px 10px red";
-                choosePlayer(e.target.previousElementSibling.innerHTML);
-            }
-            else if (!voted) {
+            // if (!day) {
+            //     for (let j = 0; j < 7; j++) {
+            //         document.getElementsByClassName("votebox")[j].style.display = "none";
+            //     }
+            //     for (
+            //         let j = 0; j < document.getElementsByClassName("card-image").length; j++
+            //     ) {
+            //         document.getElementsByClassName("card-image")[j].style.boxShadow =
+            //             "none";
+            //     }
+            //     document.getElementById(e.target.id).style.boxShadow =
+            //         "0px 0px 10px 10px red";
+            //    choosePlayer(e.target.previousElementSibling.innerHTML);
+            //}
+            if (!voted) {
                 for (let f = 0; f < document.getElementsByClassName("card-image").length; f++) {
                     document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
                 }
@@ -506,9 +400,9 @@ const call = () => {
                     document.getElementsByClassName("votebox")[i].style.display = "flex";
                     document.getElementsByClassName("votebox")[i].onclick = () => {
                         voted = true;
-                        document.getElementsByClassName("votebox")[i].innerHTML="Voted"
-                        db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
-                            db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function (dco) {
+                        document.getElementsByClassName("votebox")[i].innerHTML = "Voted"
+                        db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                            db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
                                 db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
                                     vote: ++dco.data().vote
                                 })
@@ -527,9 +421,7 @@ const call = () => {
 call();
 updateNnumbers = (numbers) => {
     for (
-        let i = 0;
-        i < document.getElementsByClassName("vote-count").length;
-        i++
+        let i = 0; i < document.getElementsByClassName("vote-count").length; i++
     ) {
         document.getElementsByClassName("vote-count")[i].innerHTML = number;
     }
@@ -538,7 +430,7 @@ updateNnumbers = (numbers) => {
 votePlayer = () => {
     let numbers = [];
     db.collection(`rooms/${roomname}/users`).onSnapshot((querySnapshot) => {
-        querySnapshot.forEach(function (doc) {
+        querySnapshot.forEach(function(doc) {
             numbers.push(doc.data().vote);
         });
         updateNnumbers(numbers);
@@ -547,12 +439,28 @@ votePlayer = () => {
 
 const choosePlayer = (name) => {
     chosenPlayer = [];
-    chosenPlayer = players.filter((el) => el.name === name);
-};
+    chosenPlayer = players.filter(el => el.name === name);
+}
 
 const mafiaPlayerAction = (id) => {
+    if (!day) {
+        for (let j = 0; j < 7; j++) {
+            document.getElementsByClassName("votebox")[j].style.display = "none";
+        }
+        for (
+            let j = 0; j < document.getElementsByClassName("card-image").length; j++
+        ) {
+        document.getElementsByClassName("card-image")[j].style.boxShadow =
+        "none";
+        }
+        document.getElementById(e.target.id).style.boxShadow =
+        "0px 0px 10px 10px red";
+        choosePlayer(e.target.previousElementSibling.innerHTML);
+    }
     db.doc(`rooms/${roomname}/users/${id}`).update({
         alive: false,
+    }).then(() => {
+        console.log("oaekwe12345");
     });
 };
 
@@ -562,27 +470,26 @@ const doctorPlayerAction = (id) => {
     });
 };
 const policePlayerAction = (id) => {
-    db.doc(`rooms/${roomname}/users/${id}`)
-        .get()
-        .then(function (doc) {
-            if (doc.data().role == "mafia") {
-                console.log("YES");
-            } else {
-                console.log("NO");
-            }
-        });
-};
+    db.doc(`rooms/${roomname}/users/${id}`).get().then(function(doc) {
+        if (doc.data().role == "mafia") {
+            console.log("YES")
+        } else {
+            console.log("NO");
+        }
+    })
+}
+
 let mainInterval = setInterval(() => {
     mainTimer();
 }, interval);
 
 db.doc(`rooms/${roomname}`)
     .get()
-    .then(function (doc) {
+    .then(function(doc) {
         while (doc.data().time == "night") {
             db.doc(`rooms/${roomname}/users/${useruid}`)
                 .get()
-                .then(function (docc) {
+                .then(function(docc) {
                     if (docc.data().role == "mafia") {
                         console.log("ad");
                     }

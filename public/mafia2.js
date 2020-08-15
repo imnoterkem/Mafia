@@ -52,7 +52,6 @@ db.collection(`rooms`).doc(`${roomname}`).collection('users').onSnapshot(functio
         document.getElementsByClassName('users')[0].appendChild(t)
     })
 })
-console.log(useruid);
 let clicked = 0
 const ready = () => {
     document.getElementById("ready").classList.toggle('green');
@@ -84,16 +83,15 @@ const ready = () => {
     clicked = clicked + 1;
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
+    if(doc.data().shuffled){
+        window.location.href = `mafia3.html?r=${roomname}`
+    }
     if (doc.data().ready >= 7) {
         let players = [];
 
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
             console.log(doc.data().shuffled)
             if (!doc.data().shuffled) {
-
-                db.doc(`rooms/${roomname}`).update({
-                    shuffled: true
-                })
                 let arr = []
                 db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
                     querySnapshot.forEach(function(docu) {
@@ -104,7 +102,6 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                 }).then(() => {
                     players = shuffle(arr);
                     db.doc(`rooms/${roomname}`).update({
-                            shuffled: true,
                             shuffledArray: players,
                             gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
                         })
@@ -137,7 +134,9 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                                 }
                             }
                             console.log("here")
-                            window.location.href = `mafia3.html?r=${roomname}`
+                            db.doc(`rooms/${roomname}`).update({
+                                shuffled: true,
+                            })
                         })
                 })
             }

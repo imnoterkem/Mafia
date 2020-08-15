@@ -467,15 +467,7 @@ const policePlayerAction = (id) => {
         }
     })
 }
-db.doc(`rooms/${roomname}/users/${id}`)
-    .get()
-    .then(function(doc) {
-        if (doc.data().role == "mafia") {
-            console.log("YES");
-        } else {
-            console.log("NO");
-        }
-    });
+
 let mainInterval = setInterval(() => {
     mainTimer();
 }, interval);

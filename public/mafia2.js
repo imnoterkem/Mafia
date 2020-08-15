@@ -84,16 +84,17 @@ const ready = () => {
     clicked = clicked + 1;
 }
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
+    if (doc.data().shuffled) {
+        // history.pushState(null, null, `/mafia2.html?r=${roomname}`);
+        // history.go();
+        window.location.href = `mafia3.html?r=${roomname}`
+    }
     if (doc.data().ready >= 7) {
         let players = [];
 
         db.doc(`rooms/${roomname}`).get().then(function(doc) {
             console.log(doc.data().shuffled)
             if (!doc.data().shuffled) {
-
-                db.doc(`rooms/${roomname}`).update({
-                    shuffled: true
-                })
                 let arr = []
                 db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
                     querySnapshot.forEach(function(docu) {
@@ -104,7 +105,6 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                 }).then(() => {
                     players = shuffle(arr);
                     db.doc(`rooms/${roomname}`).update({
-                            shuffled: true,
                             shuffledArray: players,
                             gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
                         })
@@ -136,8 +136,10 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                                     });
                                 }
                             }
+                            db.doc(`rooms/${roomname}`).update({
+                                shuffled: true,
+                            })
                             console.log("here")
-                            window.location.href = `mafia3.html?r=${roomname}`
                         })
                 })
             }
@@ -236,27 +238,27 @@ function leave() {
             })
             .then(function() {
                 console.log("adsfa");
-                // history.pushState(null, null, 'mafia.html');
+                // history.pushState({ 'a': 1 }, '', 'mafia.html');
                 // history.go();
-                window.location.href = "mafia.html";
+                window.location.href = 'mafia.html'
             })
     })
 
 }
-// const backButton = () => {
-//     let a = confirm("You sure?");
-//     if (a == true) {
-//         db.doc(`rooms/${roomname}`).get().then(function(doc) {
-//             let updater = doc.data().currentPlayer - 1;
-//             db.doc(`rooms/${roomname}/users/${useruid}`).delete();
-//             console.log("asf")
-//             db.doc(`rooms/${roomname}`).update({
-//                     currentPlayer: updater
-//                 })
-//         })
-//         history.pushState(null, null, 'mafia.html');
-//         history.go();
-//     } else {
-//         history.pushState(null, null, window.location.pathname);
-//     }
-// }
+const backButton = () => {
+    let a = confirm("You sure?");
+    // if (a == true) {
+    //     db.doc(`rooms/${roomname}`).get().then(function(doc) {
+    //         let updater = doc.data().currentPlayer - 1;
+    //         db.doc(`rooms/${roomname}/users/${useruid}`).delete();
+    //         console.log("asf")
+    //         db.doc(`rooms/${roomname}`).update({
+    //             currentPlayer: updater
+    //         })
+    //     })
+    //     history.pushState({ 'a': 1 }, '', 'mafia.html');
+    //     history.go();
+    // } else {
+    //     history.pushState({ 'a': 1 }, '', window.location.pathname);
+    // }
+}

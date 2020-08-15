@@ -149,7 +149,6 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                role: 'none',
                 shuffled: false,
             });
             firebase.auth().onAuthStateChanged(function(user) {
@@ -160,9 +159,13 @@ document.getElementById("create2").onclick = () => {
                         .doc(`${uid}`)
                         .set({
                             name: `${thename}`,
+                            ready: false,
+                            role: 'none',
                         })
                         .then(function() {
-                            window.location.href = `mafia2.html?r=${roomname}`;
+                            // history.pushState({ 'a': 1 }, '', `/mafia2.html?r=${roomname}`);
+                            // history.go()
+                            window.location.href = `mafia2.html?r=${roomname}`
                         });
                 }
             });
@@ -174,7 +177,6 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                role: 0,
                 shuffled: false,
             });
             firebase.auth().onAuthStateChanged(function(user) {
@@ -191,9 +193,9 @@ document.getElementById("create2").onclick = () => {
                         })
                         .then(function() {
                             document.getElementById("creatername").value = "";
-                            // history.pushState(null, null, `/mafia2.html?r=${roomname}`);
-                            window.location.href = `mafia2.html?r=${roomname}`;
+                            // history.pushState({ 'a': 1 }, '', `/mafia2.html?r=${roomname}`);
                             // history.go()
+                            window.location.href = `mafia2.html?r=${roomname}`
                         });
                 }
             });
@@ -213,9 +215,9 @@ document.getElementById("create2").onclick = () => {
                     })
                     .then(function() {
                         document.getElementById("creatername").value = "";
-                        history.pushState(null, null, `/mafia2.html?r=${roomname}`);
-                        // window.location.href = `mafia2.html?r=${name}`;
-                        history.go()
+                        // history.pushState({ 'a': 1 }, '', `/mafia2.html?r=${roomname}`);
+                        // history.go()
+                        window.location.href = `mafia2.html?r=${roomname}`
                     });
             }
         });
@@ -362,9 +364,13 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                     .set({
                                         name: `${askname.value}`,
                                         ready: false,
+                                        role: "none"
                                     })
                                     .then(function() {
-                                        window.location.href = `mafia2.html?r=${name}`;
+                                        // history.pushState({ 'a': 1 }, '', `mafia2.html?r=${name}`);
+                                        // // window.location.href = `mafia2.html?r=${name}`;
+                                        // history.go()
+                                        window.location.href = `mafia2.html?r=${name}`
                                     });
                             }
                         });
@@ -403,9 +409,13 @@ const renderRoom = (name, status, currentPlayer, password) => {
                                 .doc(`${uid}`)
                                 .set({
                                     name: `${askname.value}`,
+                                    ready: false,
+                                    role: "none"
                                 })
                                 .then(function() {
-                                    window.location.href = `mafia2.html?r=${name}`;
+                                    // history.pushState({ 'a': 1 }, '', `mafia2.html?r=${name}`);
+                                    // history.go()
+                                    window.location.href = `mafia2.html?r=${name}`
                                 });
                         }
                     });

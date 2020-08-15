@@ -238,5 +238,4 @@ function leave() {
                 window.location.href = 'mafia.html';
             })
     })
-
 }

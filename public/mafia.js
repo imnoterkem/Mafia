@@ -146,7 +146,7 @@ document.getElementById("create2").onclick = () => {
                 limit: 7,
                 currentPlayer: 1,
                 ready: 0,
-                role: 0,
+                role: 'none',
                 shuffled: false,
             });
             firebase.auth().onAuthStateChanged(function (user) {
@@ -186,13 +186,13 @@ document.getElementById("create2").onclick = () => {
                         .set({
                             name: `${thename}`,
                             ready: false,
-                            role: 0,
+                            role: 'none',
                         })
                         .then(function () {
                             document.getElementById("creatername").value = "";
-                            history.pushState(null, null, `/mafia2.html?r=${roomname}`);
-                                    // window.location.href = `mafia2.html?r=${name}`;
-                                    history.go()
+                            // history.pushState(null, null, `/mafia2.html?r=${roomname}`);
+                                    window.location.href = `mafia2.html?r=${roomname}`;
+                                    // history.go()
                         });
                 }
             });
@@ -208,7 +208,7 @@ document.getElementById("create2").onclick = () => {
                     .set({
                         name: `${thename}`,
                         ready: false,
-                        role: 0,
+                        role: 'none',
                     })
                     .then(function () {
                         document.getElementById("creatername").value = "";

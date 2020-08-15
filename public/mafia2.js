@@ -236,26 +236,27 @@ function leave() {
             })
             .then(function() {
                 console.log("adsfa");
-                history.pushState(null, null, 'index.html');
-                history.go();
+                // history.pushState(null, null, 'mafia.html');
+                // history.go();
+                window.location.href="mafia.html";
             })
     })
 
 }
-const backButton = () => {
-    let a = confirm("You sure?");
-    if (a == true) {
-        db.doc(`rooms/${roomname}`).get().then(function(doc) {
-            let updater = doc.data().currentPlayer - 1;
-            db.doc(`rooms/${roomname}/users/${useruid}`).delete();
-            console.log("asf")
-            db.doc(`rooms/${roomname}`).update({
-                    currentPlayer: updater
-                })
-        })
-        history.pushState(null, null, 'mafia.html');
-        history.go();
-    } else {
-        history.pushState(null, null, window.location.pathname);
-    }
-}
+// const backButton = () => {
+//     let a = confirm("You sure?");
+//     if (a == true) {
+//         db.doc(`rooms/${roomname}`).get().then(function(doc) {
+//             let updater = doc.data().currentPlayer - 1;
+//             db.doc(`rooms/${roomname}/users/${useruid}`).delete();
+//             console.log("asf")
+//             db.doc(`rooms/${roomname}`).update({
+//                     currentPlayer: updater
+//                 })
+//         })
+//         history.pushState(null, null, 'mafia.html');
+//         history.go();
+//     } else {
+//         history.pushState(null, null, window.location.pathname);
+//     }
+// }

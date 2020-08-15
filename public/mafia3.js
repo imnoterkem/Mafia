@@ -143,10 +143,6 @@ db.doc(`rooms/${roomname}`)
 
 let clicked = 0;
 
-// db.doc(`rooms/${roomname}`).get().then(function(doc){
-//     console.log(doc.data({serverTimestamps: "estimate"}))
-// })
-
 db.doc(`rooms/${roomname}`).update({
     time: "day",
 });
@@ -183,39 +179,7 @@ const ready = () => {
 };
 // udur bolgodiin
 let shunu = (document.createElement("div").innerHTML = "шөнө 111");
-db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-    // console.log(doc.data());
-    // if (doc.data().ready >= 7) {
-    //     if (doc.data().time == "day") {
-    //         console.log("nice");
-    //         document.getElementsByClassName("h")[0].style.background =
-    //             "linear-gradient(to bottom, #001447, #000000)";
-    //         document.getElementsByClassName("body")[0].backgroundImage =
-    //             "url('assets/nighttown.png')";
-    //         document.getElementsByClassName("ready")[0].background = "#3AC348";
-    //         db.doc(`rooms/${roomname}`).update({
-    //             time: "night",
-    //         });
-    //         db.doc(`rooms/${roomname}`).update({
-    //             ready: 0,
-    //         });
-    //     }
-    //     if (doc.data().time == "night") {
-    //         document.getElementsByClassName("h")[0].style.background =
-    //             "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-    //         document.getElementsByClassName("body")[0].backgroundImage =
-    //             "url('assets/daytown.png')";
-    //         document.getElementsByClassName("ready")[0].background = "#3AC348";
-    //         document.getElementsByClassName("night").appendChild(shunu);
-    //         db.doc(`rooms/${roomname}`).update({
-    //             time: "day",
-    //         });
-    //         db.doc(`rooms/${roomname}`).update({
-    //             ready: 0,
-    //         });
-    //     }
-    // }
-});
+
 
 db.doc(`rooms/${roomname}`)
     .get()
@@ -291,69 +255,6 @@ document.onkeyup = (event) => {
 };
 
 killerDo = () => {};
-
-// let gameStatedDate = false;
-
-// let startedDate = undefined;
-
-// let time = 120;
-// let dc = 0;
-// let nc = 0;
-// document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
-// const mainTimer = (timer) => {
-//     let nowDate = moment(new Date());
-
-//     if (!gameStatedDate) {
-//         db.doc(`rooms/${roomname}`)
-//             .get()
-//             .then(function (doc) {
-//                 day = doc.data().day;
-//                 dc=doc.data().dc;
-//                 nc = doc.data().nc;
-//                 startedDate = moment(doc.data().gameStarted.toDate());
-//                 startedDate.add(dc*120, "seconds");
-//                 startedDate.add(nc*30, "seconds");
-//                 gameStatedDate = true;
-//             })
-//     }
-//     // console.log(moment.duration(nowDate.diff(startedDate)).asSeconds());
-//     // console.log(timer);
-//     if (startedDate != undefined) {
-//         if (moment.duration(nowDate.diff(startedDate)).asSeconds() > timer) {
-//             if (day) {
-//                 day = false;
-//                 time = 30;
-//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
-//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
-//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     dc: dc+1,
-//                     day: false,
-//                 });
-//             } else {
-//                 day = true;
-//                 time = 120;
-//                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
-//                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
-//                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-//                 db.doc(`rooms/${roomname}`).update({
-//                     nc: nc+1,
-//                     day: true,
-//                 });
-//             }
-//         } else {
-//             document.getElementById("timer").innerHTML = nowDate - startedDate;
-//             console.log(startedDate.getSeconds())
-//             console.log("timer arla");
-//         }
-//     }
-// };
-// let role={}, ;
-// db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot){
-//     querySnapshot.forEach(function(doc){
-//         doc.data().name:doc.data().role;
-//     })
-// })
 
 let gameStatedDate = false;
 let startedDate;

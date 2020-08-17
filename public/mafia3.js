@@ -275,6 +275,7 @@ let nightcount = 1;
 let interval = 10;
 
 const mainTimer = () => {
+
     let nowDate = firebase.firestore.Timestamp.now();
     if (!gameStatedDate) {
         gameStatedDate = true;
@@ -284,6 +285,30 @@ const mainTimer = () => {
                 console.log(doc.data());
                 startedDate = doc.data().gameStarted;
             });
+    }
+    
+    // let a = (nowDate-startedDate);
+    // let i = 1;
+    // let l = 1;
+    // console.log(a);
+    // while(a>0){
+    //     if(a>60){
+    //         a=a-60;
+    //         i++;     
+    //     }
+    //     if(a>120){
+    //         a=a-120;
+    //         l++;
+    //     }
+    // }
+    // console.log(i,l);
+
+
+    if(i>l){
+        document.getElementsByClassName('night')[0].innerHTML = `Өдөр ${l}`
+    }
+    else if (i<l || i==l){
+        document.getElementsByClassName('night')[0].innerHTML = `шөнө ${i}`
     }
     if (startedDate != undefined) {
         if (nowDate.seconds - startedDate.seconds < time) {
@@ -328,6 +353,9 @@ const mainTimer = () => {
                                     }
                                     break;
                                 case 2:
+                                    if(nowDate.seconds  - startedDate.seconds === nightShift -41){
+                                        policePlayerAction(chosenPlayer.uid);
+                                    }
                                     document.getElementById("sambar").innerHTML = "Hunee songonuu!"
                                     break;
                             }
@@ -476,7 +504,7 @@ const mafiaPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
         goingtodie: true
     }).then(() => {
-        console.log("oaekwe12345")
+        console.log("oaekwe12345");
     });
 };
 
@@ -568,4 +596,32 @@ const killtheplayer = () => {
             }
         })
     })
+<<<<<<< HEAD
 }
+=======
+})
+
+db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
+      //let z = ((y-x)/180);
+    // let z1 = ((y-x)/120);
+    // let z2 = ((y-x)/60);
+    // console.log(z2-z);
+    // z = parseInt(z);
+    // console.log(z);
+    // if(parseInt((z2-z))%2==0){
+    //     console.log(z1-z);
+    //     document.getElementsByClassName('night')[0].innerHTML = `шөнө ${parseInt(z2-z)+1}`;
+    // }
+    // else{
+    //     console.log(parseInt((z1-z)));
+    //     document.getElementsByClassName('night')[0].innerHTML = `Өдөр ${parseInt(z2-z)}`;
+    // }
+
+    if (doc.data().citizen == 0) {
+        console.log("mafia win");
+    }
+    if (doc.data().mafia == 0) {
+        console.log("mafia lose");
+    }
+})
+>>>>>>> 19721bc8a0c7589c9afb34c20206717292449ac6

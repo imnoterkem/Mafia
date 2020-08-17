@@ -189,15 +189,14 @@ const Send = () => {
 
     db.doc(`rooms/${roomname}/users/${useruid}`).get().then(function(doc) {
         let sendername = doc.data().name;
-        console.log(Input.value)
+        console.log(Input.value);
         db.collection(`rooms/${roomname}/Chat`).add({
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
             text: Input.value,
             sender: sendername
-        }).then(function() {
-            document.getElementById('Input').value = '';
-            document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
         })
+        document.getElementsByClassName('chatbox')[0].scrollTop = document.getElementsByClassName('chatbox')[0].scrollHeight;
+        document.getElementById('Input').value = '';
     })
 
 }

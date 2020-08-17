@@ -17,7 +17,8 @@ firebase.auth().onAuthStateChanged(function(user) {
         useruid = user.uid;
         db.doc(`rooms/${roomname}/users/${useruid}`).update({
             alive: true,
-            vote: 0
+            vote: 0,
+            goingtodie: false
         })
         console.log(useruid);
         document.getElementById('lolo').innerHTML = roomname;
@@ -30,7 +31,8 @@ firebase.auth().onAuthStateChanged(function(user) {
             db.doc(`rooms/${roomname}/users/${useruid}`).delete();
             console.log("asf")
             db.doc(`rooms/${roomname}`).update({
-                currentPlayer: updater
+                currentPlayer: updater,
+
             })
 
         })
@@ -76,7 +78,8 @@ const ready = () => {
             let readynumber;
             readynumber = parseInt(doc.data().ready - 1);
             db.doc(`rooms/${roomname}`).update({
-                ready: readynumber
+                ready: readynumber,
+
             })
         })
     }
@@ -107,6 +110,8 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                     db.doc(`rooms/${roomname}`).update({
                             shuffledArray: players,
                             gameStarted: firebase.firestore.FieldValue.serverTimestamp(),
+                            citizen: 3,
+                            mafia: 2
                         })
                         .then(() => {
                             for (let i = 0; i < players.length; i++) {

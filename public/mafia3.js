@@ -48,6 +48,8 @@ db.collection(`rooms/${roomname}/users`)
             document.getElementsByClassName("player-name")[k].style.color = color[k];
             document.getElementsByClassName("player-name")[k].innerHTML = players[k].name;
             db.doc(`rooms/${roomname}/users/${docu.id}`).update({
+                vote: 0,
+                voted: false,
                 colors: color[k],
             });
             if (docu.id === useruid) {
@@ -57,7 +59,6 @@ db.collection(`rooms/${roomname}/users`)
                 } else if (players[k].role === "mafia") {
                     document.getElementsByClassName("card-image")[k].src = "assets/mafia.png";
                 } else if (players[k].role === "police") {
-                    console.log(k);
                     document.getElementsByClassName("card-image")[k].src = "assets/police.png";
                 } else if (players[k].role === "doctor") {
                     document.getElementsByClassName("card-image")[k].src = "assets/doctor.png";
@@ -131,36 +132,36 @@ db.doc(`rooms/${roomname}`).update({
     time: "day",
 });
 
-const ready = () => {
-    document.getElementsByClassName("ready")[0].classList.toggle("green");
-    if (clicked % 2 === 0) {
-        db.doc(`rooms/${roomname}`)
-            .get()
-            .then(function(doc) {
-                let readynumber = doc.data().ready + 1;
-                db.doc(`rooms/${roomname}`).update({
-                    ready: readynumber,
-                });
-            });
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: true,
-        });
-    } else {
-        db.doc(`rooms/${roomname}/users/${useruid}`).update({
-            ready: false,
-        });
-        db.doc(`rooms/${roomname}`)
-            .get()
-            .then(function(doc) {
-                let readynumber = doc.data().ready - 1;
-                db.doc(`rooms/${roomname}`).update({
-                    ready: readynumber,
-                });
-            });
-    }
+// const ready = () => {
+//     document.getElementsByClassName("ready")[0].classList.toggle("green");
+//     if (clicked % 2 === 0) {
+//         db.doc(`rooms/${roomname}`)
+//             .get()
+//             .then(function(doc) {
+//                 let readynumber = doc.data().ready + 1;
+//                 db.doc(`rooms/${roomname}`).update({
+//                     ready: readynumber,
+//                 });
+//             });
+//         db.doc(`rooms/${roomname}/users/${useruid}`).update({
+//             ready: true,
+//         });
+//     } else {
+//         db.doc(`rooms/${roomname}/users/${useruid}`).update({
+//             ready: false,
+//         });
+//         db.doc(`rooms/${roomname}`)
+//             .get()
+//             .then(function(doc) {
+//                 let readynumber = doc.data().ready - 1;
+//                 db.doc(`rooms/${roomname}`).update({
+//                     ready: readynumber,
+//                 });
+//             });
+//     }
 
-    clicked = clicked + 1;
-};
+//     clicked = clicked + 1;
+// };
 // udur bolgodiin
 let shunu = (document.createElement("div").innerHTML = "шөнө 111");
 
@@ -258,6 +259,14 @@ let nightcount = 0;
 
 let interval = 10;
 
+let vote = 0;
+
+    // const choosePlayer = (name) => {
+    //     chosenPlayer = [];
+    //     chosenPlayer = players.filter(el => el.name === name);
+    // }
+    // console.log(chosenPlayer);
+
 const mainTimer = () => {
     let nowDate = firebase.firestore.Timestamp.now();
     if (!gameStatedDate) {
@@ -265,7 +274,6 @@ const mainTimer = () => {
         db.doc(`rooms/${roomname}`)
             .get()
             .then(function(doc) {
-                console.log(doc.data());
                 startedDate = doc.data().gameStarted;
             });
     }
@@ -274,43 +282,69 @@ const mainTimer = () => {
             interval = 1000;
             document.getElementById("timer").innerHTML = time - (nowDate.seconds - startedDate.seconds);
             if (day) {
+                for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
+                    document.getElementsByClassName('card-image')[i].onclick = (e) => {
+                        for (let j = 0; j < document.getElementsByClassName("card-image").length; j++) {
+                            document.getElementsByClassName("card-image")[j].style.boxShadow = "none";
+                        }
+                        document.getElementById(e.target.id).style.boxShadow = "0px 0px 10px 10px green";
+                        let x = e.target.previousElementSibling.innerHTML;
+                        document.getElementsByClassName('ready')[0].onclick = () => {
+                            db.doc(`rooms/${roomname}/users/${useruid}`).onSnapshot(function(doc){
+                                if(!doc.data().voted){
+                                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                                        vote: ++vote
+                                    })
+                                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                                        voted: true
+                                    })
+                                }
+                                else{
+                                    document.getElementsByClassName('ready')[0].style.background="green";
+                                }
+                            })
+                        }
+                    }
+                }
+                document.getElementsByClassName('ready')[0].innerHTML = "Vote";
                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
                 document.getElementsByClassName("ready")[0].background = "#3AC348";
-
-            } else {
-                document.getElementsByClassName("body")[0].style.background =
-                    "linear-gradient(to bottom, #001447, #000000) ";
-                document.getElementsByClassName("h")[0].style.backgroundImage =
-                    "url('./assets/nighttown.png')";
-                document.getElementsByClassName("ready")[0].background =
-                    "#3AC348";
+            } 
+            else {
+                document.getElementsByClassName('ready')[0].innerHTML = "";
+                document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #001447, #000000) ";
+                document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/nighttown.png')";
+                document.getElementsByClassName("ready")[0].background = "#3AC348";
                 if (index < nightShift.length) {
                     if (nowDate.seconds - startedDate.seconds < nightTimer) {
                         if (nightShift[index].uid === useruid) {
                             switch (index) {
                                 case 0:
-                                    document.getElementById("sambar").innerHTML = "Хүнээ Алнуу!"
-                                    if (
-                                        nowDate.seconds -
-                                        startedDate.seconds ===
-                                        nightTimer - 1
-                                    ) {
+                                    document.getElementById("sambar").innerHTML = "Хүнээ Алнуу!";
+                                    if (nowDate.seconds - startedDate.seconds === nightTimer) {
                                         mafiaPlayerAction(chosenPlayer.uid);
                                     }
                                     break;
                                 case 1:
+                                    console.log(1)
+
                                     console.log("dfdfg")
-                                    document.getElementById("sambar").innerHTML = "Хүнээ Эмчилнүү!"
+                                    document.getElementById("sambar").innerHTML = "Хүнээ Эмчилнүү!";
                                     if (
-                                        nowDate.seconds - startedDate.seconds === nightTimer - 21
+                                        nowDate.seconds - startedDate.seconds === nightTimer
                                     ) {
-                                        console.log("dfsf");
-                                        doctorPlayerAction(chosenPlayer[0].uid);
+                                        doctorPlayerAction(chosenPlayer.uid);
                                     }
                                     break;
                                 case 2:
-                                    document.getElementById("sambar").innerHTML = "Хүнээ сонгонуу!"
+                                    console.log(2)
+                                    document.getElementById("sambar").innerHTML = "Хүнээ сонгонуу!";
+                                    if (
+                                        nowDate.seconds - startedDate.seconds === nightTimer
+                                    ) {
+                                        policePlayerAction(chosenPlayer.uid);
+                                    }
                                     break;
                             }
                         }
@@ -323,17 +357,42 @@ const mainTimer = () => {
 
             // togloom yvj baigaa
         } else {
-            round++;
-            voted = false;
-            call()
+            for(let i=0; i<document.getElementsByClassName('card-image').length; i++){
+                if(document.getElementsByClassName('card-image')[i].style.boxShadow){
+                    document.getElementsByClassName('card-image')[i].style.boxShadow==="none";
+                }
+                document.getElementsByClassName('ready')[0].style.background="#3AC348";
+            }
             db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                let max = 0;
+                let maxVoteUsers;
                 querySnapshot.forEach(function(doc) {
-                    db.doc(`rooms/${roomname}/users/${doc.id}`).update({
-                        vote: 0,
-                        voteto: 0
-                    })
-                })
-            })
+                    console.log(doc.data());
+                    if (max < doc.data().vote) {
+                        max = doc.data().vote
+                        maxVoteUsers = doc.data().name;
+                    }
+                
+                });
+                console.log(useruid);
+                if(useruid.name==maxVoteUsers.name){
+                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                        alive: false
+                    })              
+                    console.log('yes');
+                }
+            });
+            round++;
+            // voted = false;
+            // call()
+            // db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+            //     querySnapshot.forEach(function(doc) {
+            //         db.doc(`rooms/${roomname}/users/${doc.id}`).update({
+            //             vote: 0,
+            //             voteto: 0
+            //         })
+            //     })
+            // })
             killtheplayer();
             if (round % 2 == 0) {
                 mafia = false;
@@ -342,29 +401,29 @@ const mainTimer = () => {
             }
             if (day) {
                 document.getElementsByClassName('night')[0].innerHTML = "шөнө " + nightcount++;
-                startedDate.seconds += 120;
-                time = 60;
+                startedDate.seconds += 20;
+                time = 10;
                 day = false;
                 index = 0;
-                db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                    let maxvote = 0;
-                    let maxuser;
-                    querySnapshot.forEach(function(doc) {
-                        if (doc.data().vote >= maxvote) {
-                            maxvote = doc.data().vote
-                            maxuser = doc.id;
-                        }
-                    })
-                    db.doc(`rooms/${roomname}/users/${maxuser}`).update({
-                        alive: false
-                    })
+                // db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                //     let maxvote = 0;
+                //     let maxuser;
+                //     querySnapshot.forEach(function(doc) {
+                //         if (doc.data().vote >= maxvote) {
+                //             maxvote = doc.data().vote
+                //             maxuser = doc.id;
+                //         }
+                //     })
+                //     db.doc(`rooms/${roomname}/users/${maxuser}`).update({
+                //         alive: false
+                //     })
 
-                })
+                // })
             } else {
                 document.getElementsByClassName('night')[0].innerHTML = "өдөр " + daycount++;
-                startedDate.seconds += 60;
+                startedDate.seconds += 10;
                 nightTimer = 20;
-                time = 120;
+                time = 20;
                 day = true;
             }
 
@@ -373,12 +432,27 @@ const mainTimer = () => {
 }
 let alive = true;
 
-const choosePlayer = (name) => {
-    chosenPlayer = [];
-    chosenPlayer = players.filter(el => el.name === name);
-}
-
 for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
+    // console.log(day, alive);
+    // document.getElementsByClassName('card-image')[i].onclick = (e) => {
+    //     console.log(e);
+    //     console.log('why');
+    //     if(day){
+    //         console.log('nice');
+    //         for (
+    //             let j = 0; j < document.getElementsByClassName("card-image").length; j++
+    //         ) {
+    //             document.getElementsByClassName("card-image")[j].style.boxShadow =
+    //                 "none";
+    //         }
+    //         document.getElementById(e.target.id).style.boxShadow =
+    //             "0px 0px 10px 10px green";
+    //         choosePlayer(e.target.previousElementSibling.innerHTML);
+    //     }
+    //     else{
+    //         console.log('nicent');
+    //     }
+    // }
 
     document.getElementsByClassName("card-image")[i].onclick = (e) => {
         if (!day && alive) {
@@ -390,56 +464,53 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
             }
             document.getElementById(e.target.id).style.boxShadow =
                 "0px 0px 10px 10px red";
-            console.log("working")
-            choosePlayer(e.target.previousElementSibling.previousElementSibling.innerHTML);
-        } else if (!voted && alive) {
-            for (let f = 0; f < document.getElementsByClassName("card-image").length; f++) {
-                document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
-            }
-            choosePlayer(e.target.previousElementSibling.previousElementSibling.innerHTML);
-            voted = true;
-            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
-                    console.log(dco.data())
-                    let temp = parseInt(dco.data().vote) + 1
-                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
-                        vote: temp
-                    })
-                })
+            choosePlayer(e.target.previousElementSibling.innerHTML);
+        // } else if (!voted && alive) {
+        //     for (let f = 0; f < document.getElementsByClassName("card-image").length; f++) {
+        //         document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
+        //     }
+        //     choosePlayer(e.target.previousElementSibling.previousElementSibling.innerHTML);
+        //     voted = true;
+        //     db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+        //         db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
+        //             console.log(dco.data())
+        //             let temp = parseInt(dco.data().vote) + 1
+        //             db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
+        //                 vote: temp
+        //             })
+        //         })
 
-            })
-            db.doc(`rooms/${roomname}/users/${useruid}`).update({
-                voteto: i
-            })
+        //     })
+        //     db.doc(`rooms/${roomname}/users/${useruid}`).update({
+        //         voteto: i
+        //     })
+        // }
         }
-        //}
     }
 };
 const call = () => {
-
     for (let h = 0; h < document.getElementsByClassName("card-image").length; h++) {
         document.getElementsByClassName("card-image")[h].style.boxShadow = "none";
     }
-
 }
 call();
-updateNnumbers = (numbers) => {
-    for (
-        let i = 0; i < document.getElementsByClassName("vote-count").length; i++
-    ) {
-        document.getElementsByClassName("vote-count")[i].innerHTML = number;
-    }
-};
 
-votePlayer = () => {
-    let numbers = [];
-    db.collection(`rooms/${roomname}/users`).onSnapshot((querySnapshot) => {
-        querySnapshot.forEach(function(doc) {
-            numbers.push(doc.data().vote);
-        });
-        updateNnumbers(numbers);
-    });
-};
+// updateNnumbers = (numbers) => {
+//     for (
+//         let i = 0; i < document.getElementsByClassName("vote-count").length; i++
+//     ) {
+//         document.getElementsByClassName("vote-count")[i].innerHTML = number;
+//     }
+// };
+// votePlayer = () => {
+//     let numbers = [];
+//     db.collection(`rooms/${roomname}/users`).onSnapshot((querySnapshot) => {
+//         querySnapshot.forEach(function(doc) {
+//             numbers.push(doc.data().vote);
+//         });
+//         updateNnumbers(numbers);
+//     });
+// };
 
 const mafiaPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
@@ -455,6 +526,7 @@ const doctorPlayerAction = (id) => {
     });
 };
 const policePlayerAction = (id) => {
+    console.log('yes');
     db.doc(`rooms/${roomname}/users/${id}`).get().then(function(doc) {
         if (doc.data().role == "mafia") {
             console.log("YES")
@@ -488,16 +560,6 @@ db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
             })
             if (doc.data().role === "mafia") {
                 db.doc(`rooms/${roomname}`).get().then(function(lol) {
-
-                    db.doc(`rooms/${roomname}`).update({
-                        mafia: --lol.data().mafia
-                    })
-
-                })
-            } else if (doc.data().role === "citizen") {
-
-                db.doc(`rooms/${roomname}`).get().then(function(lol) {
-
                     db.doc(`rooms/${roomname}`).update({
                         mafia: --lol.data().mafia
                     })
@@ -546,21 +608,19 @@ const killtheplayer = () => {
             if (doc.data().goingtodie && doc.data().alive) {
                 db.doc(`rooms/${roomname}/users/${doc.id}`).update({
                     alive: false,
-
                 })
-            }
+            }   
+            console.log(doc.data().alive);
             for (let k = 0; k < players.length; k++) {
                 if (players[k].role === "citizen") {
                     document.getElementsByClassName("card-image")[k].src = "assets/irgen.png";
                 } else if (players[k].role === "mafia") {
                     document.getElementsByClassName("card-image")[k].src = "assets/mafia.png";
                 } else if (players[k].role === "police") {
-                    console.log(k);
                     document.getElementsByClassName("card-image")[k].src = "assets/police.png";
                 } else if (players[k].role === "doctor") {
                     document.getElementsByClassName("card-image")[k].src = "assets/doctor.png";
                 }
-                console.log('not working');
             }
         })
     })

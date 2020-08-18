@@ -26,7 +26,6 @@ firebase.auth().onAuthStateChanged(function(user) {
 let roomname = new URL(window.location.href).searchParams.get("r");
 
 let players = [];
-let roles = [];
 db.collection(`rooms/${roomname}/users`)
     .get()
     .then(function(doc) {
@@ -45,41 +44,25 @@ db.collection(`rooms/${roomname}/users`)
                 ...docu.data(),
                 uid: docu.id,
             });
-            roles.push({
-                ...docu.data(),
-                role: docu.data().role,
-            })
+
             document.getElementsByClassName("player-name")[k].style.color = color[k];
             document.getElementsByClassName("player-name")[k].innerHTML = players[k].name;
             db.doc(`rooms/${roomname}/users/${docu.id}`).update({
                 colors: color[k],
             });
             if (docu.id === useruid) {
-                let i = 0;
                 importantvar = k;
-                db.doc(`rooms/${roomname}/users/${useruid}`)
-                    .get()
-                    .then(function(docs) {
-                        console.log(roles[k]);
-                        if (roles[i].role === "citizen") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/irgen.png";
-                        } else if (roles[i].role === "mafia") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/mafia.png";
-                        } else if (roles[i].role === "police") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/police.png";
-                        } else if (roles[i].role === "doctor") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/doctor.png";
-                        }
-                        i++;
-                    })
+                if (players[k].role === "citizen") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/irgen.png";
+                } else if (players[k].role === "mafia") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/mafia.png";
+                } else if (players[k].role === "police") {
+                    console.log(k);
+                    document.getElementsByClassName("card-image")[k].src = "assets/police.png";
+                } else if (players[k].role === "doctor") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/doctor.png";
+                }
+                k++;
             } else {
                 k++;
             }
@@ -527,6 +510,15 @@ db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
 
                 })
             } else if (doc.data().role === "citizen") {
+
+                db.doc(`rooms/${roomname}`).get().then(function(lol) {
+
+                    db.doc(`rooms/${roomname}`).update({
+                        mafia: --lol.data().mafia
+                    })
+
+                })
+            } else if (doc.data().role === "citizen") {
                 db.doc(`rooms/${roomname}`).get().then(function(lol) {
 
                     db.doc(`rooms/${roomname}`).update({
@@ -546,7 +538,6 @@ db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
     })
 })
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-
     if (doc.data().citizen == 0) {
         document.getElementById("citizenwin").style.display = "none"
         document.getElementById("mafiawin").style.display = "inline"

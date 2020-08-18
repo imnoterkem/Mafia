@@ -112,50 +112,50 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
                             citizen: 3,
                             mafia: 2
                         })
-                        .then(() => {
+                        .then(async() => {
                             var promises = [];
                             for (let i = 0; i < players.length; i++) {
-                                if (i < 3) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "citizen",
-                                    }).then(() => {
-                                        promises.push(i);
-                                    });
-                                } else if (i === 4) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "doctor",
-                                    }).then(() => {
-                                        promises.push(i);
-                                    });
-                                } else if (i === 5) {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "police",
-                                    }).then(() => {
-                                        promises.push(i);
-                                    });
-                                } else {
-                                    db.doc(
-                                        `rooms/${roomname}/users/${players[i]}`
-                                    ).update({
-                                        role: "mafia",
-                                    }).then(() => {
-                                        promises.push(i);
-                                    });
-                                }
+
+                                promises.push(rolePlayer(players[i], i));
+                                // if (i < 3) {
+                                //     db.doc(
+                                //         `rooms/${roomname}/users/${players[i]}`
+                                //     ).update({
+                                //         role: "citizen",
+                                //     }).then(() => {
+                                //         promises.push(i);
+                                //     });
+                                // } else if (i === 4) {
+                                //     db.doc(
+                                //         `rooms/${roomname}/users/${players[i]}`
+                                //     ).update({
+                                //         role: "doctor",
+                                //     }).then(() => {
+                                //         promises.push(i);
+                                //     });
+                                // } else if (i === 5) {
+                                //     db.doc(
+                                //         `rooms/${roomname}/users/${players[i]}`
+                                //     ).update({
+                                //         role: "police",
+                                //     }).then(() => {
+                                //         promises.push(i);
+                                //     });
+                                // } else {
+                                //     db.doc(
+                                //         `rooms/${roomname}/users/${players[i]}`
+                                //     ).update({
+                                //         role: "mafia",
+                                //     }).then(() => {
+                                //         promises.push(i);
+                                //     });
+                                // }
                             }
-                            Promise.all(promises)
-                                .then(() => {
-                                    db.doc(`rooms/${roomname}`).update({
-                                        shuffled: true,
-                                    })
-                                    console.log("here")
+                            Promise.all(promises).then(() => {
+                                db.doc(`rooms/${roomname}`).update({
+                                    shuffled: true
                                 })
+                            })
                         })
                 })
             }
@@ -165,6 +165,18 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
 
     }
 })
+
+const rolePlayer = (player, i) => {
+
+    playerRole = ['citizen', 'citizen', 'citizen', "doctor", 'police', 'mafia', 'mafia'];
+
+    return db.doc(
+        `rooms/${roomname}/users/${player}`
+    ).update({
+        role: playerRole[i],
+    })
+
+}
 
 function shuffle(array) {
     var currentIndex = array.length,

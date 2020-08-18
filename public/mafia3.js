@@ -99,29 +99,29 @@ db.doc(`rooms/${roomname}`)
                             });
                     });
                 });
-            if (!doc.data().gameStarted) {
-                let gameStarted = firebase.firestore.FieldValue.serverTimestamp();
-                db.doc(`rooms/${roomname}`).update({
-                    dc: 0,
-                    nc: 0,
-                    day: true,
-                    gameStarted,
-                    ready: 0,
-                    time: "day",
-                });
-                let nowT = moment(new Date());
-                let parsedDate = moment(gameStarted.toDate());
+            // if (!doc.data().gameStarted) {
+            //     let gameStarted = firebase.firestore.FieldValue.serverTimestamp();
+            //     db.doc(`rooms/${roomname}`).update({
+            //         dc: 0,
+            //         nc: 0,
+            //         day: true,
+            //         gameStarted,
+            //         ready: 0,
+            //         time: "day",
+            //     });
+            //     let nowT = moment(new Date());
+            //     let parsedDate = moment(gameStarted.toDate());
 
-                diffTime = moment.duration(nowT.diff(parsedDate).asMinutes());
-            } else {
-                let nowT = moment(new Date());
-                let parsedDate = moment(doc.data().gameStarted.toDate());
-                console.log(parsedDate);
-                console.log(nowT);
-                let difference = nowT.diff(parsedDate);
-                diffTime = moment.duration(difference).asSeconds();
-                console.log("zao" + " " + diffTime);
-            }
+            //     diffTime = moment.duration(nowT.diff(parsedDate).asMinutes());
+            // } else {
+            //     let nowT = moment(new Date());
+            //     let parsedDate = moment(doc.data().gameStarted.toDate());
+            //     console.log(parsedDate);
+            //     console.log(nowT);
+            //     let difference = nowT.diff(parsedDate);
+            //     diffTime = moment.duration(difference).asSeconds();
+            //     console.log("zao" + " " + diffTime);
+            // }
         }
     });
 
@@ -274,13 +274,11 @@ const mainTimer = () => {
             interval = 1000;
             document.getElementById("timer").innerHTML = time - (nowDate.seconds - startedDate.seconds);
             if (day) {
-                // console.log('udur bolood bnaaaaaaaaaa fuuuuu');
                 document.getElementsByClassName("body")[0].style.background = "linear-gradient(to bottom, #62b8e8, #FFFFFF)";
                 document.getElementsByClassName("h")[0].style.backgroundImage = "url('./assets/daytown.png')";
                 document.getElementsByClassName("ready")[0].background = "#3AC348";
 
             } else {
-                // console.log('shunu bolood bnashd wtf');
                 document.getElementsByClassName("body")[0].style.background =
                     "linear-gradient(to bottom, #001447, #000000) ";
                 document.getElementsByClassName("h")[0].style.backgroundImage =
@@ -298,7 +296,7 @@ const mainTimer = () => {
                                         startedDate.seconds ===
                                         nightTimer - 1
                                     ) {
-                                        mafiaPlayerAction(chosenPlayer[0].uid);
+                                        mafiaPlayerAction(chosenPlayer.uid);
                                     }
                                     break;
                                 case 1:
@@ -356,11 +354,11 @@ const mainTimer = () => {
                             maxvote = doc.data().vote
                             maxuser = doc.id;
                         }
-                    }).then(() => {
-                        db.doc(`rooms/${roomname}/users/${maxuser}`).update({
-                            alive: false
-                        })
                     })
+                    db.doc(`rooms/${roomname}/users/${maxuser}`).update({
+                        alive: false
+                    })
+
                 })
             } else {
                 document.getElementsByClassName('night')[0].innerHTML = "өдөр " + daycount++;
@@ -374,13 +372,16 @@ const mainTimer = () => {
     }
 }
 let alive = true;
+
+const choosePlayer = (name) => {
+    chosenPlayer = [];
+    chosenPlayer = players.filter(el => el.name === name);
+}
+
 for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
 
     document.getElementsByClassName("card-image")[i].onclick = (e) => {
         if (!day && alive) {
-            for (let j = 0; j < 7; j++) {
-                document.getElementsByClassName("votebox")[j].style.display = "none";
-            }
             for (
                 let j = 0; j < document.getElementsByClassName("card-image").length; j++
             ) {
@@ -396,37 +397,26 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
                 document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
             }
             choosePlayer(e.target.previousElementSibling.previousElementSibling.innerHTML);
-            if (i != importantvar) {
-                for (let j = 0; j < 7; j++) {
-                    document.getElementsByClassName("votebox")[j].style.display = "none";
-                }
-                document.getElementsByClassName("votebox")[i].style.display = "flex";
-                document.getElementsByClassName("votebox")[i].onclick = () => {
-                    voted = true;
-                    document.getElementsByClassName("votebox")[i].innerHTML = "Voted"
-                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
-                            let temp = parseInt(dco.data().vote) + 1
-                            db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
-                                vote: temp
-                            })
-                        })
+            voted = true;
+            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+                db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
+                    console.log(dco.data())
+                    let temp = parseInt(dco.data().vote) + 1
+                    db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
+                        vote: temp
+                    })
+                })
 
-                    })
-                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
-                        voteto: i
-                    })
-                }
-            }
+            })
+            db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                voteto: i
+            })
         }
-    };
-}
+        //}
+    }
+};
 const call = () => {
 
-    for (let l = 0; l < 7; l++) {
-        document.getElementsByClassName("votebox")[l].style.display = "none";
-        document.getElementsByClassName("votebox")[l].innerHTML = "Vote";
-    }
     for (let h = 0; h < document.getElementsByClassName("card-image").length; h++) {
         document.getElementsByClassName("card-image")[h].style.boxShadow = "none";
     }
@@ -450,11 +440,6 @@ votePlayer = () => {
         updateNnumbers(numbers);
     });
 };
-
-const choosePlayer = (name) => {
-    chosenPlayer = [];
-    chosenPlayer = players.filter(el => el.name === name);
-}
 
 const mafiaPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
@@ -491,7 +476,7 @@ db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
 })
 db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
     querySnapshot.forEach(function(doc) {
-        if (!doc.data().alive) {
+        if (!doc.data().alive && doc.data().goingtodie) {
             db.collection(`users/${roomname}/users`).get().then(function(querySnapshot2) {
                 let i = 0;
                 querySnapshot2.forEach(function(doc2) {
@@ -534,10 +519,15 @@ db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
                     document.getElementsByClassName("card-image")[i].src = "assets/dead.png";
                 }
             }
+            db.doc(`rooms/${roomname}/users/${doc.id}`).update({
+                goingtodie: false
+            })
         }
     })
 })
+
 db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
+
     if (doc.data().citizen == 0) {
         document.getElementById("citizenwin").style.display = "none"
         document.getElementById("mafiawin").style.display = "inline"
@@ -553,11 +543,24 @@ db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
 const killtheplayer = () => {
     db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
-            if (doc.data().goingtodie) {
+            if (doc.data().goingtodie && doc.data().alive) {
                 db.doc(`rooms/${roomname}/users/${doc.id}`).update({
-                    alive: false
-                })
+                    alive: false,
 
+                })
+            }
+            for (let k = 0; k < players.length; k++) {
+                if (players[k].role === "citizen") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/irgen.png";
+                } else if (players[k].role === "mafia") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/mafia.png";
+                } else if (players[k].role === "police") {
+                    console.log(k);
+                    document.getElementsByClassName("card-image")[k].src = "assets/police.png";
+                } else if (players[k].role === "doctor") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/doctor.png";
+                }
+                console.log('not working');
             }
         })
     })

@@ -16,19 +16,21 @@ let dayShift = [];
 let chosenPlayer;
 // console.log(nowT)
 
-firebase.auth().onAuthStateChanged(function(user) {
+firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         var isAnonymous = user.isAnonymous;
         useruid = user.uid;
-    } else {}
+    } else { }
 });
 
 let roomname = new URL(window.location.href).searchParams.get("r");
 
 let players = [];
+let roles = [];
+
 db.collection(`rooms/${roomname}/users`)
     .get()
-    .then(function(doc) {
+    .then(function (doc) {
         let k = 0;
         let color = [
             "#DE5656",
@@ -39,46 +41,39 @@ db.collection(`rooms/${roomname}/users`)
             "#782B8B",
             "#E95CCA",
         ];
-        let mycard;
-        doc.forEach(function(docu) {
+        doc.forEach(function (docu) {
+            console.log(k);
             players.push({
                 ...docu.data(),
                 uid: docu.id,
             });
-            document.getElementsByClassName("player-name")[k].style.color =
-                color[k];
-            document.getElementsByClassName("player-name")[
-                k
-            ].innerHTML = docu.data().name;
+            // roles.push({
+            //     ...docu.data(),
+            //     role: docu.data().role,
+            // });
+            console.log(players);
+            document.getElementsByClassName("player-name")[k].style.color = color[k];
+            document.getElementsByClassName("player-name")[k].innerHTML = players[k].name;
             db.doc(`rooms/${roomname}/users/${docu.id}`).update({
                 colors: color[k],
             });
             if (docu.id === useruid) {
                 importantvar = k;
-                db.doc(`rooms/${roomname}/users/${useruid}`)
-                    .get()
-                    .then(function(docs) {
-                        if (docs.data().role === "citizen") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/irgen.png";
-                        } else if (docs.data().role === "mafia") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/mafia.png";
-                        } else if (docs.data().role === "police") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/police.png";
-                        } else if (docs.data().role === "doctor") {
-                            document.getElementsByClassName("card-image")[
-                                k
-                            ].src = "assets/doctor.png";
-                        }
-                    })
-                    .then(() => {
-                        k++;
-                    });
+                if (players[k].role === "citizen") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/irgen.png";
+                }
+                else if (players[k].role === "mafia") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/mafia.png";
+                }
+                else if (players[k].role === "police") {
+                    console.log(k);
+                    document.getElementsByClassName("card-image")[k].src = "assets/police.png";
+                }
+                else if (players[k].role === "doctor") {
+                    document.getElementsByClassName("card-image")[k].src = "assets/doctor.png";
+                }
+                k++;
+                console.log("sdsfsd")
             } else {
                 k++;
             }
@@ -86,28 +81,28 @@ db.collection(`rooms/${roomname}/users`)
 
         nightShift = players.filter(
             (el) =>
-            el.role === "mafia" ||
-            el.role === "doctor" ||
-            el.role === "police"
+                el.role === "mafia" ||
+                el.role === "doctor" ||
+                el.role === "police"
         );
         dayShift = players.filter((el) => el.role === "citizen");
     });
 db.doc(`rooms/${roomname}`)
     .get()
-    .then(function(doc) {
+    .then(function (doc) {
         if (!doc.data().isChatDeleted) {
             db.doc(`rooms/${roomname}`).update({
                 isChatDeleted: true,
             });
             db.collection(`rooms/${roomname}/Chat`)
                 .get()
-                .then(function(querySnapshot) {
-                    querySnapshot.forEach(function(doc) {
+                .then(function (querySnapshot) {
+                    querySnapshot.forEach(function (doc) {
                         db.collection(`rooms/${roomname}/Chat`)
                             .doc(`${doc.id}`)
                             .delete()
-                            .then(function() {})
-                            .catch(function(error) {
+                            .then(function () { })
+                            .catch(function (error) {
                                 console.error(
                                     "Error removing document: ",
                                     error
@@ -152,7 +147,7 @@ const ready = () => {
     if (clicked % 2 === 0) {
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function(doc) {
+            .then(function (doc) {
                 let readynumber = doc.data().ready + 1;
                 db.doc(`rooms/${roomname}`).update({
                     ready: readynumber,
@@ -167,7 +162,7 @@ const ready = () => {
         });
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function(doc) {
+            .then(function (doc) {
                 let readynumber = doc.data().ready - 1;
                 db.doc(`rooms/${roomname}`).update({
                     ready: readynumber,
@@ -183,7 +178,7 @@ let shunu = (document.createElement("div").innerHTML = "шөнө 111");
 
 db.doc(`rooms/${roomname}`)
     .get()
-    .then(function(doc) {
+    .then(function (doc) {
         if (!doc.data().shuffled) {
             db.doc(`rooms/${roomname}`).update({
                 shuffled: true,
@@ -205,7 +200,7 @@ const Send = () => {
         sending = true;
         db.doc(`rooms/${roomname}/users/${useruid}`)
             .get()
-            .then(function(doc) {
+            .then(function (doc) {
                 let sendername = doc.data().name;
                 let color = doc.data().colors;
                 db.collection(`rooms/${roomname}/Chat`)
@@ -230,9 +225,9 @@ db.collection(`rooms`)
     .doc(`${roomname}`)
     .collection("Chat")
     .orderBy("createdAt")
-    .onSnapshot(function(querySnapshot) {
+    .onSnapshot(function (querySnapshot) {
         document.getElementsByClassName("display")[0].innerHTML = "";
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
             const t = document.createElement("div");
             let coloredname = doc.data().sender;
             coloredname = coloredname.fontcolor(doc.data().color);
@@ -254,7 +249,7 @@ document.onkeyup = (event) => {
     }
 };
 
-killerDo = () => {};
+killerDo = () => { };
 
 let gameStatedDate = false;
 let startedDate;
@@ -269,45 +264,21 @@ let round = 0;
 
 let mafia = true;
 let voted = false;
-
+let daycount = 1;
+let nightcount = 0;
 
 let interval = 10;
 
 const mainTimer = () => {
-
     let nowDate = firebase.firestore.Timestamp.now();
     if (!gameStatedDate) {
         gameStatedDate = true;
         db.doc(`rooms/${roomname}`)
             .get()
-            .then(function(doc) {
+            .then(function (doc) {
                 console.log(doc.data());
                 startedDate = doc.data().gameStarted;
             });
-    }
-    
-    // let a = (nowDate-startedDate);
-    // let i = 1;
-    // let l = 1;
-    // console.log(a);
-    // while(a>0){
-    //     if(a>60){
-    //         a=a-60;
-    //         i++;     
-    //     }
-    //     if(a>120){
-    //         a=a-120;
-    //         l++;
-    //     }
-    // }
-    // console.log(i,l);
-
-
-    if(i>l){
-        document.getElementsByClassName('night')[0].innerHTML = `Өдөр ${l}`
-    }
-    else if (i<l || i==l){
-        document.getElementsByClassName('night')[0].innerHTML = `шөнө ${i}`
     }
     if (startedDate != undefined) {
         if (nowDate.seconds - startedDate.seconds < time) {
@@ -332,7 +303,7 @@ const mainTimer = () => {
                         if (nightShift[index].uid === useruid) {
                             switch (index) {
                                 case 0:
-                                    document.getElementById("sambar").innerHTML = "Hunee Alnuu!"
+                                    document.getElementById("sambar").innerHTML = "Хүнээ Алнуу!"
                                     if (
                                         nowDate.seconds -
                                         startedDate.seconds ===
@@ -343,7 +314,7 @@ const mainTimer = () => {
                                     break;
                                 case 1:
                                     console.log("dfdfg")
-                                    document.getElementById("sambar").innerHTML = "Hunee Emchilnuu!"
+                                    document.getElementById("sambar").innerHTML = "Хүнээ Эмчилнүү!"
                                     if (
                                         nowDate.seconds - startedDate.seconds === nightTimer - 21
                                     ) {
@@ -352,10 +323,7 @@ const mainTimer = () => {
                                     }
                                     break;
                                 case 2:
-                                    if(nowDate.seconds  - startedDate.seconds === nightShift -41){
-                                        policePlayerAction(chosenPlayer.uid);
-                                    }
-                                    document.getElementById("sambar").innerHTML = "Hunee songonuu!"
+                                    document.getElementById("sambar").innerHTML = "Хүнээ сонгонуу!"
                                     break;
                             }
                         }
@@ -371,40 +339,56 @@ const mainTimer = () => {
             round++;
             voted = false;
             call()
-            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                querySnapshot.forEach(function(doc) {
+            db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
+                querySnapshot.forEach(function (doc) {
                     db.doc(`rooms/${roomname}/users/${doc.id}`).update({
                         vote: 0,
                         voteto: 0
                     })
                 })
             })
+            killtheplayer();
             if (round % 2 == 0) {
                 mafia = false;
             } else {
                 mafia = true;
             }
             if (day) {
+                document.getElementsByClassName('night')[0].innerHTML = "шөнө " + nightcount++;
                 startedDate.seconds += 120;
                 time = 60;
                 day = false;
                 index = 0;
+                db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
+                    let maxvote = 0;
+                    let maxuser;
+                    querySnapshot.forEach(function (doc) {
+                        if (doc.data().vote >= maxvote) {
+                            maxvote = doc.data().vote
+                            maxuser = doc.id;
+                        }
+                    }).then(() => {
+                        db.doc(`rooms/${roomname}/users/${maxuser}`).update({
+                            alive: false
+                        })
+                    })
+                })
             } else {
+                document.getElementsByClassName('night')[0].innerHTML = "өдөр " + daycount++;
                 startedDate.seconds += 60;
                 nightTimer = 20;
                 time = 120;
                 day = true;
             }
 
-            //togloom duussan
-            //daraaciinn round
         }
     }
-};
+}
+let alive = true;
 for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
 
     document.getElementsByClassName("card-image")[i].onclick = (e) => {
-        if (!day) {
+        if (!day && alive) {
             for (let j = 0; j < 7; j++) {
                 document.getElementsByClassName("votebox")[j].style.display = "none";
             }
@@ -418,7 +402,7 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
                 "0px 0px 10px 10px red";
             console.log("working")
             choosePlayer(e.target.previousElementSibling.previousElementSibling.innerHTML);
-        } else if (!voted) {
+        } else if (!voted && alive) {
             for (let f = 0; f < document.getElementsByClassName("card-image").length; f++) {
                 document.getElementsByClassName("card-image")[f].style.boxShadow = "none";
             }
@@ -431,8 +415,8 @@ for (let i = 0; i < document.getElementsByClassName("card-image").length; i++) {
                 document.getElementsByClassName("votebox")[i].onclick = () => {
                     voted = true;
                     document.getElementsByClassName("votebox")[i].innerHTML = "Voted"
-                    db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function(dco) {
+                    db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
+                        db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).get().then(function (dco) {
                             let temp = parseInt(dco.data().vote) + 1
                             db.doc(`rooms/${roomname}/users/${querySnapshot.docs[i]}`).update({
                                 vote: temp
@@ -452,6 +436,7 @@ const call = () => {
 
     for (let l = 0; l < 7; l++) {
         document.getElementsByClassName("votebox")[l].style.display = "none";
+        document.getElementsByClassName("votebox")[l].innerHTML = "Vote";
     }
     for (let h = 0; h < document.getElementsByClassName("card-image").length; h++) {
         document.getElementsByClassName("card-image")[h].style.boxShadow = "none";
@@ -470,7 +455,7 @@ updateNnumbers = (numbers) => {
 votePlayer = () => {
     let numbers = [];
     db.collection(`rooms/${roomname}/users`).onSnapshot((querySnapshot) => {
-        querySnapshot.forEach(function(doc) {
+        querySnapshot.forEach(function (doc) {
             numbers.push(doc.data().vote);
         });
         updateNnumbers(numbers);
@@ -484,19 +469,19 @@ const choosePlayer = (name) => {
 
 const mafiaPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
-        alive: false
+        goingtodie: true
     }).then(() => {
-        console.log("oaekwe12345");
+        console.log("oaekwe12345")
     });
 };
 
 const doctorPlayerAction = (id) => {
     db.doc(`rooms/${roomname}/users/${id}`).update({
-        alive: true,
+        goingtodie: false
     });
 };
 const policePlayerAction = (id) => {
-    db.doc(`rooms/${roomname}/users/${id}`).get().then(function(doc) {
+    db.doc(`rooms/${roomname}/users/${id}`).get().then(function (doc) {
         if (doc.data().role == "mafia") {
             console.log("YES")
         } else {
@@ -510,46 +495,73 @@ let mainInterval = setInterval(() => {
 }, interval);
 
 let aliveplayers = [];
-db.collection(`rooms/${roomname}/users`).get().then(function(doc) {
-    doc.forEach(function(ok) {
+db.collection(`rooms/${roomname}/users`).get().then(function (doc) {
+    doc.forEach(function (ok) {
         aliveplayers.push(ok.data().name)
     })
 })
-db.collection(`rooms/${roomname}/users`).onSnapshot(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
+db.collection(`rooms/${roomname}/users`).onSnapshot(function (querySnapshot) {
+    querySnapshot.forEach(function (doc) {
         if (!doc.data().alive) {
+            db.collection(`users/${roomname}/users`).get().then(function (querySnapshot2) {
+                let i = 0;
+                querySnapshot2.forEach(function (doc2) {
+                    console.log(doc2.data().role)
+                    i++;
+                    console.log("sdfsd")
+                })
+                console.log("fdsffs")
+            })
+            if (doc.data().role === "mafia") {
+                db.doc(`rooms/${roomname}`).get().then(function (lol) {
 
+                    db.doc(`rooms/${roomname}`).update({
+                        mafia: --lol.data().mafia
+                    })
+
+                })
+            } else if (doc.data().role === "citizen") {
+                db.doc(`rooms/${roomname}`).get().then(function (lol) {
+
+                    db.doc(`rooms/${roomname}`).update({
+                        citizen: --lol.data().citizen
+                    })
+
+                })
+            }
+            alive = false;
             for (let i = 0; i < aliveplayers.length; i++) {
                 if (aliveplayers[i] == doc.data().name) {
+                    call();
                     document.getElementsByClassName("card-image")[i].src = "assets/dead.png";
                 }
             }
-
         }
-
     })
 })
-
-db.doc(`rooms/${roomname}`).onSnapshot(function(doc) {
-      //let z = ((y-x)/180);
-    // let z1 = ((y-x)/120);
-    // let z2 = ((y-x)/60);
-    // console.log(z2-z);
-    // z = parseInt(z);
-    // console.log(z);
-    // if(parseInt((z2-z))%2==0){
-    //     console.log(z1-z);
-    //     document.getElementsByClassName('night')[0].innerHTML = `шөнө ${parseInt(z2-z)+1}`;
-    // }
-    // else{
-    //     console.log(parseInt((z1-z)));
-    //     document.getElementsByClassName('night')[0].innerHTML = `Өдөр ${parseInt(z2-z)}`;
-    // }
+db.doc(`rooms/${roomname}`).onSnapshot(function (doc) {
 
     if (doc.data().citizen == 0) {
-        console.log("mafia win");
+        document.getElementById("citizenwin").style.display = "none"
+        document.getElementById("mafiawin").style.display = "inline"
+        db.doc(`rooms/${roomname}`).delete();
     }
     if (doc.data().mafia == 0) {
-        console.log("mafia lose");
+        document.getElementById("mafiawin").style.display = "none"
+        document.getElementById("citizenwin").style.display = "inline"
+        db.doc(`rooms/${roomname}`).delete();
     }
+
 })
+const killtheplayer = () => {
+    db.collection(`rooms/${roomname}/users`).get().then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
+            if (doc.data().goingtodie) {
+                db.doc(`rooms/${roomname}/users/${doc.id}`).update({
+                    alive: false
+                })
+
+            }
+        })
+    })
+}

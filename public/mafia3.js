@@ -290,18 +290,22 @@ const mainTimer = () => {
                         document.getElementById(e.target.id).style.boxShadow = "0px 0px 10px 10px green";
                         let x = e.target.previousElementSibling.innerHTML;
                         document.getElementsByClassName('ready')[0].onclick = () => {
-                            db.doc(`rooms/${roomname}/users/${useruid}`).onSnapshot(function(doc){
-                                if(!doc.data().voted){
-                                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
-                                        vote: ++vote
-                                    })
-                                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
-                                        voted: true
-                                    })
-                                }
-                                else{
-                                    document.getElementsByClassName('ready')[0].style.background="green";
-                                }
+                            db.doc(`rooms/${roomname}/users/${useruid}`).onSnapshot(function(querySnapshot){
+                                querySnapshot.forEach(function(doc){
+
+                                })
+                                // if(!doc.data().voted){
+                                //     console.log(x);
+                                //     db.doc(`rooms/${roomname}/users/${x}`).update({
+                                //         vote: vote++
+                                //     })
+                                //     db.doc(`rooms/${roomname}/users/${useruid}`).update({
+                                //         voted: true
+                                //     })
+                                // }
+                                // else{
+                                //     document.getElementsByClassName('ready')[0].style.background="green";
+                                // }
                             })
                         }
                     }
@@ -363,25 +367,24 @@ const mainTimer = () => {
                 }
                 document.getElementsByClassName('ready')[0].style.background="#3AC348";
             }
-            db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
-                let max = 0;
-                let maxVoteUsers;
-                querySnapshot.forEach(function(doc) {
-                    console.log(doc.data());
-                    if (max < doc.data().vote) {
-                        max = doc.data().vote
-                        maxVoteUsers = doc.data().name;
-                    }
-                
-                });
-                console.log(useruid);
-                if(useruid.name==maxVoteUsers.name){
-                    db.doc(`rooms/${roomname}/users/${useruid}`).update({
-                        alive: false
-                    })              
-                    console.log('yes');
-                }
-            });
+            // db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
+            //     let max = 0;
+            //     let maxVoteUsers;
+            //     querySnapshot.forEach(function(doc) {
+            //         console.log(doc.data());
+            //         if (max < doc.data().vote) {
+            //             max = doc.data().vote
+            //             maxVoteUsers = doc.data().name;
+            //         }
+            //     });
+            //     console.log(useruid);
+            //     if(useruid.name==maxVoteUsers){
+            //         db.doc(`rooms/${roomname}/users/${useruid}`).update({
+            //             alive: false
+            //         })              
+            //         console.log('yes');
+            //     }
+            // });
             round++;
             // voted = false;
             // call()
@@ -401,8 +404,8 @@ const mainTimer = () => {
             }
             if (day) {
                 document.getElementsByClassName('night')[0].innerHTML = "шөнө " + nightcount++;
-                startedDate.seconds += 20;
-                time = 10;
+                startedDate.seconds += 120;
+                time = 60;
                 day = false;
                 index = 0;
                 // db.collection(`rooms/${roomname}/users`).get().then(function(querySnapshot) {
@@ -421,9 +424,9 @@ const mainTimer = () => {
                 // })
             } else {
                 document.getElementsByClassName('night')[0].innerHTML = "өдөр " + daycount++;
-                startedDate.seconds += 10;
+                startedDate.seconds += 60;
                 nightTimer = 20;
-                time = 20;
+                time = 120;
                 day = true;
             }
 
